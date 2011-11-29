@@ -18,10 +18,31 @@ public class Problem {
 	public Problem(int n, int d, double p1, double p2) {
 
 		setN(n);
-		_d = d;
-		_p1 = p1;
-		_p2 = p2;
-		// TODO _v... , _domain.. , _constraints..
+		setD(d);
+		setP1(p1);
+		setP2(p2);
+		
+		setV(new Vector<Integer>(n));
+		
+		setDomain(new Vector<Vector<Integer>>(n));
+		
+		for (int i = 0; i < n; i++){
+			
+			Vector<Integer> tmpVec = new Vector<Integer>(d);
+			
+			for (int j = 1; j <= d; j++)
+				tmpVec.add(new Integer(j));
+			
+			getDomain().set(i, tmpVec);
+		}
+		
+		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
+		
+		initConstraints();
+	}
+
+	protected void initConstraints() {
+		// TODO Auto-generated method stub
 	}
 
 	// TODO for further use...
@@ -50,16 +71,40 @@ public class Problem {
 		return super.toString();
 	}
 
-	protected void setN(int _n) {
-		this._n = _n;
+	protected void setN(int n) {
+		this._n = n;
 	}
 
 	public int getN() {
 		return _n;
 	}
 
-	protected void setV(Vector<Integer> _v) {
-		this._v = _v;
+	public void setD(int d) {
+		this._d = d;
+	}
+
+	public int getD() {
+		return _d;
+	}
+
+	public void setP1(double p1) {
+		this._p1 = p1;
+	}
+
+	public double getP1() {
+		return _p1;
+	}
+
+	public void setP2(double p2) {
+		this._p2 = p2;
+	}
+
+	public double getP2() {
+		return _p2;
+	}
+
+	protected void setV(Vector<Integer> v) {
+		this._v = v;
 	}
 
 	public Vector<Integer> getV() {
@@ -73,8 +118,14 @@ public class Problem {
 	public Vector<Vector<Integer>> getDomain() {
 		return _domain;
 	}
+
+	public void setConstraints(Vector<Vector<Map<VariablesPair, Boolean>>> constraints) {
+		this._constraints = constraints;
+	}
+
+	public Vector<Vector<Map<VariablesPair, Boolean>>> getConstraints() {
+		return _constraints;
+	}
 	
 	//TODO: need a way to save the information about the previous generated matrices
-	
-	
 }

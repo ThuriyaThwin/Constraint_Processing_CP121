@@ -19,6 +19,6 @@ public class Main {
 		CSPAlgorithm algoritm = new BTAlgoritm();
 		
 		for (Problem p: problems)
-			algoritm.solve(p);
+			System.out.println(algoritm.solve(p));
 	}
 }
