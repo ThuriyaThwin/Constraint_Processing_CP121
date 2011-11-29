@@ -1,8 +1,7 @@
-package main;
+package algoritm;
 
 import java.util.Vector;
 
-import algoritm.CSPAlgorithm;
 
 public class BTAlgoritm extends CSPAlgorithm {
 

@@ -2,6 +2,7 @@ package main;
 
 import java.util.Vector;
 
+import algoritm.BTAlgoritm;
 import algoritm.CSPAlgorithm;
 
 public class Main {
