@@ -1,14 +1,18 @@
 package main;
 
+import java.util.Vector;
+
+import algoritm.CSPAlgorithm;
+
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-		System.out.println("Bla Bla..");
+		Vector<Problem> problems = new Vector<Problem>();
+		
+		CSPAlgorithm algoritm = new BTAlgoritm();
+		
+		for (Problem p: problems)
+			algoritm.solve(p);
 	}
-
 }
