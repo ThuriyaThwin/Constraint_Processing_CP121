@@ -2,7 +2,8 @@ package algoritm;
 
 import java.util.Vector;
 
-import main.Problem;
+import problem.Problem;
+
 
 public abstract class CSPAlgorithm {
 

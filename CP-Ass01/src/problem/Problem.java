@@ -1,4 +1,4 @@
-package main;
+package problem;
 
 import java.util.Map;
 import java.util.Vector;
