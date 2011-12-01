@@ -1,6 +1,7 @@
 package problem;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import algoritm.VariablesPair;
@@ -36,17 +37,17 @@ public class Problem {
 			getDomain().set(i, tmpVec);
 		}
 		
-		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
-		
 		initConstraints();
 	}
 
 	protected void initConstraints() {
 		// TODO Auto-generated method stub
+		
+		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
 	}
 
 	// TODO for further use...
-	public Problem() {
+	public Problem(int n, int d, double p1, double p2, Random random) {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -61,8 +62,8 @@ public class Problem {
 	 * @return
 	 */
 	public boolean check(int var1, int val1, int var2, int val2){
-		
-		return false;
+				
+		return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 	}
 	
 	@Override

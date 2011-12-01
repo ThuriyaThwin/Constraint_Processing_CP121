@@ -9,6 +9,16 @@ public class VariablesPair {
 		setFirst(first);
 		setSecond(second);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (!(obj instanceof VariablesPair))
+			return false;
+		
+		return (((VariablesPair)obj).getFirst() == getFirst() &&
+				((VariablesPair)obj).getSecond() == getSecond()	);
+	}
 
 	public void setSecond(int _second) {
 		this._second = _second;
