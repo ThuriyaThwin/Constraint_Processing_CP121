@@ -31,10 +31,10 @@ public class Problem {
 			
 			Vector<Integer> tmpVec = new Vector<Integer>(d);
 			
-			for (int j = 1; j <= d; j++)
+			for (int j = 1; j <= d; j++)		//TODO: should be 0 ?..
 				tmpVec.add(new Integer(j));
 			
-			getDomain().set(i, tmpVec);
+			getDomain().add(tmpVec);
 		}
 		
 		initConstraints();
