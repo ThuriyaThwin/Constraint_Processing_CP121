@@ -68,8 +68,13 @@ public class Problem {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i = 0; i < getN(); i++)
+			sb.append(" <" + i + "," + getV().get(i) + "> ");
+		
+		return sb.toString();
 	}
 
 	protected void setN(int n) {

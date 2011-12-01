@@ -10,7 +10,7 @@ import algoritm.CSPAlgorithm;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		Vector<Problem> problems = new Vector<Problem>();
 		
@@ -18,7 +18,10 @@ public class Main {
 		
 		CSPAlgorithm algoritm = new BTAlgoritm();
 		
-		for (Problem p: problems)
-			System.out.println(algoritm.solve(p));
+		for (Problem p: problems){
+			
+			algoritm.solve(p);
+			System.out.println(p);
+		}
 	}
 }

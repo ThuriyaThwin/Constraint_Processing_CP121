@@ -42,16 +42,16 @@ public abstract class CSPAlgorithm {
 		_status = INITIALIZED;
 	}
 	
-	public String solve(Problem problem){
+	public void solve(Problem problem) throws Exception{
 		
 		init(problem);		
-		return solve();
+		solve();
 	}
 	
-	public String solve(){
+	public void solve() throws Exception{
 		
 		if (UNINITIALIZED == _status)
-			return "Please initialize the algorithm with a Problem";
+			throw new Exception("Please initialize the algorithm with a Problem");
 		
 		_consistent = true;
 		
@@ -67,13 +67,6 @@ public abstract class CSPAlgorithm {
 			if (i >= _problem.getN()) _status = SOLUTION;	// TODO: should be > ?..
 			else if (-1 == i) _status = IMPOSSIBLE;			// TODO: should be 0 ?..
 		}
-		
-		return printSolution();
-	}
-
-	protected String printSolution() {
-		// TODO Auto-generated method stub
-		return "";
 	}
 
 	public abstract int label(int i);
