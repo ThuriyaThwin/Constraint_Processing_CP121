@@ -19,12 +19,10 @@ public abstract class CSPAlgorithm {
 	protected	Vector<Vector<Integer>>	_currentDomain;
 	
 	public CSPAlgorithm() {
-
 		_status = UNINITIALIZED;
 	}
 	
-	public CSPAlgorithm(Problem problem) {
-		
+	public CSPAlgorithm(Problem problem) {	
 		init(problem);
 	}
 	
