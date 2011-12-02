@@ -5,7 +5,8 @@ import java.util.Vector;
 import problem.NQueensProblem;
 import problem.Problem;
 
-import algoritm.BTAlgoritm;
+import algoritm.BTAlgorithm;
+import algoritm.CBJAlgorithm;
 import algoritm.CSPAlgorithm;
 
 public class Main {
@@ -14,14 +15,23 @@ public class Main {
 
 		Vector<Problem> problems = new Vector<Problem>();
 		
-		problems.add(new NQueensProblem(10));
+		problems.add(new NQueensProblem(4));
 		
-		CSPAlgorithm algoritm = new BTAlgoritm();
+		CSPAlgorithm algoritm = new BTAlgorithm();
 		
 		for (Problem p: problems){
 			
 			algoritm.solve(p);
-			System.out.println(p);
+//			System.out.println(p);
+			System.out.println(p.printSolution());
+		}
+		
+		algoritm = new CBJAlgorithm();
+		
+		for (Problem p: problems){
+			
+			algoritm.solve(p);
+//			System.out.println(p);
 			System.out.println(p.printSolution());
 		}
 	}

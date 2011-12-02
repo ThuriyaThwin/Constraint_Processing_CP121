@@ -48,6 +48,8 @@ public class Problem {
 		initConstraints();
 		
 		setSolved(false);
+		setCCs(0);
+		setAssignments(0);
 	}
 
 	protected void initConstraints() {
