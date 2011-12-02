@@ -30,9 +30,9 @@ public class NQueensProblem extends Problem {
 				
 				tmpMap = new HashMap<VariablesPair, Boolean>(getD()*getD());
 				
-				for (int di = 0; di < getN(); di++){
+				for (int di = 0; di < getD(); di++){
 				
-					for (int dj = 0; dj < getN(); dj++){
+					for (int dj = 0; dj < getD(); dj++){
 						
 						if (	(di == dj) || (i-j == di-dj) || (j-i == di-dj)
 										   || (i-j == dj-di) || (j-i == dj-di)	)

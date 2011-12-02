@@ -35,7 +35,7 @@ public abstract class CSPAlgorithm {
 		
 		_currentDomain = new Vector<Vector<Integer>>();
 		
-		for (int i = 0; i < _currentDomain.size(); i++)
+		for (int i = 0; i < _problem.getN(); i++)
 			_currentDomain.add(
 					(Vector<Integer>)_problem.getDomain().get(i).clone());
 		
@@ -57,15 +57,19 @@ public abstract class CSPAlgorithm {
 		
 		_status = UNKNOWN;
 		
-		int i = 0;											// TODO: should be 1 ?..
+		int i = 0;
 		
 		while (UNKNOWN == _status){
 			
 			if (_consistent) i = label(i);
 			else i = unlabel(i);
 			
-			if (i >= _problem.getN()) _status = SOLUTION;	// TODO: should be > ?..
-			else if (-1 == i) _status = IMPOSSIBLE;			// TODO: should be 0 ?..
+			if (i >= _problem.getN()){
+				
+				_status = SOLUTION;
+				_problem.setSolved(true);
+			}
+			else if (-1 == i) _status = IMPOSSIBLE;
 		}
 	}
 

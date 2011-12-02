@@ -15,6 +15,9 @@ public class Problem {
 	protected	Vector<Integer>								_v;
 	protected	Vector<Vector<Integer>>						_domain;
 	protected	Vector<Vector<Map<VariablesPair, Boolean>>>	_constraints;
+	protected	boolean										_solved;
+	protected	int											_CCs;
+	protected	int											_assignments;
 	
 	public Problem(int n, int d, double p1, double p2) {
 
@@ -23,7 +26,12 @@ public class Problem {
 		setP1(p1);
 		setP2(p2);
 		
-		setV(new Vector<Integer>(n));
+		Vector<Integer> tmpV = new Vector<Integer>(n);
+		
+		for (int i = 0; i < n; i++)
+			tmpV.add(new Integer(-1));
+
+		setV(tmpV);
 		
 		setDomain(new Vector<Vector<Integer>>(n));
 		
@@ -31,13 +39,15 @@ public class Problem {
 			
 			Vector<Integer> tmpVec = new Vector<Integer>(d);
 			
-			for (int j = 1; j <= d; j++)		//TODO: should be 0 ?..
+			for (int j = 0; j < d; j++)
 				tmpVec.add(new Integer(j));
 			
 			getDomain().add(tmpVec);
 		}
 		
 		initConstraints();
+		
+		setSolved(false);
 	}
 
 	protected void initConstraints() {
@@ -63,16 +73,30 @@ public class Problem {
 	 */
 	public boolean check(int var1, int val1, int var2, int val2){
 				
+		incCCs();
+		
 		return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 	}
 	
 	@Override
 	public String toString() {
+		// TODO Auto-generated method stub
+		return "";
+	}
+	
+	public String printSolution() {
 		
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("Assignment = ");
 		
+		if (!isSolved())
+			sb.append("UNSOLVED: ");
+
 		for (int i = 0; i < getN(); i++)
-			sb.append(" <" + i + "," + getV().get(i) + "> ");
+			sb.append("<" + i + "," + getV().get(i) + ">,");
+		
+		sb.deleteCharAt(sb.lastIndexOf(","));
+		
+		sb.append(" , CCs=" + getCCs() + ", Assignments=" + getAssignments());
 		
 		return sb.toString();
 	}
@@ -116,6 +140,13 @@ public class Problem {
 	public Vector<Integer> getV() {
 		return _v;
 	}
+	
+	public void setVi(int i, Integer element) {
+		
+		incAssignments();
+		
+		getV().set(i, element);
+	}
 
 	protected void setDomain(Vector<Vector<Integer>> currentDomain) {
 		this._domain = currentDomain;
@@ -131,6 +162,38 @@ public class Problem {
 
 	public Vector<Vector<Map<VariablesPair, Boolean>>> getConstraints() {
 		return _constraints;
+	}
+
+	public void setSolved(boolean solved) {
+		this._solved = solved;
+	}
+
+	public boolean isSolved() {
+		return _solved;
+	}
+
+	public void setCCs(int cCs) {
+		_CCs = cCs;
+	}
+
+	public int getCCs() {
+		return _CCs;
+	}
+	
+	public void incCCs(){
+		_CCs++;
+	}
+
+	public void setAssignments(int assignments) {
+		this._assignments = assignments;
+	}
+
+	public int getAssignments() {
+		return _assignments;
+	}
+	
+	public void incAssignments(){
+		_assignments++;
 	}
 	
 	//TODO: need a way to save the information about the previous generated matrices

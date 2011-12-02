@@ -14,7 +14,7 @@ public class Main {
 
 		Vector<Problem> problems = new Vector<Problem>();
 		
-		problems.add(new NQueensProblem(8));
+		problems.add(new NQueensProblem(10));
 		
 		CSPAlgorithm algoritm = new BTAlgoritm();
 		
@@ -22,6 +22,7 @@ public class Main {
 			
 			algoritm.solve(p);
 			System.out.println(p);
+			System.out.println(p.printSolution());
 		}
 	}
 }

@@ -10,36 +10,35 @@ public class BTAlgoritm extends CSPAlgorithm {
 		
 		_consistent = false;
 		
-		Vector<Integer> tmpCurrentDomain = new Vector<Integer>();
-		
-		int size = _currentDomain.get(i).size();
-
-		for  (int j = 0; j < size && !_consistent; j++){
+		while  (!_currentDomain.get(i).isEmpty() && !_consistent){
 
 			_consistent = true;
 
-			_problem.getV().set(i, _currentDomain.get(i).get(j));
+			_problem.setVi(i, _currentDomain.get(i).firstElement());
 
 			for (int h = 0; h < i && _consistent; h++)
 				_consistent = _problem.check(i, _problem.getV().get(i), h, _problem.getV().get(h));
 
-			if (_consistent) tmpCurrentDomain.addElement(_currentDomain.get(i).get(j));
+			if (!_consistent) //	tmpCurrentDomain.addElement(_currentDomain.get(i).get(j));
+				_currentDomain.get(i).removeElementAt(0);//hard coded
 		}
-
-		_currentDomain.set(i, tmpCurrentDomain);
 
 		return (_consistent) ? i + 1 : i;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int unlabel(int i) {
 
 		int h = i - 1;
 		
-		_currentDomain.set(i, _problem.getDomain().get(i));
-		_currentDomain.get(h).remove(new Integer(_problem.getV().get(h)));
+		if (-1 != h){ 
 		
-		_consistent = !_currentDomain.get(h).isEmpty();
+			_currentDomain.set(i, (Vector<Integer>)_problem.getDomain().get(i).clone());
+			_currentDomain.get(h).remove(_problem.getV().get(h));
+			
+			_consistent = !_currentDomain.get(h).isEmpty();
+		}
 		
 		return h;
 	}

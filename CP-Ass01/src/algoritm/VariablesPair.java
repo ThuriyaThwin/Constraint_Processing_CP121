@@ -19,6 +19,12 @@ public class VariablesPair {
 		return (((VariablesPair)obj).getFirst() == getFirst() &&
 				((VariablesPair)obj).getSecond() == getSecond()	);
 	}
+	
+	@Override
+	public int hashCode() {
+		
+		return (_first * _second) % 100;
+	}
 
 	public void setSecond(int _second) {
 		this._second = _second;
