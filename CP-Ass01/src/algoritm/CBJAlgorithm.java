@@ -29,6 +29,8 @@ public class CBJAlgorithm extends BTAlgorithm {
 			_confSets.add(new TreeSet<Integer>());
 	}
 	
+
+	
 	@Override
 	protected void doSomethingLabel(int hMinusOne, int i) {
 		

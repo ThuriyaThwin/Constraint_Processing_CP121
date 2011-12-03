@@ -40,7 +40,6 @@ public class BTAlgorithm extends CSPAlgorithm {
 				doSomethingLabel(h-1, i);
 				_currentDomain.get(i).removeElementAt(0);//hard coded
 			}
-				
 		}
 
 		return (_consistent) ? i + 1 : i;

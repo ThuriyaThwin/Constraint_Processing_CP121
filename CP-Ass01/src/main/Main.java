@@ -8,6 +8,7 @@ import problem.Problem;
 import algoritm.BTAlgorithm;
 import algoritm.CBJAlgorithm;
 import algoritm.CSPAlgorithm;
+import algoritm.FCCBJAlgorithm;
 
 public class Main {
 
@@ -15,7 +16,7 @@ public class Main {
 
 		Vector<Problem> problems = new Vector<Problem>();
 		
-		problems.add(new NQueensProblem(4));
+		problems.add(new NQueensProblem(10));
 		
 		CSPAlgorithm algoritm = new BTAlgorithm();
 		
@@ -27,6 +28,15 @@ public class Main {
 		}
 		
 		algoritm = new CBJAlgorithm();
+		
+		for (Problem p: problems){
+			
+			algoritm.solve(p);
+//			System.out.println(p);
+			System.out.println(p.printSolution());
+		}
+		
+		algoritm = new FCCBJAlgorithm();
 		
 		for (Problem p: problems){
 			

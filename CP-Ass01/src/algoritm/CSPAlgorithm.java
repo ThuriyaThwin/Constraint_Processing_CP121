@@ -51,6 +51,10 @@ public abstract class CSPAlgorithm {
 		if (UNINITIALIZED == _status)
 			throw new Exception("Please initialize the algorithm with a Problem");
 		
+		_problem.setSolved(true);
+		_problem.setCCs(0);
+		_problem.setAssignments(0);
+		
 		_consistent = true;
 		
 		_status = UNKNOWN;
