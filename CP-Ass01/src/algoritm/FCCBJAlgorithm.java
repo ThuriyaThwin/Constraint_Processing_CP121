@@ -45,22 +45,26 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		while  (!_currentDomain.get(i).isEmpty() && !_consistent){
 
 			_problem.setVi(i, _currentDomain.get(i).firstElement());//Always going for the first
-			_consistent = true;		
+			_consistent = true;	
+			
 			int j;
 			for(j = i+1; j < _problem.getN() && _consistent; j++){
 				_consistent = checkForward(i, j);
 			}
+			
 			if(!_consistent){
 				_currentDomain.get(i).remove(0);//Hard coded 0 
 				undoReductions(i);
 				_confSets.get(i).addAll(_pastFc.get(j-1));
 			}
-		
+			else labelExtansion(i);
 		}
 
 		return (_consistent) ? i + 1 : i;
 	}
 	
+	protected void labelExtansion(int i) {}
+
 	@Override
 	public int unlabel(int i) {
 
@@ -70,7 +74,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		
 		_confSets.get(h).addAll(_confSets.get(i));
 		_confSets.get(h).addAll(_pastFc.get(i));
-		_confSets.get(h).remove(h);//TODO:Possibly a bug here
+		_confSets.get(h).remove(h);//TODO:Possibly a bug here new Integer(h)
 		
 		for(int j = i;j >= h + 1;j--){
 			_confSets.get(j).clear();
