@@ -2,6 +2,8 @@ package main;
 
 import java.util.Vector;
 
+import data.DataManager;
+
 import problem.NQueensProblem;
 import problem.Problem;
 
@@ -15,9 +17,15 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 
-		Vector<Problem> problems = new Vector<Problem>();
+		Vector<Problem> problems;
 		
-		problems.add(new NQueensProblem(8));
+		problems = generateProblems();
+		
+		DataManager dataManager = new DataManager();
+		
+		dataManager.storeProblems(problems, "problems");
+		
+		problems = dataManager.restoreProblems("problems");
 		
 		CSPAlgorithm algoritm = new BTAlgorithm();
 		
@@ -54,5 +62,14 @@ public class Main {
 //			System.out.println(p);
 			System.out.println(p.printSolution());
 		}
+	}
+
+	private static Vector<Problem> generateProblems() {
+
+		Vector<Problem> problems = new Vector<Problem>();
+		
+		problems.add(new NQueensProblem(8));
+		
+		return problems;
 	}
 }
