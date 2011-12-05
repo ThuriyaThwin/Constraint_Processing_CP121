@@ -74,7 +74,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 			
 			_currentDomain.get(p).removeAll(tVec);
 			
-			tValuesToRemove.add(tVec);
+			tValuesToRemove.add(tVec);	//TODO: add to the end?..
 			
 			if (_currentDomain.get(p).isEmpty()){
 				
