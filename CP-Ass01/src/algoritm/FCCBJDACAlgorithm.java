@@ -107,6 +107,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 			else if(_dac.get(i).get(j) == 0){
 			}
 		}
+		_currentDomain.set(i, tbuildingDomain);//TODO:Check this
 	}
 	/**
 	 * Use this function,tells us if we have emptied a current domain.
