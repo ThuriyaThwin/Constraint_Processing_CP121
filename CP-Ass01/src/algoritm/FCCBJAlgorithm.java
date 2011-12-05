@@ -41,6 +41,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 	public int label(int i) {
 		
 		_consistent = false;
+		boolean tExtansion = true;
 		
 		while  (!_currentDomain.get(i).isEmpty() && !_consistent){
 
@@ -52,18 +53,28 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 				_consistent = checkForward(i, j);
 			}
 			
-			if(!_consistent){
-				_currentDomain.get(i).remove(0);//Hard coded 0 
-				undoReductions(i);
-				_confSets.get(i).addAll(_pastFc.get(j-1));
+			if(!_consistent){//TODO:check this.
+				undoAssignment(i, j);
 			}
-			else labelExtansion(i);
+			else tExtansion = labelExtansion(i);
+			if(!tExtansion){//TODO:Check this,interesting;
+				undoAssignment(i, j);
+				_consistent = false;//an attempt to try an another variable in the domain;
+			}
 		}
 
 		return (_consistent) ? i + 1 : i;
 	}
+
+	private void undoAssignment(int i, int j) {
+		_currentDomain.get(i).remove(0);//Hard coded 0 
+		undoReductions(i);
+		_confSets.get(i).addAll(_pastFc.get(j-1));
+	}
 	
-	protected void labelExtansion(int i) {}
+	protected boolean labelExtansion(int i) {
+		return false;
+	}
 
 	@Override
 	public int unlabel(int i) {
@@ -74,7 +85,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		
 		_confSets.get(h).addAll(_confSets.get(i));
 		_confSets.get(h).addAll(_pastFc.get(i));
-		_confSets.get(h).remove(h);//TODO:Possibly a bug here new Integer(h)
+		_confSets.get(h).remove(new Integer(h));
 		
 		for(int j = i;j >= h + 1;j--){
 			_confSets.get(j).clear();

@@ -33,16 +33,21 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 	}
 
 	@Override
-	protected void labelExtansion(int k) {
+	protected boolean labelExtansion(int k) {
 
-		for (int p = _problem.getN() -1; p > k; p--){
+		boolean tAns = true;
+		
+		Vector<Vector<Integer>> tValuesToRemove = new Vector<Vector<Integer>>();
+				
+		for (int p = _problem.getN() - 1; p > k; p--){
 
-			//index for iterating - tL
-			//int tCurrentDomainStartSize = _currentDomain.get(p).size();
-			//int tRemovedCount = 0;
 			Vector<Integer> tIndicesVec = new Vector<Integer>();
-			for (int tL = 0;tL < _currentDomain.get(p).size();tL++){	//TODO: change it...
+			Vector<Integer> tVec = new Vector<Integer>();
+			
+			for (int tL = 0; tL < _currentDomain.get(p).size(); tL++){	//TODO: change it...
+			
 				Integer Vp = _currentDomain.get(p).get(tL);
+				
 				for (int q = p + 1; q < _problem.getN(); q++){
 
 					boolean tFound = false;
@@ -54,17 +59,36 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 					}
 
 					if (!tFound){
+				
 						tIndicesVec.add(tL);//Saving the indices which we will dissapper later, in order to update _dac
-						//_currentDomain.get(p).remove(tL);
-						//tL--;
-						break;//TODO:Hard coded,change this?
-						//_currentDomain.get(p).remove(Vp);
+						tVec.add(Vp);
+						
+						break; //TODO:Hard coded,change this?
 					}
 				}
 			}
+			
 			updateDAC(p, tIndicesVec, k);
-			clearCurrentDomain(p,tIndicesVec);
+			
+			//clearCurrentDomain(p, tIndicesVec);
+			
+			_currentDomain.get(p).removeAll(tVec);
+			
+			tValuesToRemove.add(tVec);
+			
+			if (_currentDomain.get(p).isEmpty()){
+				
+				for (int l = 0; l < tValuesToRemove.size(); l++){
+					
+					_currentDomain.get(p+l).addAll(tValuesToRemove.get(l));
+				}
+				
+				tAns = false;
+				break;
+			}
 		}
+		
+		return tAns;
 	}
 
 	/**
@@ -77,16 +101,16 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 
 		Vector<Integer> tAns = new Vector<Integer>();
 
-		for (int j = 0; j < _currentDomain.get(i).size();j++) {
+		for (int j = 0; j < _currentDomain.get(i).size(); j++)
+			
 			if(!IndicesVec.contains(j)){
 				tAns.add(_currentDomain.get(i).get(j));
-			}
 		}
-		if(tAns.size() != _currentDomain.get(i).size()){
-			_currentDomain.set(i,tAns);//nice Replace?
-		}
-		return _currentDomain.get(i).isEmpty();
+		
+		if(tAns.size() != _currentDomain.get(i).size())
+			_currentDomain.set(i, tAns);//nice Replace?
 
+		return _currentDomain.get(i).isEmpty();
 	}
 
 	/**
@@ -96,14 +120,15 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 	 * to the DAC Procedure
 	 * @param h - Is the index of the varible after it's assignment we ran DAC procedure.
 	 */
-	private void updateDAC(int i,Vector<Integer> indices,int h){
-		for(int l = 0;l < _problem.getD();l++){
-			if(indices.contains(l)){
+	private void updateDAC(int i, Vector<Integer> indices, int h){
+		
+		for(int l = 0; l < _problem.getD(); l++){
+		
+			if(indices.contains(l))
 				_dac.get(i).set(l, h);
-			}
-			else{
+
+			else
 				_dac.get(i).set(l, 0);
-			}
 		}
 	}
 }
