@@ -91,6 +91,23 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 		return tAns;
 	}
 
+	
+	//TODO:Check this, very weird.
+	@Override
+	protected void unlabelExtansion(int i,int h){
+		
+		Vector<Integer> tbuildingDomain = (Vector<Integer>)_currentDomain.get(i).clone();
+		int tCounter = 0;
+		for(int j = 0;j < _dac.get(i).size();j++){
+			//Restore from original
+			if(_dac.get(i).get(j) >= h){
+				tbuildingDomain.add(j + tCounter, _problem.getDomain().get(i).get(j));
+				tCounter++;
+			}
+			else if(_dac.get(i).get(j) == 0){
+			}
+		}
+	}
 	/**
 	 * Use this function,tells us if we have emptied a current domain.
 	 * @param i = the index to the domain we want to clear.

@@ -73,7 +73,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 	}
 	
 	protected boolean labelExtansion(int i) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -91,6 +91,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 			_confSets.get(j).clear();
 			undoReductions(j);
 			updateCurrentDomain(j);
+			unlabelExtansion(i, h);
 		}
 		
 		undoReductions(h);
@@ -115,6 +116,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		return tMax;
 	}
 	
+	protected void unlabelExtansion(int i,int h){}
 	
 	public boolean checkForward(int i, int j){
 
