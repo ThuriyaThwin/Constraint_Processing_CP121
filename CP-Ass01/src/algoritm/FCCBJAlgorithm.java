@@ -84,14 +84,13 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 	protected boolean labelExtansion(int i) {
 		return true;
 	}
-
-	//TODO: if updateCurrentDomain says "remove x" and DAC says "add x".. should we keep x or not?.. 
+ 
 	@Override
 	public int unlabel(int i) {
 
 		int h = getHFromI(i);
 		
-//		unlabelExtansion(i, h);
+		if (h < 0) return h;
 		
 		_confSets.get(h).addAll(_confSets.get(i));
 		_confSets.get(h).addAll(_pastFc.get(i));
@@ -114,13 +113,15 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 	@Override
 	protected int getHFromI(int i) {
 		
-		int tMax = -2;
+		if (_pastFc.get(i).isEmpty()) return -1;	//TODO ...
+		
+		int tMax = _pastFc.get(i).firstElement();
 		
 		for(Integer tX :_pastFc.get(i)){
 			if(tX > tMax)
 				tMax = tX;
 		}
-		if(tMax < _confSets.get(i).last())
+		if(!_confSets.get(i).isEmpty() && tMax < _confSets.get(i).last())	//TODO ...
 			tMax = _confSets.get(i).last();
 
 		return tMax;

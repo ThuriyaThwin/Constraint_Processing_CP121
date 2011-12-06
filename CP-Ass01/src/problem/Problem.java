@@ -88,11 +88,17 @@ public class Problem {
 
 			tmpVec = new Vector<Map<VariablesPair, Boolean>>(getN());
 			
-			for (int j = i + 1; j < getN(); j++){
+			for (int j = 0; j < getN(); j++){
+				
+				if (j < i){
+					
+					tmpVec.add(null);
+					continue;
+				}
 				
 				tmpMap = new HashMap<VariablesPair, Boolean>(getD()*getD());
 				
-				dontHaveConstarint = getRandom().nextDouble() > getP1();
+				dontHaveConstarint = (i == j) || getRandom().nextDouble() > getP1();
 				
 				for (int di = 0; di < getD(); di++){
 					
@@ -129,7 +135,7 @@ public class Problem {
 				
 		incCCs();
 		
-		if (var1 < var2)
+		if (var1 <= var2)
 			return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 		
 		else
