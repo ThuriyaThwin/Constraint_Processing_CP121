@@ -20,6 +20,12 @@ public class Problem {
 	protected	int											_assignments;
 	protected	Random										_random;
 	
+	/**
+	 * n – the number of variables.
+	 * d – the domain size.
+	 * p1 – the probability for a constraint between 2 variables.
+	 * p2 – the probability for a conflict between 2 constrained values.
+	 */	
 	public Problem(int n, int d, double p1, double p2) {
 		this(n, d, p1, p2, new Random(17));
 	}
@@ -63,10 +69,18 @@ public class Problem {
 		setAssignments(0);
 	}
 
+	/**
+	 * p1 – the probability for a constraint between 2 variables.
+	 * p2 – the probability for a conflict between 2 constrained values.
+	 */
 	protected void initConstraints() {
 		
-		
-		
+		double numOfVariablesWhichHasConstaint = (getN()-1) * getP1();
+
+		for (int i = 0; i < getN(); i++){
+			
+			
+		}
 		
 		
 		//TODO ...
