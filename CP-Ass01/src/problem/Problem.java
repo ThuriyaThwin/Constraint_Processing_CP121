@@ -26,26 +26,30 @@ public class Problem {
 		setP1(p1);
 		setP2(p2);
 		
-		Vector<Integer> tmpV = new Vector<Integer>(n);
+		initDataStructures();
+		initConstraints();
+	}
+
+	public void initDataStructures() {
 		
-		for (int i = 0; i < n; i++)
+		Vector<Integer> tmpV = new Vector<Integer>(getN());
+		
+		for (int i = 0; i < getN(); i++)
 			tmpV.add(new Integer(-1));
 
 		setV(tmpV);
 		
-		setDomain(new Vector<Vector<Integer>>(n));
+		setDomain(new Vector<Vector<Integer>>(getN()));
 		
-		for (int i = 0; i < n; i++){
+		for (int i = 0; i < getN(); i++){
 			
-			Vector<Integer> tmpVec = new Vector<Integer>(d);
+			Vector<Integer> tmpVec = new Vector<Integer>(getD());
 			
-			for (int j = 0; j < d; j++)
+			for (int j = 0; j < getD(); j++)
 				tmpVec.add(new Integer(j));
 			
 			getDomain().add(tmpVec);
 		}
-		
-		initConstraints();
 		
 		setSolved(false);
 		setCCs(0);
@@ -53,14 +57,11 @@ public class Problem {
 	}
 
 	protected void initConstraints() {
-		// TODO Auto-generated method stub
-		
 		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
 	}
 
-	// TODO for further use...
 	public Problem(int n, int d, double p1, double p2, Random random) {
-		// TODO Auto-generated constructor stub
+		// TODO for further use...
 	}
 	
 	/**

@@ -45,7 +45,8 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		
 		while  (!_currentDomain.get(i).isEmpty() && !_consistent){
 
-			_problem.setVi(i, _currentDomain.get(i).firstElement());//Always going for the first
+			//Always going for the first
+			_problem.setVi(i, _currentDomain.get(i).firstElement());
 			
 			_consistent = true;	
 			tExtansion = true;
@@ -90,7 +91,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 
 		int h = getHFromI(i);
 		
-		// TODO 	if (-1 != h){ ... }
+//		unlabelExtansion(i, h);
 		
 		_confSets.get(h).addAll(_confSets.get(i));
 		_confSets.get(h).addAll(_pastFc.get(i));
@@ -102,9 +103,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 			undoReductions(j);
 			updateCurrentDomain(j);
 		}
-		
-		unlabelExtansion(i, h);
-		
+				
 		undoReductions(h);
 		_currentDomain.get(h).remove(_problem.getV().get(h));
 		_consistent = !_currentDomain.get(h).isEmpty();

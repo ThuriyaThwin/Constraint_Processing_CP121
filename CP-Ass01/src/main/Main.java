@@ -18,33 +18,36 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		Vector<Problem> problems;
+		CSPAlgorithm algoritm;
 		
-//		problems = generateProblems();
+		problems = generateProblems();
 		
-		DataManager dataManager = new DataManager();
+//		DataManager dataManager = new DataManager();
 		
 //		dataManager.storeProblems(problems, "problems");
 		
-		problems = dataManager.restoreProblems("problems");
+//		problems = dataManager.restoreProblems("problems");
 		
-		CSPAlgorithm algoritm = new BTAlgorithm();
-		
-		for (Problem p: problems){
-			
-			algoritm.solve(p);
-//			System.out.println(p);
-			System.out.println(p.printSolution());
-		}
-		
-		algoritm = new CBJAlgorithm();
-		
-		for (Problem p: problems){
-			
-			algoritm.solve(p);
-//			System.out.println(p);
-			System.out.println(p.printSolution());
-		}
-		
+		System.out.println("Finished Generating Problems, Starts solving..");
+//		
+//		algoritm = new BTAlgorithm();
+//		
+//		for (Problem p: problems){
+//			
+//			algoritm.solve(p);
+////			System.out.println(p);
+//			System.out.println(p.printSolution());
+//		}
+//		
+//		algoritm = new CBJAlgorithm();
+//		
+//		for (Problem p: problems){
+//			
+//			algoritm.solve(p);
+////			System.out.println(p);
+//			System.out.println(p.printSolution());
+//		}
+//		
 		algoritm = new FCCBJAlgorithm();
 		
 		for (Problem p: problems){

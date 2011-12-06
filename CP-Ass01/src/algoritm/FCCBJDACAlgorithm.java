@@ -83,7 +83,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 				
 				for (int l = 0; l < tValuesToRemove.size(); l++){
 					
-					_currentDomain.get(p+l).addAll(tValuesToRemove.get(l));
+//					_currentDomain.get(p+l).addAll(tValuesToRemove.get(l));
 				}
 				
 				tAns = false;
@@ -160,10 +160,14 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 	 */
 	private void updateDAC(int i, Vector<Integer> removedValues, int h){
 		
-		for (Integer j: removedValues){
-			
-			_dac.get(i).set(j, h);
-		}
+		_pastFc.get(i).push(h);
+		_futureFc.get(h).push(i);
+		_reductions.get(i).push(removedValues);
+				
+//		for (Integer j: removedValues){
+//			
+//			_dac.get(i).set(j, h);
+//		}
 
 //		for(int l = 0; l < _problem.getD(); l++){
 //		

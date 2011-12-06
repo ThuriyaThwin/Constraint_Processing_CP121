@@ -39,7 +39,6 @@ public class DataManager {
 			writeToFile(_xstream.toXML(problems), fileName);
 		}
 		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -54,7 +53,6 @@ public class DataManager {
 			problems = (Vector<Problem>)_xstream.fromXML(readFileAsString(fileName));
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

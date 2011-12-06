@@ -42,7 +42,7 @@ public abstract class CSPAlgorithm {
 	
 	public void solve(Problem problem) throws Exception{
 		
-		init(problem);		
+		init(problem);
 		solve();
 	}
 	
@@ -51,9 +51,7 @@ public abstract class CSPAlgorithm {
 		if (UNINITIALIZED == _status)
 			throw new Exception("Please initialize the algorithm with a Problem");
 		
-		_problem.setSolved(true);
-		_problem.setCCs(0);
-		_problem.setAssignments(0);
+		_problem.initDataStructures();
 		
 		_consistent = true;
 		
