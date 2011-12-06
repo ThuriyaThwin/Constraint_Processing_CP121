@@ -14,6 +14,9 @@ import algoritm.FCCBJDACAlgorithm;
 
 public class Main {
 
+	public static final int		GEN_AND_STORE		= 1;
+	public static final int		RESTORE				= 2;
+	
 	public static final int		NUM_OF_PROBLEMS		= 50;
 	public static final long	RANDOM_SEED			= 17;
 	public static final int		NUM_OF_VARIABLES	= 15;
@@ -29,15 +32,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 
-		Vector<Problem> problems;
-		
-		problems = generateProblems();
-		
-		DataManager dataManager = new DataManager();
-		
-		dataManager.storeProblems(problems, "problems");
-		
-		problems = dataManager.restoreProblems("problems");
+		Vector<Problem> problems = getProblems(GEN_AND_STORE);
 		
 		System.out.println("Finished Generating Problems, Starts solving..");
 
@@ -56,17 +51,39 @@ public class Main {
 		}
 	}
 
+	private static Vector<Problem> getProblems(int how) {
+
+		Vector<Problem> problems = null;
+		DataManager dataManager = new DataManager();
+		
+		switch (how){
+		
+			case GEN_AND_STORE:
+				
+				problems = generateProblems();
+				dataManager.storeProblems(problems, "problems");
+				break;
+				
+			case RESTORE:
+				
+				problems = dataManager.restoreProblems("problems");
+				break;
+				
+			default: break;
+		}
+
+		return problems;
+	}
+
 	private static Vector<Problem> generateProblems() {
-		
-		Random random = new Random(RANDOM_SEED);
-		
+
 		Vector<Problem> problems = new Vector<Problem>();
 		
 		problems.add(new NQueensProblem(10));
 		
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA)
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
-				problems.add(new Problem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
+				problems.add(new Problem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, new Random(RANDOM_SEED)));
 		
 		return problems;
 	}

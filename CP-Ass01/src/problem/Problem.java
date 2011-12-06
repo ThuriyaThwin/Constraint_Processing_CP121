@@ -1,5 +1,6 @@
 package problem;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
@@ -75,16 +76,82 @@ public class Problem {
 	 */
 	protected void initConstraints() {
 		
-		double numOfVariablesWhichHasConstaint = (getN()-1) * getP1();
+		int x;
+		
+		Vector<Vector<Map<VariablesPair, Boolean>>> tConstraints =
+			new Vector<Vector<Map<VariablesPair, Boolean>>>();
+		
+		int numOfVariablesWhichHasConstaint = (int)(getN()*getP1()) - 1;
+		int numOfValuesWhichHasConstaint = (int)(getD()*getP2()) - 1;
+		
+		boolean[][] choose = new boolean[getN()][getN()];
 
-		for (int i = 0; i < getN(); i++){
-			
-			
+		for (int i = 0; i < getN(); i++) {
+
+			for (int j = 0; j < numOfVariablesWhichHasConstaint; j++){
+				
+				while (true){
+					
+					x = getRandom().nextInt() % getN();
+					
+					if (x != i && !choose[i][x]){
+						
+						choose[i][x] = true;
+						choose[x][i] = true;
+						break;
+					}
+				}
+			}
 		}
 		
 		
 		//TODO ...
-		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
+		setConstraints(tConstraints);
+	}
+	
+	/**
+	 * p1 – the probability for a constraint between 2 variables.
+	 * p2 – the probability for a conflict between 2 constrained values.
+	 */
+	protected void initConstraints2() {
+		
+		Vector<Vector<Map<VariablesPair, Boolean>>> tConstraints =
+			new Vector<Vector<Map<VariablesPair, Boolean>>>(getN());
+
+		Vector<Map<VariablesPair, Boolean>> tmpVec = null;
+		Map<VariablesPair, Boolean> tmpMap = null;
+		
+		boolean dontHaveConstarint = false;
+		
+		for (int i = 0; i < getN(); i++) {
+
+			tmpVec = new Vector<Map<VariablesPair, Boolean>>(getN());
+			
+			for (int j = i + 1; j < getN(); j++){
+				
+				tmpMap = new HashMap<VariablesPair, Boolean>(getD()*getD());
+				
+				dontHaveConstarint = getRandom().nextDouble() > getP1();
+				
+				for (int di = 0; di < getD(); di++){
+					
+					for (int dj = 0; dj < getD(); dj++){
+						
+						if (dontHaveConstarint || getRandom().nextDouble() > getP2())
+							tmpMap.put(new VariablesPair(di, dj), true);
+						
+						else
+							tmpMap.put(new VariablesPair(di, dj), false);
+					}
+				}
+				
+				tmpVec.add(tmpMap);
+			}
+			
+			tConstraints.add(tmpVec);
+		}
+
+		setConstraints(tConstraints);
 	}
 	
 	/**
@@ -101,7 +168,11 @@ public class Problem {
 				
 		incCCs();
 		
-		return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
+		if (var1 < var2)
+			return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
+		
+		else
+			return getConstraints().get(var2).get(var1).get(new VariablesPair(val2, val1));
 	}
 	
 	@Override
