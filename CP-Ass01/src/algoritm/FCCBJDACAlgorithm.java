@@ -31,7 +31,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 			}
 		}
 	}
-
+	//TODO:Interesting Solution case(Ariel)
 	@Override
 	protected boolean labelExtansion(int k) {
 

@@ -84,6 +84,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		return true;
 	}
 
+	//TODO: if updateCurrentDomain says "remove x" and DAC says "add x".. should we keep x or not?.. 
 	@Override
 	public int unlabel(int i) {
 
