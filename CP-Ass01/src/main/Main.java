@@ -18,51 +18,28 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		Vector<Problem> problems;
-		CSPAlgorithm algoritm;
 		
 		problems = generateProblems();
 		
-//		DataManager dataManager = new DataManager();
+		DataManager dataManager = new DataManager();
 		
-//		dataManager.storeProblems(problems, "problems");
+		dataManager.storeProblems(problems, "problems");
 		
-//		problems = dataManager.restoreProblems("problems");
+		problems = dataManager.restoreProblems("problems");
 		
 		System.out.println("Finished Generating Problems, Starts solving..");
-//		
-//		algoritm = new BTAlgorithm();
-//		
-//		for (Problem p: problems){
-//			
-//			algoritm.solve(p);
-////			System.out.println(p);
-//			System.out.println(p.printSolution());
-//		}
-//		
-//		algoritm = new CBJAlgorithm();
-//		
-//		for (Problem p: problems){
-//			
-//			algoritm.solve(p);
-////			System.out.println(p);
-//			System.out.println(p.printSolution());
-//		}
-//		
-		algoritm = new FCCBJAlgorithm();
+
+		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
+		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
 		
 		for (Problem p: problems){
+
+			System.out.println(p);
 			
-			algoritm.solve(p);
-//			System.out.println(p);
-			System.out.println(p.printSolution());
-		}
-		
-		algoritm = new FCCBJDACAlgorithm();
-		
-		for (Problem p: problems){
+			FCCBJAlgorithm.solve(p);
+			System.out.println(p.printSolution());	
 			
-			algoritm.solve(p);
-//			System.out.println(p);
+			FCCBJDACAlgorithm.solve(p);
 			System.out.println(p.printSolution());
 		}
 	}
