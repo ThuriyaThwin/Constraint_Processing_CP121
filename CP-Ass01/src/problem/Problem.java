@@ -18,13 +18,20 @@ public class Problem {
 	protected	boolean										_solved;
 	protected	int											_CCs;
 	protected	int											_assignments;
+	protected	Random										_random;
 	
 	public Problem(int n, int d, double p1, double p2) {
-
+		this(n, d, p1, p2, new Random(17));
+	}
+	
+	public Problem(int n, int d, double p1, double p2, Random random) {
+		
 		setN(n);
 		setD(d);
 		setP1(p1);
 		setP2(p2);
+		
+		setRandom(random);
 		
 		initDataStructures();
 		initConstraints();
@@ -57,11 +64,8 @@ public class Problem {
 	}
 
 	protected void initConstraints() {
+		//TODO ...
 		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
-	}
-
-	public Problem(int n, int d, double p1, double p2, Random random) {
-		// TODO for further use...
 	}
 	
 	/**
@@ -89,11 +93,11 @@ public class Problem {
 	
 	public String printSolution() {
 		
+		if (!isSolved())
+			System.out.println("UNSOLVED: ");
+		
 		StringBuilder sb = new StringBuilder("Assignment = ");
 		
-		if (!isSolved())
-			sb.append("UNSOLVED: ");
-
 		for (int i = 0; i < getN(); i++)
 			sb.append("<" + i + "," + getV().get(i) + ">,");
 		
@@ -198,6 +202,12 @@ public class Problem {
 	public void incAssignments(){
 		_assignments++;
 	}
-	
-	//TODO: need a way to save the information about the previous generated matrices
+
+	public void setRandom(Random random) {
+		this._random = random;
+	}
+
+	public Random getRandom() {
+		return _random;
+	}
 }

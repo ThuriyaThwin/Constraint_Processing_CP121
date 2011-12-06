@@ -7,8 +7,6 @@ import data.DataManager;
 import problem.NQueensProblem;
 import problem.Problem;
 
-import algoritm.BTAlgorithm;
-import algoritm.CBJAlgorithm;
 import algoritm.CSPAlgorithm;
 import algoritm.FCCBJAlgorithm;
 import algoritm.FCCBJDACAlgorithm;
@@ -48,7 +46,7 @@ public class Main {
 
 		Vector<Problem> problems = new Vector<Problem>();
 		
-		problems.add(new NQueensProblem(8));
+		problems.add(new NQueensProblem(10));
 		
 		return problems;
 	}
