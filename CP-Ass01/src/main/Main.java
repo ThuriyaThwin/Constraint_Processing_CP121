@@ -19,11 +19,11 @@ public class Main {
 
 		Vector<Problem> problems;
 		
-		problems = generateProblems();
+//		problems = generateProblems();
 		
 		DataManager dataManager = new DataManager();
 		
-		dataManager.storeProblems(problems, "problems");
+//		dataManager.storeProblems(problems, "problems");
 		
 		problems = dataManager.restoreProblems("problems");
 		
