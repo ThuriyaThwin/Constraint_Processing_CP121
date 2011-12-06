@@ -46,20 +46,27 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		while  (!_currentDomain.get(i).isEmpty() && !_consistent){
 
 			_problem.setVi(i, _currentDomain.get(i).firstElement());//Always going for the first
+			
 			_consistent = true;	
+			tExtansion = true;
 			
 			int j;
-			for(j = i+1; j < _problem.getN() && _consistent; j++){
+			
+			for(j = i + 1; j < _problem.getN() && _consistent; j++){
 				_consistent = checkForward(i, j);
 			}
 			
-			if(!_consistent){//TODO:check this.
+			if(!_consistent){
 				undoAssignment(i, j);
 			}
 			else tExtansion = labelExtansion(i);
-			if(!tExtansion){//TODO:Check this,interesting;
+			
+			if(!tExtansion){
+				
 				undoAssignment(i, j);
-				_consistent = false;//an attempt to try an another variable in the domain;
+				
+				//an attempt to try an another variable in the domain;
+				_consistent = false;
 			}
 		}
 
@@ -67,6 +74,7 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 	}
 
 	private void undoAssignment(int i, int j) {
+		
 		_currentDomain.get(i).remove(0);//Hard coded 0 
 		undoReductions(i);
 		_confSets.get(i).addAll(_pastFc.get(j-1));
@@ -87,12 +95,14 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 		_confSets.get(h).addAll(_pastFc.get(i));
 		_confSets.get(h).remove(new Integer(h));
 		
-		for(int j = i;j >= h + 1;j--){
+		for(int j = i; j >= h + 1; j--){
+			
 			_confSets.get(j).clear();
 			undoReductions(j);
 			updateCurrentDomain(j);
-			unlabelExtansion(i, h);
 		}
+		
+		unlabelExtansion(i, h);
 		
 		undoReductions(h);
 		_currentDomain.get(h).remove(_problem.getV().get(h));
