@@ -69,51 +69,12 @@ public class Problem {
 		setCCs(0);
 		setAssignments(0);
 	}
-
-	/**
-	 * p1 – the probability for a constraint between 2 variables.
-	 * p2 – the probability for a conflict between 2 constrained values.
-	 */
-	protected void initConstraints() {
-		
-		int x;
-		
-		Vector<Vector<Map<VariablesPair, Boolean>>> tConstraints =
-			new Vector<Vector<Map<VariablesPair, Boolean>>>();
-		
-		int numOfVariablesWhichHasConstaint = (int)(getN()*getP1()) - 1;
-		int numOfValuesWhichHasConstaint = (int)(getD()*getP2()) - 1;
-		
-		boolean[][] choose = new boolean[getN()][getN()];
-
-		for (int i = 0; i < getN(); i++) {
-
-			for (int j = 0; j < numOfVariablesWhichHasConstaint; j++){
-				
-				while (true){
-					
-					x = getRandom().nextInt() % getN();
-					
-					if (x != i && !choose[i][x]){
-						
-						choose[i][x] = true;
-						choose[x][i] = true;
-						break;
-					}
-				}
-			}
-		}
-		
-		
-		//TODO ...
-		setConstraints(tConstraints);
-	}
 	
 	/**
 	 * p1 – the probability for a constraint between 2 variables.
 	 * p2 – the probability for a conflict between 2 constrained values.
 	 */
-	protected void initConstraints2() {
+	protected void initConstraints() {
 		
 		Vector<Vector<Map<VariablesPair, Boolean>>> tConstraints =
 			new Vector<Vector<Map<VariablesPair, Boolean>>>(getN());
