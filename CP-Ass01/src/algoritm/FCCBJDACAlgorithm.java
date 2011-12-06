@@ -44,7 +44,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 			Vector<Integer> tIndicesVec = new Vector<Integer>();
 			Vector<Integer> tVec = new Vector<Integer>();
 			
-			for (int tL = 0; tL < _currentDomain.get(p).size(); tL++){	//TODO: change it...
+			for (int tL = 0; tL < _currentDomain.get(p).size(); tL++){
 			
 				Integer Vp = _currentDomain.get(p).get(tL);
 				
@@ -54,8 +54,10 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 
 					for (Integer Vq: _currentDomain.get(q)){
 
-						if (_problem.check(p, Vp, q, Vq))//TODO:Problem here i-j=true?
+						if (_problem.check(p, Vp, q, Vq)){
 							tFound  = true;
+							break;
+						}
 					}
 
 					if (!tFound){
@@ -68,13 +70,14 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 				}
 			}
 			
-			updateDAC(p, tIndicesVec, k);
+			//updateDAC(p, tIndicesVec, k);
+			updateDAC(p, tVec, k);
 			
 			//clearCurrentDomain(p, tIndicesVec);
 			
 			_currentDomain.get(p).removeAll(tVec);
 			
-			tValuesToRemove.add(tVec);	//TODO: add to the end?..
+			tValuesToRemove.add(0, tVec);
 			
 			if (_currentDomain.get(p).isEmpty()){
 				
@@ -91,24 +94,41 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 		return tAns;
 	}
 
-	
-	//TODO:Check this, very weird.
 	@Override
-	protected void unlabelExtansion(int i,int h){
+	protected void unlabelExtansion(int i, int h){
 		
-		Vector<Integer> tbuildingDomain = (Vector<Integer>)_currentDomain.get(i).clone();
-		int tCounter = 0;
-		for(int j = 0;j < _dac.get(i).size();j++){
-			//Restore from original
-			if(_dac.get(i).get(j) >= h){
-				tbuildingDomain.add(j + tCounter, _problem.getDomain().get(i).get(j));
-				tCounter++;
-			}
-			else if(_dac.get(i).get(j) == 0){
+		for (int k = h; k <= i; h++){
+			
+			for (int l = 0; l < _problem.getD(); l++){
+				
+				Integer x = _dac.get(k).get(l);
+				
+				if (x >= h && x <= i){
+					
+					_currentDomain.get(k).add(new Integer(l));
+					_dac.get(k).set(l, 0);
+				}
 			}
 		}
-		_currentDomain.set(i, tbuildingDomain);//TODO:Check this
+		
+//		Vector<Integer> tbuildingDomain = (Vector<Integer>)_currentDomain.get(i).clone();
+//		
+//		int tCounter = 0;
+//		
+//		for(int j = 0;j < _dac.get(i).size();j++){
+//			
+//			//Restore from original
+//			if(_dac.get(i).get(j) >= h){
+//				
+//				tbuildingDomain.add(j + tCounter, _problem.getDomain().get(i).get(j));
+//				tCounter++;
+//			}
+//			else if(_dac.get(i).get(j) == 0){
+//			}
+//		}
+//		_currentDomain.set(i, tbuildingDomain);//TODO:Check this
 	}
+	
 	/**
 	 * Use this function,tells us if we have emptied a current domain.
 	 * @param i = the index to the domain we want to clear.
@@ -134,19 +154,24 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 	/**
 	 * This function updates the Row i in the _dac matrix
 	 * @param i - Row to update in matrix _dac
-	 * @param indices - a Vector of indices which were removed from the current domain due 
+	 * @param removedValues - a Vector of indices which were removed from the current domain due 
 	 * to the DAC Procedure
 	 * @param h - Is the index of the varible after it's assignment we ran DAC procedure.
 	 */
-	private void updateDAC(int i, Vector<Integer> indices, int h){
+	private void updateDAC(int i, Vector<Integer> removedValues, int h){
 		
-		for(int l = 0; l < _problem.getD(); l++){
-		
-			if(indices.contains(l))
-				_dac.get(i).set(l, h);
-
-			else
-				_dac.get(i).set(l, 0);
+		for (Integer j: removedValues){
+			
+			_dac.get(i).set(j, h);
 		}
+
+//		for(int l = 0; l < _problem.getD(); l++){
+//		
+//			if(removedValues.contains(l))
+//				_dac.get(i).set(l, h);
+//
+//			else
+//				_dac.get(i).set(l, 0);
+//		}
 	}
 }
