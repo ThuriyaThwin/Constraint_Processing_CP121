@@ -64,6 +64,11 @@ public class Problem {
 	}
 
 	protected void initConstraints() {
+		
+		
+		
+		
+		
 		//TODO ...
 		setConstraints(new Vector<Vector<Map<VariablesPair, Boolean>>>());
 	}
