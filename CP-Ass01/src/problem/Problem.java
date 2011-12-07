@@ -151,10 +151,12 @@ public class Problem {
 	
 	public String printSolution() {
 		
-		if (!isSolved())
-			System.out.print("UNSOLVED: ");
+		StringBuilder sb = new StringBuilder();
 		
-		StringBuilder sb = new StringBuilder("Assignment = ");
+		if (!isSolved())
+			sb.append("UNSOLVED: ");
+		
+		sb.append("Assignment = ");
 		
 		for (int i = 0; i < getN(); i++)
 			sb.append("<" + i + "," + getV().get(i) + ">,");

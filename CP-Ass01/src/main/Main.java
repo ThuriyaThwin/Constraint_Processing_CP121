@@ -1,5 +1,6 @@
 package main;
 
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Vector;
 
@@ -29,73 +30,96 @@ public class Main {
 	
 	public static final double	P2_MIN				= 0.1;
 	public static final double	P2_MAX				= 0.9;
-	public static final double	P2_DELTA			= (P2_MAX-P2_MIN)/(NUM_OF_PROBLEMS/7);
+	public static final double	P2_DELTA			= (P2_MAX-P2_MIN)/(NUM_OF_PROBLEMS);
 
 	
 	public static void main(String[] args) throws Exception {
 
-		Vector<Problem> problems = getProblems(GENERATE);
+		Vector<Vector<Problem>> problemsSets = getProblems(GENERATE);
 		
 		System.out.println("Finished Generating Problems, Starts solving..");
 
 		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
 		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
 		
+		PrintWriter out = new PrintWriter("report.txt");
+		
 		int i = 0;
 		
-		for (Problem p: problems){
-
-			System.out.println("\nPROBLEM " + i++ + ": " + p);
+		for (Vector<Problem> problems: problemsSets){
+		
+			int j = 0;
 			
-			FCCBJAlgorithm.solve(p);
-			System.out.println(p.printSolution());	
+			System.out.println("\nPROBLEM SET" + i + ":");
+			out.append("\nPROBLEM SET" + i++ + ":\n");
 			
-			FCCBJDACAlgorithm.solve(p);
-			System.out.println(p.printSolution());
+			for (Problem p: problems){
+	
+				System.out.println("\nPROBLEM " + j + ": " + p);
+				out.append("\nPROBLEM " + j++ + ": " + p + "\n");
+				
+				FCCBJAlgorithm.solve(p);
+				System.out.println(p.printSolution());	
+				out.append(p.printSolution() + "\n");
+				
+				FCCBJDACAlgorithm.solve(p);
+				System.out.println(p.printSolution());
+				out.append(p.printSolution() + "\n");
+			}
 		}
+		
+		out.close();
 	}
 
-	private static Vector<Problem> getProblems(int how) {
+	private static Vector<Vector<Problem>> getProblems(int how) {
 
-		Vector<Problem> problems = null;
+		Vector<Vector<Problem>> problemsSets = null;
 		DataManager dataManager = new DataManager();
 		
 		switch (how){
 		
 			case GENERATE:
 				
-				problems = generateProblems();
+				problemsSets = generateProblems();
 				break;
 		
 			case GEN_AND_STORE:
 				
-				problems = generateProblems();
-				dataManager.storeProblems(problems, "problems");
+				problemsSets = generateProblems();
+				dataManager.storeProblems(problemsSets, "problems");
 				break;
 				
 			case RESTORE:
 				
-				problems = dataManager.restoreProblems("problems");
+				problemsSets = dataManager.restoreProblems("problems");
 				break;
 				
 			default: break;
 		}
 
-		return problems;
+		return problemsSets;
 	}
 
-	private static Vector<Problem> generateProblems() {
+	private static Vector<Vector<Problem>> generateProblems() {
 
 		Random random = new Random(RANDOM_SEED);
 		
-		Vector<Problem> problems = new Vector<Problem>();
+		Vector<Vector<Problem>> problemsSets = new Vector<Vector<Problem>>();
 		
+		Vector<Problem> problems = new Vector<Problem>();
 		problems.add(new NQueensProblem(10));
+		problemsSets.add(problems);
 		 
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA)
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+			
+			problems = new Vector<Problem>();
+			
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
 				problems.add(new Problem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
-		
-		return problems;
+			
+			problemsSets.add(problems);
+		}
+
+		return problemsSets;
 	}
 }

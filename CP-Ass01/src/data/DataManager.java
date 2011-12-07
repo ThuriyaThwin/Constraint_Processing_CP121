@@ -34,10 +34,10 @@ public class DataManager {
 		_xstream.alias("variablespair", VariablesPair.class);
 	}
 	
-	public void storeProblems(Vector<Problem> problems, String dirName){
+	public void storeProblems(Vector<Vector<Problem>> problemsSets, String dirName){
 		
 		for (int i = 0; i < Main.NUM_OF_PROBLEMS; i++)
-			storeProblem(problems.get(i), dirName, "problem" + i++);
+			storeProblem(problemsSets.get(i), dirName, "problem" + i++);
 	}
 	
 	public void storeProblem(Problem problem, String dirName, String fileName){
@@ -51,7 +51,7 @@ public class DataManager {
 		}
 	}
 
-	public Vector<Problem> restoreProblems(String dirName){
+	public Vector<Vector<Problem>> restoreProblems(String dirName){
 		
 		Vector<Problem> problems = new Vector<Problem>(Main.NUM_OF_PROBLEMS);
 		
@@ -101,6 +101,6 @@ public class DataManager {
 		out.append(str);
 
 		out.close();
-   }
+	}
 
 }
