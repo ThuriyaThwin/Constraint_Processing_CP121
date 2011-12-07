@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import main.Main;
+
 import problem.Problem;
 
 import algoritm.VariablesPair;
@@ -32,28 +34,37 @@ public class DataManager {
 		_xstream.alias("variablespair", VariablesPair.class);
 	}
 	
-	public void storeProblems(Vector<Problem> problems, String fileName){
+	public void storeProblems(Vector<Problem> problems, String dirName){
+		
+		for (int i = 0; i < Main.NUM_OF_PROBLEMS; i++)
+			storeProblem(problems.get(i), dirName, "problem" + i++);
+	}
+	
+	public void storeProblem(Problem problem, String dirName, String fileName){
 		
 		try {
 			
-			writeToFile(_xstream.toXML(problems), fileName);
+			writeToFile(_xstream.toXML(problem), dirName + "/" + fileName);
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
-	public Vector<Problem> restoreProblems(String fileName){
+
+	public Vector<Problem> restoreProblems(String dirName){
 		
-		Vector<Problem> problems = null;
+		Vector<Problem> problems = new Vector<Problem>(Main.NUM_OF_PROBLEMS);
 		
-		try {
+		for (int i = 0; i < Main.NUM_OF_PROBLEMS; i++){
 			
-			problems = (Vector<Problem>)_xstream.fromXML(readFileAsString(fileName));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+			try {
+				
+				problems.add((Problem)_xstream.fromXML(
+						readFileAsString(dirName + "/" + "problem" + i)));
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return problems;

@@ -141,7 +141,7 @@ public class Problem {
 			return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 		
 		else
-			return getConstraints().get(var2).get(var1).get(new VariablesPair(val1, val2));
+			return getConstraints().get(var2).get(var1).get(new VariablesPair(val2, val1));
 	}
 	
 	@Override
