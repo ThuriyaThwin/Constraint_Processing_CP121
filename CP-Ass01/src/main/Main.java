@@ -91,7 +91,7 @@ public class Main {
 		Vector<Problem> problems = new Vector<Problem>();
 		
 		problems.add(new NQueensProblem(10));
-		
+		 
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA)
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
 				problems.add(new Problem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
