@@ -34,7 +34,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 
-		Vector<Problem> problems = getProblems(GEN_AND_STORE);
+		Vector<Problem> problems = getProblems(RESTORE);
 		
 		System.out.println("Finished Generating Problems, Starts solving..");
 
