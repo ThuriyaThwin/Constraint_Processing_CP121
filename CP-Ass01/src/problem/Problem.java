@@ -135,23 +135,24 @@ public class Problem {
 				
 		incCCs();
 		
+		// TODO ...
+		
 		if (var1 <= var2)
 			return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 		
 		else
-			return getConstraints().get(var2).get(var1).get(new VariablesPair(val2, val1));
+			return getConstraints().get(var2).get(var1).get(new VariablesPair(val1, val2));
 	}
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return "";
+		return "N=" + getN() + ", D=" + getD() + ", P1=" + getP1() + ", P2=" + getP2();
 	}
 	
 	public String printSolution() {
 		
 		if (!isSolved())
-			System.out.println("UNSOLVED: ");
+			System.out.print("UNSOLVED: ");
 		
 		StringBuilder sb = new StringBuilder("Assignment = ");
 		

@@ -41,9 +41,11 @@ public class Main {
 		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
 		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
 		
+		int i = 0;
+		
 		for (Problem p: problems){
 
-			System.out.println(p);
+			System.out.println("\nPROBLEM " + i++ + ": " + p);
 			
 			FCCBJAlgorithm.solve(p);
 			System.out.println(p.printSolution());	
