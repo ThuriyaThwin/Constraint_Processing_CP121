@@ -7,6 +7,8 @@ import java.util.Vector;
 import problem.Problem;
 import problem.ProblemsSetStats;
 
+import algoritm.BTAlgorithm;
+import algoritm.CBJAlgorithm;
 import algoritm.CSPAlgorithm;
 import algoritm.FCCBJAlgorithm;
 import algoritm.FCCBJDACAlgorithm;
@@ -38,7 +40,8 @@ public class Main {
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
 
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random), out) + "\n");
+				out.append(solveProblems(createProblems(p1, p2, random), out,
+						(p1 == 0.2 && p2 == 0.7)) + "\n");
 			}
 		}
 		
@@ -56,9 +59,11 @@ public class Main {
 	}
 	
 
-	private static ProblemsSetStats solveProblems(Vector<Problem> problems, PrintWriter out)
-		throws Exception {
-		
+	private static ProblemsSetStats solveProblems(Vector<Problem> problems,
+			PrintWriter out, boolean debug) throws Exception {
+	
+		CSPAlgorithm BTAlgorithm = new BTAlgorithm();
+		CSPAlgorithm CBJAlgorithm = new CBJAlgorithm();
 		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
 		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
 		
@@ -68,16 +73,33 @@ public class Main {
 		int FCCBJCCs = 0;
 		int FCCBJDACCCs = 0;
 		
+		StringBuffer debugSB = new StringBuffer();
+		
 		for (Problem p: problems){
+
+			debugSB.append("PROBLEM: " + p + "\n");
+			
+			if (debug && p == problems.firstElement()){
+				
+				BTAlgorithm.solve(p);
+				debugSB.append(p.printSolution() + "\n");
+				
+				CBJAlgorithm.solve(p);
+				debugSB.append(p.printSolution() + "\n");
+			}
 
 			FCCBJAlgorithm.solve(p);
 			FCCBJAssignments += p.getAssignments();
 			FCCBJCCs += p.getCCs();
+			debugSB.append(p.printSolution() + "\n");
 			
 			FCCBJDACAlgorithm.solve(p);
 			FCCBJDACAssignments += p.getAssignments();
 			FCCBJDACCCs += p.getCCs();
+			debugSB.append(p.printSolution() + "\n");
 		}
+		
+		if (debug) System.out.println(debugSB.toString());
 		
 		return new ProblemsSetStats(
 				FCCBJAssignments, FCCBJDACAssignments, FCCBJCCs, FCCBJDACCCs);
