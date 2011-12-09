@@ -113,15 +113,17 @@ public class FCCBJAlgorithm extends CBJAlgorithm {
 	@Override
 	protected int getHFromI(int i) {
 		
-		if (_pastFc.get(i).isEmpty()) return -1;	//TODO ...
+		int tMax = -1;
+			
+		if (!_pastFc.get(i).isEmpty()){
 		
-		int tMax = _pastFc.get(i).firstElement();
-		
-		for(Integer tX :_pastFc.get(i)){
-			if(tX > tMax)
-				tMax = tX;
+			for(Integer tX :_pastFc.get(i)){
+				
+				if (tX > tMax) tMax = tX;
+			}
 		}
-		if(!_confSets.get(i).isEmpty() && tMax < _confSets.get(i).last())	//TODO ...
+
+		if(!_confSets.get(i).isEmpty() && tMax < _confSets.get(i).last())
 			tMax = _confSets.get(i).last();
 
 		return tMax;
