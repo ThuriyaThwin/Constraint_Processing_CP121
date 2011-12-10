@@ -40,8 +40,7 @@ public class Main {
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
 
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random), out,
-						(p1 == 0.2 && p2 == 0.7)) + "\n");
+				out.append(solveProblems(createProblems(p1, p2, random), out, false) + "\n");
 			}
 		}
 		
@@ -61,8 +60,7 @@ public class Main {
 
 	private static ProblemsSetStats solveProblems(Vector<Problem> problems,
 			PrintWriter out, boolean debug) throws Exception {
-	
-		CSPAlgorithm BTAlgorithm = new BTAlgorithm();
+
 		CSPAlgorithm CBJAlgorithm = new CBJAlgorithm();
 		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
 		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
@@ -78,15 +76,9 @@ public class Main {
 		for (Problem p: problems){
 
 			debugSB.append("PROBLEM: " + p + "\n");
-			
-			if (debug && p == problems.firstElement()){
 				
-				BTAlgorithm.solve(p);
-				debugSB.append(p.printSolution() + "\n");
-				
-				CBJAlgorithm.solve(p);
-				debugSB.append(p.printSolution() + "\n");
-			}
+			CBJAlgorithm.solve(p);
+			debugSB.append(p.printSolution() + "\n");
 
 			FCCBJAlgorithm.solve(p);
 			FCCBJAssignments += p.getAssignments();
