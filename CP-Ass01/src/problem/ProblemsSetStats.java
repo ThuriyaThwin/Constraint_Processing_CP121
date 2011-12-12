@@ -2,8 +2,6 @@ package problem;
 
 import java.util.Vector;
 
-import main.Main;
-
 public class ProblemsSetStats {
 
 	protected	int				_numOfProblems;
@@ -34,9 +32,9 @@ public class ProblemsSetStats {
 	}
 	
 	public ProblemsSetStats(int fCCBJAssignments, int fCCBJDACAssignments,
-			int fCCBJCCs, int fCCBJDACCCs) {
+			int fCCBJCCs, int fCCBJDACCCs, int numOfProblems) {
 
-		_numOfProblems = Main.NUM_OF_PROBLEMS;
+		_numOfProblems = numOfProblems;
 		
 		_fCCBJAssignments = fCCBJAssignments;
 		_fCCBJDACAssignments = fCCBJDACAssignments;
@@ -95,19 +93,35 @@ public class ProblemsSetStats {
 		return _numOfProblems;
 	}
 	
-	public Vector<Integer> getFCCBJAssignments(){	
+	public int getFCCBJAssignments(){
+		return _fCCBJAssignments;
+	}
+	
+	public int getFCCBJDACAssignments(){
+		return _fCCBJDACAssignments;
+	}
+	
+	public int getFCCBJCCs(){
+		return _fCCBJCCs;
+	}
+	
+	public int getFCCBJDACCCs(){
+		return _fCCBJDACCCs;
+	}	
+	
+	public Vector<Integer> getFCCBJAssignmentsVec(){	
 		return _fCCBJAssignmentsVec;
 	}
 	
-	public Vector<Integer> getFCCBJDACAssignments(){
+	public Vector<Integer> getFCCBJDACAssignmentsVec(){
 		return _fCCBJDACAssignmentsVec;
 	}
 	
-	public Vector<Integer> getFCCBJCCs(){
+	public Vector<Integer> getFCCBJCCsVec(){
 		return _fCCBJCCsVec;
 	}
 	
-	public Vector<Integer> getFCCBJDACCCs(){
+	public Vector<Integer> getFCCBJDACCCsVec(){
 		return _fCCBJDACCCsVec;
 	}
 }

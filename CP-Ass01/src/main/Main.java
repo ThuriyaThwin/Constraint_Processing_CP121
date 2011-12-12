@@ -29,11 +29,16 @@ public class Main {
 	public static final double	P2_MIN				= 0.1;
 	public static final double	P2_MAX				= 0.9;
 	public static final double	P2_DELTA			= 0.1;
-
 	
+	public static final int		ALL					= 0;
+	public static final int		ONLY_UNSOLVED		= 1;
+	public static final int		ONLY_SOLVED			= 2;
+
 	public static void main(String[] args) throws Exception {
 	
 		randomProblemsTests();
+		randomProblemsSolvedTests();
+		randomProblemsUnsolvedTests();
 		nQueensTests();
 	}
 
@@ -48,13 +53,53 @@ public class Main {
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
 
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random), true, false) + "\n");
+				out.append(solveProblems(createProblems(p1, p2, random), false, false, ALL) + "\n");
 			}
 		}
 		
 		out.close();
 	}
 	
+	private static void randomProblemsSolvedTests()
+			throws FileNotFoundException, Exception {
+
+		Random random = new Random(RANDOM_SEED);
+		
+		PrintWriter out = new PrintWriter("report_solved.txt");
+		
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+		
+			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
+		
+				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+				out.append(solveProblems(createProblems(p1, p2, random),
+						false, false, ONLY_SOLVED) + "\n");
+			}
+		}
+		
+		out.close();
+	}
+
+	private static void randomProblemsUnsolvedTests()
+			throws FileNotFoundException, Exception {
+		
+		Random random = new Random(RANDOM_SEED);
+		
+		PrintWriter out = new PrintWriter("report_unsolved.txt");
+		
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+
+			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
+
+				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+				out.append(solveProblems(createProblems(p1, p2, random),
+						false, false, ONLY_UNSOLVED) + "\n");
+			}
+		}
+		
+		out.close();
+	}
+
 	private static void nQueensTests() throws FileNotFoundException, Exception {
 		
 		PrintWriter out = new PrintWriter("queens.txt");
@@ -64,15 +109,15 @@ public class Main {
 		for (int i = 2; i <= 25; i++)
 			problems.add(new NQueensProblem(i));
 		
-		ProblemsSetStats result = solveProblems(problems, true, false);
+		ProblemsSetStats result = solveProblems(problems, true, false, ALL);
 
 		for (int i = 2; i <= 25; i++){
 			
 			out.append(problems.get(i-2).toString() + "\n");
-			out.append("FCCBJ Assignments = " + result.getFCCBJAssignments().get(i-2) + "\n");
-			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignments().get(i-2) + "\n");
-			out.append("FCCBJ CCs = " + result.getFCCBJCCs().get(i-2) + "\n");
-			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCs().get(i-2) + "\n\n");
+			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
+			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
+			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
+			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
 		}
 		
 		out.close();
@@ -89,8 +134,8 @@ public class Main {
 	}
 	
 
-	private static ProblemsSetStats solveProblems(
-			Vector<Problem> problems, boolean debug, boolean bt) throws Exception {
+	private static ProblemsSetStats solveProblems(Vector<Problem> problems,
+			boolean debug, boolean btAndCBJ, int problemsReportType) throws Exception {
 
 		CSPAlgorithm BTAlgorithm = new BTAlgorithm();
 		CSPAlgorithm CBJAlgorithm = new CBJAlgorithm();
@@ -99,40 +144,86 @@ public class Main {
 		
 		StringBuffer debugSB = new StringBuffer();
 		
-		ProblemsSetStats stats = new ProblemsSetStats();
+		ProblemsSetStats solvedStats = new ProblemsSetStats();
+		ProblemsSetStats unsolvedStats = new ProblemsSetStats();
+		ProblemsSetStats allStats = new ProblemsSetStats();
 		
-		stats.setNumOfProblems(problems.size());
+		int solvedSize = problems.size();
+		int unsolvedSize = problems.size();
+		
+		allStats.setNumOfProblems(problems.size());
 		
 		for (Problem p: problems){
 
 			debugSB.append("PROBLEM: " + p + "\n");
 			
-			if (bt){
+			if (btAndCBJ){
 				
 				BTAlgorithm.solve(p);
 				if (!p.isSolved()) debugSB.append("UNSOLVED: ");
 				debugSB.append(p.printSolution() + "\n");
+				
+				CBJAlgorithm.solve(p);
+				if (!p.isSolved()) debugSB.append("UNSOLVED: ");
+				debugSB.append(p.printSolution() + "\n");
 			}
-			
-			CBJAlgorithm.solve(p);
-			if (!p.isSolved()) debugSB.append("UNSOLVED: ");
-			debugSB.append(p.printSolution() + "\n");
 
 			FCCBJAlgorithm.solve(p);
-			stats.addFCCBJAssignments(p.getAssignments());
-			stats.addFCCBJCCs(p.getCCs());
-			if (!p.isSolved()) debugSB.append("UNSOLVED: ");
+			
+			if (p.isSolved()){
+				
+				solvedStats.addFCCBJAssignments(p.getAssignments());
+				solvedStats.addFCCBJCCs(p.getCCs());
+				unsolvedSize--;
+			}
+			else{
+				
+				unsolvedStats.addFCCBJAssignments(p.getAssignments());
+				unsolvedStats.addFCCBJCCs(p.getCCs());
+				solvedSize--;
+				
+				debugSB.append("UNSOLVED: ");
+			}
+			
+			allStats.addFCCBJAssignments(p.getAssignments());
+			allStats.addFCCBJCCs(p.getAssignments());
+
 			debugSB.append(p.printSolution() + "\n");
 			
 			FCCBJDACAlgorithm.solve(p);
-			stats.addFCCBJDACAssignments(p.getAssignments());
-			stats.addFCCBJDACCCs(p.getCCs());
-			if (!p.isSolved()) debugSB.append("UNSOLVED: ");
+			
+			if (p.isSolved()){
+				
+				solvedStats.addFCCBJDACAssignments(p.getAssignments());
+				solvedStats.addFCCBJDACCCs(p.getCCs());
+				unsolvedSize--;
+			}
+			else{
+				
+				unsolvedStats.addFCCBJDACAssignments(p.getAssignments());
+				unsolvedStats.addFCCBJDACCCs(p.getCCs());
+				solvedSize--;
+				
+				debugSB.append("UNSOLVED: ");
+			}
+			
+			allStats.addFCCBJDACAssignments(p.getAssignments());
+			allStats.addFCCBJDACCCs(p.getAssignments());
+
 			debugSB.append(p.printSolution() + "\n");
 		}
 		
+		solvedStats.setNumOfProblems(solvedSize);
+		unsolvedStats.setNumOfProblems(unsolvedSize);
+		
 		if (debug) System.out.println(debugSB.toString());
 		
-		return stats;
+		switch (problemsReportType){
+		
+			case ONLY_SOLVED: return solvedStats;
+			case ONLY_UNSOLVED: return unsolvedStats;
+			
+			default: return allStats;
+		}
 	}
 }

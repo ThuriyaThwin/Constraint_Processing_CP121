@@ -1,0 +1,162 @@
+P1=0.2, P2=0.1:
+Average FCCBJ Assignments = 15.0
+Average FCCBJDAC Assignments = 15.0
+Average FCCBJ CCs = 957.06
+Average FCCBJDAC CCs = 5228.66
+
+P1=0.2, P2=0.2:
+Average FCCBJ Assignments = 15.04
+Average FCCBJDAC Assignments = 15.0
+Average FCCBJ CCs = 893.74
+Average FCCBJDAC CCs = 5007.04
+
+P1=0.2, P2=0.30000000000000004:
+Average FCCBJ Assignments = 15.44
+Average FCCBJDAC Assignments = 15.02
+Average FCCBJ CCs = 836.08
+Average FCCBJDAC CCs = 4717.08
+
+P1=0.2, P2=0.4:
+Average FCCBJ Assignments = 18.58
+Average FCCBJDAC Assignments = 15.22
+Average FCCBJ CCs = 818.04
+Average FCCBJDAC CCs = 4428.24
+
+P1=0.2, P2=0.5:
+Average FCCBJ Assignments = 27.14
+Average FCCBJDAC Assignments = 34.68
+Average FCCBJ CCs = 987.34
+Average FCCBJDAC CCs = 5585.2
+
+P1=0.2, P2=0.6:
+Average FCCBJ Assignments = 555.56
+Average FCCBJDAC Assignments = 35.1
+Average FCCBJ CCs = 10714.9
+Average FCCBJDAC CCs = 6463.1
+
+P1=0.2, P2=0.7:
+Average FCCBJ Assignments = 4909.46
+Average FCCBJDAC Assignments = 1590.74
+Average FCCBJ CCs = 126098.42
+Average FCCBJDAC CCs = 134417.78
+
+P1=0.2, P2=0.7999999999999999:
+Average FCCBJ Assignments = 417.42
+Average FCCBJDAC Assignments = 92.34
+Average FCCBJ CCs = 15221.72
+Average FCCBJDAC CCs = 28312.52
+
+P1=0.2, P2=0.8999999999999999:
+Average FCCBJ Assignments = 83.94
+Average FCCBJDAC Assignments = 14.66
+Average FCCBJ CCs = 3790.46
+Average FCCBJDAC CCs = 3757.56
+
+P1=0.5, P2=0.1:
+Average FCCBJ Assignments = 15.0
+Average FCCBJDAC Assignments = 15.0
+Average FCCBJ CCs = 853.6
+Average FCCBJDAC CCs = 4794.58
+
+P1=0.5, P2=0.2:
+Average FCCBJ Assignments = 15.82
+Average FCCBJDAC Assignments = 15.04
+Average FCCBJ CCs = 715.06
+Average FCCBJDAC CCs = 4166.46
+
+P1=0.5, P2=0.30000000000000004:
+Average FCCBJ Assignments = 73.56
+Average FCCBJDAC Assignments = 24.1
+Average FCCBJ CCs = 1582.1
+Average FCCBJDAC CCs = 4322.78
+
+P1=0.5, P2=0.4:
+Average FCCBJ Assignments = 873.46
+Average FCCBJDAC Assignments = 118.08
+Average FCCBJ CCs = 18207.26
+Average FCCBJDAC CCs = 20185.86
+
+P1=0.5, P2=0.5:
+Average FCCBJ Assignments = 3258.54
+Average FCCBJDAC Assignments = 282.2
+Average FCCBJ CCs = 83103.1
+Average FCCBJDAC CCs = 73268.08
+
+P1=0.5, P2=0.6:
+Average FCCBJ Assignments = 607.08
+Average FCCBJDAC Assignments = 33.8
+Average FCCBJ CCs = 20283.82
+Average FCCBJDAC CCs = 13848.46
+
+P1=0.5, P2=0.7:
+Average FCCBJ Assignments = 160.12
+Average FCCBJDAC Assignments = 10.16
+Average FCCBJ CCs = 5204.9
+Average FCCBJDAC CCs = 3497.34
+
+P1=0.5, P2=0.7999999999999999:
+Average FCCBJ Assignments = 50.46
+Average FCCBJDAC Assignments = 10.0
+Average FCCBJ CCs = 2208.9
+Average FCCBJDAC CCs = 1531.26
+
+P1=0.5, P2=0.8999999999999999:
+Average FCCBJ Assignments = 15.34
+Average FCCBJDAC Assignments = 10.0
+Average FCCBJ CCs = 662.42
+Average FCCBJDAC CCs = 600.66
+
+P1=0.8, P2=0.1:
+Average FCCBJ Assignments = 15.2
+Average FCCBJDAC Assignments = 15.0
+Average FCCBJ CCs = 755.52
+Average FCCBJDAC CCs = 4381.06
+
+P1=0.8, P2=0.2:
+Average FCCBJ Assignments = 38.58
+Average FCCBJDAC Assignments = 20.6
+Average FCCBJ CCs = 856.5
+Average FCCBJDAC CCs = 3822.38
+
+P1=0.8, P2=0.30000000000000004:
+Average FCCBJ Assignments = 2367.96
+Average FCCBJDAC Assignments = 367.72
+Average FCCBJ CCs = 46708.64
+Average FCCBJDAC CCs = 66781.92
+
+P1=0.8, P2=0.4:
+Average FCCBJ Assignments = 1226.9
+Average FCCBJDAC Assignments = 133.88
+Average FCCBJ CCs = 32516.6
+Average FCCBJDAC CCs = 42166.4
+
+P1=0.8, P2=0.5:
+Average FCCBJ Assignments = 290.3
+Average FCCBJDAC Assignments = 26.68
+Average FCCBJ CCs = 9433.0
+Average FCCBJDAC CCs = 10005.18
+
+P1=0.8, P2=0.6:
+Average FCCBJ Assignments = 97.84
+Average FCCBJDAC Assignments = 10.06
+Average FCCBJ CCs = 3627.98
+Average FCCBJDAC CCs = 3010.98
+
+P1=0.8, P2=0.7:
+Average FCCBJ Assignments = 44.6
+Average FCCBJDAC Assignments = 10.0
+Average FCCBJ CCs = 1816.86
+Average FCCBJDAC CCs = 1627.66
+
+P1=0.8, P2=0.7999999999999999:
+Average FCCBJ Assignments = 20.78
+Average FCCBJDAC Assignments = 10.0
+Average FCCBJ CCs = 944.0
+Average FCCBJDAC CCs = 925.0
+
+P1=0.8, P2=0.8999999999999999:
+Average FCCBJ Assignments = 10.46
+Average FCCBJDAC Assignments = 10.0
+Average FCCBJ CCs = 372.34
+Average FCCBJDAC CCs = 372.66
+
