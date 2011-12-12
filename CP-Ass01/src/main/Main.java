@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Vector;
 
+import problem.NQueensProblem;
 import problem.Problem;
 import problem.ProblemsSetStats;
 
@@ -30,20 +31,31 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 	
-		Random random = new Random(RANDOM_SEED);
+//		Random random = new Random(RANDOM_SEED);
+//		
+//		PrintWriter out = new PrintWriter("report.txt");
+//		
+//		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+//
+//			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
+//
+//				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+//				out.append(solveProblems(createProblems(p1, p2, random), out, false) + "\n");
+//			}
+//		}
+//		
+//		out.close();
 		
-		PrintWriter out = new PrintWriter("report.txt");
+		PrintWriter out2 = new PrintWriter("queens.txt");
 		
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random), out, false) + "\n");
-			}
-		}
+		Vector<Problem> problems = new Vector<Problem>(24);
 		
-		out.close();
+		for (int i = 2; i <= 25; i++)
+			problems.add(new NQueensProblem(i));
+		
+		out2.append(solveProblems(problems, out2, true) + "\n");
+		
+		out2.close();
 	}
 
 	private static Vector<Problem> createProblems(double p1, double p2, Random random) {

@@ -51,4 +51,9 @@ public class NQueensProblem extends Problem {
 		
 		setConstraints(constraint);
 	}
+	
+	@Override
+	public String toString() {
+		return getN() + " Queens";
+	}
 }

@@ -23,10 +23,10 @@ public class ProblemsSetStats {
 
 		String ans = "";
 		
-		ans += "Average FCCBJ Assignments = " + _fCCBJAssignments/Main.NUM_OF_PROBLEMS + "\n";
-		ans += "Average FCCBJDAC Assignments = " + _fCCBJDACAssignments/Main.NUM_OF_PROBLEMS + "\n";
-		ans += "Average FCCBJ CCs = " + _fCCBJCCs/Main.NUM_OF_PROBLEMS + "\n";
-		ans += "Average FCCBJDAC CCs = " + _fCCBJDACCCs/Main.NUM_OF_PROBLEMS + "\n";
+		ans += "Average FCCBJ Assignments = " + _fCCBJAssignments/(double)Main.NUM_OF_PROBLEMS + "\n";
+		ans += "Average FCCBJDAC Assignments = " + _fCCBJDACAssignments/(double)Main.NUM_OF_PROBLEMS + "\n";
+		ans += "Average FCCBJ CCs = " + _fCCBJCCs/(double)Main.NUM_OF_PROBLEMS + "\n";
+		ans += "Average FCCBJDAC CCs = " + _fCCBJDACCCs/(double)Main.NUM_OF_PROBLEMS + "\n";
 		
 		 return ans;
 	}
