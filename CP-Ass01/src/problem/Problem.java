@@ -135,8 +135,6 @@ public class Problem {
 				
 		incCCs();
 		
-		// TODO ...
-		
 		if (var1 <= var2)
 			return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 		

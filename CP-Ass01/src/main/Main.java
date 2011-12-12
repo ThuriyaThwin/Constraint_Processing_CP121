@@ -32,7 +32,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 	
-//		randomProblemsTests();
+		randomProblemsTests();
 		nQueensTests();
 	}
 
@@ -106,8 +106,8 @@ public class Main {
 
 			debugSB.append("PROBLEM: " + p + "\n");
 			
-//			CBJAlgorithm.solve(p);
-//			debugSB.append(p.printSolution() + "\n");
+			CBJAlgorithm.solve(p);
+			debugSB.append(p.printSolution() + "\n");
 
 			FCCBJAlgorithm.solve(p);
 			stats.addFCCBJAssignments(p.getAssignments());

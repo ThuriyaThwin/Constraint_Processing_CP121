@@ -31,7 +31,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 			}
 		}
 	}
-	//TODO:Interesting Solution case(Ariel)
+
 	@Override
 	protected boolean labelExtansion(int k) {
 
@@ -65,7 +65,7 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 						tIndicesVec.add(tL);//Saving the indices which we will dissapper later, in order to update _dac
 						tVec.add(Vp);
 						
-						break; //TODO:Hard coded,change this?
+						break;
 					}
 				}
 			}
@@ -80,11 +80,6 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 			tValuesToRemove.add(0, tVec);
 			
 			if (_currentDomain.get(p).isEmpty()){
-				
-				for (int l = 0; l < tValuesToRemove.size(); l++){
-					
-//					_currentDomain.get(p+l).addAll(tValuesToRemove.get(l));
-				}
 				
 				tAns = false;
 				break;
@@ -110,45 +105,6 @@ public class FCCBJDACAlgorithm extends FCCBJAlgorithm {
 				}
 			}
 		}
-		
-//		Vector<Integer> tbuildingDomain = (Vector<Integer>)_currentDomain.get(i).clone();
-//		
-//		int tCounter = 0;
-//		
-//		for(int j = 0;j < _dac.get(i).size();j++){
-//			
-//			//Restore from original
-//			if(_dac.get(i).get(j) >= h){
-//				
-//				tbuildingDomain.add(j + tCounter, _problem.getDomain().get(i).get(j));
-//				tCounter++;
-//			}
-//			else if(_dac.get(i).get(j) == 0){
-//			}
-//		}
-//		_currentDomain.set(i, tbuildingDomain);//TODO:Check this
-	}
-	
-	/**
-	 * Use this function,tells us if we have emptied a current domain.
-	 * @param i = the index to the domain we want to clear.
-	 * @param IndicesVec
-	 * @return
-	 */
-	private boolean clearCurrentDomain(int i, Vector<Integer> IndicesVec) {
-
-		Vector<Integer> tAns = new Vector<Integer>();
-
-		for (int j = 0; j < _currentDomain.get(i).size(); j++)
-			
-			if(!IndicesVec.contains(j)){
-				tAns.add(_currentDomain.get(i).get(j));
-		}
-		
-		if(tAns.size() != _currentDomain.get(i).size())
-			_currentDomain.set(i, tAns);//nice Replace?
-
-		return _currentDomain.get(i).isEmpty();
 	}
 
 	/**
