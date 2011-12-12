@@ -36,56 +36,18 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 	
-		randomProblemsTests();
-		randomProblemsSolvedTests();
-		randomProblemsUnsolvedTests();
+		randomProblemsTests("report.txt", ALL);
+		randomProblemsTests("report_unsolved.txt", ONLY_SOLVED);
+		randomProblemsTests("report_unsolved.txt", ONLY_UNSOLVED);
 		nQueensTests();
 	}
 
-	private static void randomProblemsTests() throws FileNotFoundException, Exception {
-		
-		Random random = new Random(RANDOM_SEED);
-		
-		PrintWriter out = new PrintWriter("report.txt");
-		
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random), false, false, ALL) + "\n");
-			}
-		}
-		
-		out.close();
-	}
-	
-	private static void randomProblemsSolvedTests()
-			throws FileNotFoundException, Exception {
-
-		Random random = new Random(RANDOM_SEED);
-		
-		PrintWriter out = new PrintWriter("report_solved.txt");
-		
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-		
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-		
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random),
-						false, false, ONLY_SOLVED) + "\n");
-			}
-		}
-		
-		out.close();
-	}
-
-	private static void randomProblemsUnsolvedTests()
+	private static void randomProblemsTests(String fileName, int problemsReportType)
 			throws FileNotFoundException, Exception {
 		
 		Random random = new Random(RANDOM_SEED);
 		
-		PrintWriter out = new PrintWriter("report_unsolved.txt");
+		PrintWriter out = new PrintWriter(fileName);
 		
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
 
@@ -93,7 +55,7 @@ public class Main {
 
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
 				out.append(solveProblems(createProblems(p1, p2, random),
-						false, false, ONLY_UNSOLVED) + "\n");
+						false, false, problemsReportType) + "\n");
 			}
 		}
 		
