@@ -1,0 +1,5 @@
+Average FCCBJ Assignments = 33094.26
+Average FCCBJDAC Assignments = 13499.36
+Average FCCBJ CCs = 605004.12
+Average FCCBJDAC CCs = 1686439.72
+
