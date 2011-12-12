@@ -9,6 +9,7 @@ import problem.NQueensProblem;
 import problem.Problem;
 import problem.ProblemsSetStats;
 
+import algoritm.BTAlgorithm;
 import algoritm.CBJAlgorithm;
 import algoritm.CSPAlgorithm;
 import algoritm.FCCBJAlgorithm;
@@ -36,8 +37,7 @@ public class Main {
 		nQueensTests();
 	}
 
-	private static void randomProblemsTests() throws FileNotFoundException,
-			Exception {
+	private static void randomProblemsTests() throws FileNotFoundException, Exception {
 		
 		Random random = new Random(RANDOM_SEED);
 		
@@ -48,7 +48,7 @@ public class Main {
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
 
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random), out, false) + "\n");
+				out.append(solveProblems(createProblems(p1, p2, random), true, false) + "\n");
 			}
 		}
 		
@@ -64,7 +64,7 @@ public class Main {
 		for (int i = 2; i <= 25; i++)
 			problems.add(new NQueensProblem(i));
 		
-		ProblemsSetStats result = solveProblems(problems, out, true);
+		ProblemsSetStats result = solveProblems(problems, true, false);
 
 		for (int i = 2; i <= 25; i++){
 			
@@ -89,9 +89,10 @@ public class Main {
 	}
 	
 
-	private static ProblemsSetStats solveProblems(Vector<Problem> problems,
-			PrintWriter out, boolean debug) throws Exception {
+	private static ProblemsSetStats solveProblems(
+			Vector<Problem> problems, boolean debug, boolean bt) throws Exception {
 
+		CSPAlgorithm BTAlgorithm = new BTAlgorithm();
 		CSPAlgorithm CBJAlgorithm = new CBJAlgorithm();
 		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
 		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
@@ -106,17 +107,27 @@ public class Main {
 
 			debugSB.append("PROBLEM: " + p + "\n");
 			
+			if (bt){
+				
+				BTAlgorithm.solve(p);
+				if (!p.isSolved()) debugSB.append("UNSOLVED: ");
+				debugSB.append(p.printSolution() + "\n");
+			}
+			
 			CBJAlgorithm.solve(p);
+			if (!p.isSolved()) debugSB.append("UNSOLVED: ");
 			debugSB.append(p.printSolution() + "\n");
 
 			FCCBJAlgorithm.solve(p);
 			stats.addFCCBJAssignments(p.getAssignments());
 			stats.addFCCBJCCs(p.getCCs());
+			if (!p.isSolved()) debugSB.append("UNSOLVED: ");
 			debugSB.append(p.printSolution() + "\n");
 			
 			FCCBJDACAlgorithm.solve(p);
 			stats.addFCCBJDACAssignments(p.getAssignments());
 			stats.addFCCBJDACCCs(p.getCCs());
+			if (!p.isSolved()) debugSB.append("UNSOLVED: ");
 			debugSB.append(p.printSolution() + "\n");
 		}
 		

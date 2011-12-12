@@ -151,9 +151,6 @@ public class Problem {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		if (!isSolved())
-			sb.append("UNSOLVED: ");
-		
 		sb.append("Assignment = ");
 		
 		for (int i = 0; i < getN(); i++)
