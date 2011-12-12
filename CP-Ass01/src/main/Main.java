@@ -37,7 +37,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 	
 		randomProblemsTests("report.txt", ALL);
-		randomProblemsTests("report_unsolved.txt", ONLY_SOLVED);
+		randomProblemsTests("report_solved.txt", ONLY_SOLVED);
 		randomProblemsTests("report_unsolved.txt", ONLY_UNSOLVED);
 		nQueensTests();
 	}
