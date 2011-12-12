@@ -1,5 +1,6 @@
 package main;
 
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Vector;
@@ -31,31 +32,50 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 	
-//		Random random = new Random(RANDOM_SEED);
-//		
-//		PrintWriter out = new PrintWriter("report.txt");
-//		
-//		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-//
-//			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-//
-//				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-//				out.append(solveProblems(createProblems(p1, p2, random), out, false) + "\n");
-//			}
-//		}
-//		
-//		out.close();
+		randomProblemsTests();
+		nQueensTests();
+	}
+
+	private static void randomProblemsTests() throws FileNotFoundException,
+			Exception {
 		
-		PrintWriter out2 = new PrintWriter("queens.txt");
+		Random random = new Random(RANDOM_SEED);
+		
+		PrintWriter out = new PrintWriter("report.txt");
+		
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+
+			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
+
+				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+				out.append(solveProblems(createProblems(p1, p2, random), out, false) + "\n");
+			}
+		}
+		
+		out.close();
+	}
+	
+	private static void nQueensTests() throws FileNotFoundException, Exception {
+		
+		PrintWriter out = new PrintWriter("queens.txt");
 		
 		Vector<Problem> problems = new Vector<Problem>(24);
 		
 		for (int i = 2; i <= 25; i++)
 			problems.add(new NQueensProblem(i));
 		
-		out2.append(solveProblems(problems, out2, true) + "\n");
+		ProblemsSetStats result = solveProblems(problems, out, true);
+
+		for (int i = 2; i <= 25; i++){
+			
+			out.append(problems.get(i-2).toString() + "\n");
+			out.append("FCCBJ Assignments = " + result.getFCCBJAssignments().get(i-2) + "\n");
+			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignments().get(i-2) + "\n");
+			out.append("FCCBJ CCs = " + result.getFCCBJCCs().get(i-2) + "\n");
+			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCs().get(i-2) + "\n\n");
+		}
 		
-		out2.close();
+		out.close();
 	}
 
 	private static Vector<Problem> createProblems(double p1, double p2, Random random) {
@@ -76,35 +96,32 @@ public class Main {
 		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
 		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
 		
-		int FCCBJAssignments = 0;
-		int FCCBJDACAssignments = 0;
-		
-		int FCCBJCCs = 0;
-		int FCCBJDACCCs = 0;
-		
 		StringBuffer debugSB = new StringBuffer();
+		
+		ProblemsSetStats stats = new ProblemsSetStats();
+		
+		stats.setNumOfProblems(problems.size());
 		
 		for (Problem p: problems){
 
 			debugSB.append("PROBLEM: " + p + "\n");
-				
-			CBJAlgorithm.solve(p);
-			debugSB.append(p.printSolution() + "\n");
+			
+//			CBJAlgorithm.solve(p);
+//			debugSB.append(p.printSolution() + "\n");
 
 			FCCBJAlgorithm.solve(p);
-			FCCBJAssignments += p.getAssignments();
-			FCCBJCCs += p.getCCs();
+			stats.addFCCBJAssignments(p.getAssignments());
+			stats.addFCCBJCCs(p.getCCs());
 			debugSB.append(p.printSolution() + "\n");
 			
 			FCCBJDACAlgorithm.solve(p);
-			FCCBJDACAssignments += p.getAssignments();
-			FCCBJDACCCs += p.getCCs();
+			stats.addFCCBJDACAssignments(p.getAssignments());
+			stats.addFCCBJDACCCs(p.getCCs());
 			debugSB.append(p.printSolution() + "\n");
 		}
 		
 		if (debug) System.out.println(debugSB.toString());
 		
-		return new ProblemsSetStats(
-				FCCBJAssignments, FCCBJDACAssignments, FCCBJCCs, FCCBJDACCCs);
+		return stats;
 	}
 }
