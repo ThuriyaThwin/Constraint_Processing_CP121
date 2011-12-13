@@ -2,6 +2,7 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.util.Random;
 import java.util.Vector;
 
@@ -36,30 +37,10 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 	
+		nQueensTests();
 		randomProblemsTests("report.txt", ALL);
 		randomProblemsTests("report_solved.txt", ONLY_SOLVED);
 		randomProblemsTests("report_unsolved.txt", ONLY_UNSOLVED);
-		nQueensTests();
-	}
-
-	private static void randomProblemsTests(String fileName, int problemsReportType)
-			throws FileNotFoundException, Exception {
-		
-		Random random = new Random(RANDOM_SEED);
-		
-		PrintWriter out = new PrintWriter(fileName);
-		
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random),
-						false, false, problemsReportType) + "\n");
-			}
-		}
-		
-		out.close();
 	}
 
 	private static void nQueensTests() throws FileNotFoundException, Exception {
@@ -80,6 +61,26 @@ public class Main {
 			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
 			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
 			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
+		}
+		
+		out.close();
+	}
+	
+	private static void randomProblemsTests(String fileName, int problemsReportType)
+			throws FileNotFoundException, Exception {
+
+		Random random = new Random(RANDOM_SEED);
+		
+		PrintWriter out = new PrintWriter(fileName);
+		
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+		
+			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
+		
+				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+				out.append(solveProblems(createProblems(p1, p2, random),
+						false, false, problemsReportType) + "\n");
+			}
 		}
 		
 		out.close();
@@ -110,11 +111,6 @@ public class Main {
 		ProblemsSetStats unsolvedStats = new ProblemsSetStats();
 		ProblemsSetStats allStats = new ProblemsSetStats();
 		
-		int solvedSize = problems.size();
-		int unsolvedSize = problems.size();
-		
-		allStats.setNumOfProblems(problems.size());
-		
 		for (Problem p: problems){
 
 			debugSB.append("PROBLEM: " + p + "\n");
@@ -134,21 +130,19 @@ public class Main {
 			
 			if (p.isSolved()){
 				
-				solvedStats.addFCCBJAssignments(p.getAssignments());
-				solvedStats.addFCCBJCCs(p.getCCs());
-				unsolvedSize--;
+				solvedStats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+				solvedStats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
 			}
 			else{
 				
-				unsolvedStats.addFCCBJAssignments(p.getAssignments());
-				unsolvedStats.addFCCBJCCs(p.getCCs());
-				solvedSize--;
+				unsolvedStats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+				unsolvedStats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
 				
 				debugSB.append("UNSOLVED: ");
 			}
 			
-			allStats.addFCCBJAssignments(p.getAssignments());
-			allStats.addFCCBJCCs(p.getAssignments());
+			allStats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			allStats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 			
@@ -156,27 +150,22 @@ public class Main {
 			
 			if (p.isSolved()){
 				
-				solvedStats.addFCCBJDACAssignments(p.getAssignments());
-				solvedStats.addFCCBJDACCCs(p.getCCs());
-				unsolvedSize--;
+				solvedStats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+				solvedStats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 			}
 			else{
 				
-				unsolvedStats.addFCCBJDACAssignments(p.getAssignments());
-				unsolvedStats.addFCCBJDACCCs(p.getCCs());
-				solvedSize--;
+				unsolvedStats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+				unsolvedStats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 				
 				debugSB.append("UNSOLVED: ");
 			}
 			
-			allStats.addFCCBJDACAssignments(p.getAssignments());
-			allStats.addFCCBJDACCCs(p.getAssignments());
+			allStats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			allStats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 		}
-		
-		solvedStats.setNumOfProblems(solvedSize);
-		unsolvedStats.setNumOfProblems(unsolvedSize);
 		
 		if (debug) System.out.println(debugSB.toString());
 		

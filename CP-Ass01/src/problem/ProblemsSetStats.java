@@ -1,127 +1,103 @@
 package problem;
 
+import java.math.BigInteger;
 import java.util.Vector;
 
 public class ProblemsSetStats {
 
-	protected	int				_numOfProblems;
+	protected	BigInteger			_fCCBJAssignments;
+	protected	BigInteger			_fCCBJDACAssignments;
+	protected	BigInteger			_fCCBJCCs;
+	protected	BigInteger			_fCCBJDACCCs;
 	
-	protected	int				_fCCBJAssignments;
-	protected	int				_fCCBJDACAssignments;
-	protected	int				_fCCBJCCs;
-	protected	int				_fCCBJDACCCs;
-	
-	protected	Vector<Integer>	_fCCBJAssignmentsVec;
-	protected	Vector<Integer>	_fCCBJDACAssignmentsVec;
-	protected	Vector<Integer>	_fCCBJCCsVec;
-	protected	Vector<Integer>	_fCCBJDACCCsVec;
+	protected	Vector<BigInteger>	_fCCBJAssignmentsVec;
+	protected	Vector<BigInteger>	_fCCBJDACAssignmentsVec;
+	protected	Vector<BigInteger>	_fCCBJCCsVec;
+	protected	Vector<BigInteger>	_fCCBJDACCCsVec;
 
 	public ProblemsSetStats() {
-
-		_numOfProblems = 0;
 		
-		_fCCBJAssignments = 0;
-		_fCCBJDACAssignments = 0;
-		_fCCBJCCs = 0;
-		_fCCBJDACCCs = 0;
+		_fCCBJAssignments = new BigInteger("0");
+		_fCCBJDACAssignments = new BigInteger("0");
+		_fCCBJCCs = new BigInteger("0");
+		_fCCBJDACCCs = new BigInteger("0");
 		
-		_fCCBJAssignmentsVec = new Vector<Integer>();
-		_fCCBJDACAssignmentsVec = new Vector<Integer>();
-		_fCCBJCCsVec = new Vector<Integer>();
-		_fCCBJDACCCsVec = new Vector<Integer>();
-	}
-	
-	public ProblemsSetStats(int fCCBJAssignments, int fCCBJDACAssignments,
-			int fCCBJCCs, int fCCBJDACCCs, int numOfProblems) {
-
-		_numOfProblems = numOfProblems;
-		
-		_fCCBJAssignments = fCCBJAssignments;
-		_fCCBJDACAssignments = fCCBJDACAssignments;
-		_fCCBJCCs = fCCBJCCs;
-		_fCCBJDACCCs = fCCBJDACCCs;
+		_fCCBJAssignmentsVec = new Vector<BigInteger>();
+		_fCCBJDACAssignmentsVec = new Vector<BigInteger>();
+		_fCCBJCCsVec = new Vector<BigInteger>();
+		_fCCBJDACCCsVec = new Vector<BigInteger>();
 	}
 	
 	@Override
 	public String toString() {
 
+		BigInteger numOfProblems = new BigInteger(String.valueOf(_fCCBJAssignmentsVec.size()));
+		
+		if (0 == numOfProblems.compareTo(new BigInteger("0"))) return "EMPTY\n";
+		
 		String ans = "";
 		
-		ans += "Average FCCBJ Assignments = " + (double)_fCCBJAssignments/_numOfProblems + "\n";
-		ans += "Average FCCBJDAC Assignments = " + (double)_fCCBJDACAssignments/_numOfProblems + "\n";
-		ans += "Average FCCBJ CCs = " + (double)_fCCBJCCs/_numOfProblems + "\n";
-		ans += "Average FCCBJDAC CCs = " + (double)_fCCBJDACCCs/_numOfProblems + "\n";
+		ans += "Average FCCBJ Assignments = " + _fCCBJAssignments.divide(numOfProblems) + "\n";
+		ans += "Average FCCBJDAC Assignments = " + _fCCBJDACAssignments.divide(numOfProblems) + "\n";
+		ans += "Average FCCBJ CCs = " + _fCCBJCCs.divide(numOfProblems) + "\n";
+		ans += "Average FCCBJDAC CCs = " + _fCCBJDACCCs.divide(numOfProblems) + "\n";
 		
-		 return ans;
+		return ans;
 	}
 	
-	public void incNumOfProblems(){
+	public void addFCCBJAssignments(BigInteger num){
 		
-		_numOfProblems++;
-	}
-	
-	public void setNumOfProblems(int num){
-		
-		_numOfProblems = num;
-	}
-	
-	public void addFCCBJAssignments(int num){
-		
-		_fCCBJAssignments += num;
+		_fCCBJAssignments = _fCCBJAssignments.add(num);
 		_fCCBJAssignmentsVec.add(num);
 	}
 	
-	public void addFCCBJDACAssignments(int num){
+	public void addFCCBJDACAssignments(BigInteger num){
 		
-		_fCCBJDACAssignments += num;
+		_fCCBJDACAssignments = _fCCBJDACAssignments.add(num);
 		_fCCBJDACAssignmentsVec.add(num);
 	}
 	
-	public void addFCCBJCCs(int num){
+	public void addFCCBJCCs(BigInteger num){
 		
-		_fCCBJCCs += num;
+		_fCCBJCCs = _fCCBJCCs.add(num);
 		_fCCBJCCsVec.add(num);
 	}
 	
-	public void addFCCBJDACCCs(int num){
+	public void addFCCBJDACCCs(BigInteger num){
 		
-		_fCCBJDACCCs += num;
+		_fCCBJDACCCs = _fCCBJDACCCs.add(num);
 		_fCCBJDACCCsVec.add(num);
 	}
 	
-	public int getNumOfProblems(){
-		return _numOfProblems;
-	}
-	
-	public int getFCCBJAssignments(){
+	public BigInteger getFCCBJAssignments(){
 		return _fCCBJAssignments;
 	}
 	
-	public int getFCCBJDACAssignments(){
+	public BigInteger getFCCBJDACAssignments(){
 		return _fCCBJDACAssignments;
 	}
 	
-	public int getFCCBJCCs(){
+	public BigInteger getFCCBJCCs(){
 		return _fCCBJCCs;
 	}
 	
-	public int getFCCBJDACCCs(){
+	public BigInteger getFCCBJDACCCs(){
 		return _fCCBJDACCCs;
 	}	
 	
-	public Vector<Integer> getFCCBJAssignmentsVec(){	
+	public Vector<BigInteger> getFCCBJAssignmentsVec(){	
 		return _fCCBJAssignmentsVec;
 	}
 	
-	public Vector<Integer> getFCCBJDACAssignmentsVec(){
+	public Vector<BigInteger> getFCCBJDACAssignmentsVec(){
 		return _fCCBJDACAssignmentsVec;
 	}
 	
-	public Vector<Integer> getFCCBJCCsVec(){
+	public Vector<BigInteger> getFCCBJCCsVec(){
 		return _fCCBJCCsVec;
 	}
 	
-	public Vector<Integer> getFCCBJDACCCsVec(){
+	public Vector<BigInteger> getFCCBJDACCCsVec(){
 		return _fCCBJDACCCsVec;
 	}
 }
