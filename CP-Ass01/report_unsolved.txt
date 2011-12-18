@@ -1,15 +1,21 @@
 P1=0.2, P2=0.1:
 EMPTY
+
 P1=0.2, P2=0.2:
 EMPTY
+
 P1=0.2, P2=0.30000000000000004:
 EMPTY
+
 P1=0.2, P2=0.4:
 EMPTY
+
 P1=0.2, P2=0.5:
 EMPTY
+
 P1=0.2, P2=0.6:
 EMPTY
+
 P1=0.2, P2=0.7:
 Average FCCBJ Assignments = 17632
 Average FCCBJDAC Assignments = 666
@@ -30,12 +36,16 @@ Average FCCBJDAC CCs = 3757
 
 P1=0.5, P2=0.1:
 EMPTY
+
 P1=0.5, P2=0.2:
 EMPTY
+
 P1=0.5, P2=0.30000000000000004:
 EMPTY
+
 P1=0.5, P2=0.4:
 EMPTY
+
 P1=0.5, P2=0.5:
 Average FCCBJ Assignments = 3345
 Average FCCBJDAC Assignments = 282
@@ -68,8 +78,10 @@ Average FCCBJDAC CCs = 600
 
 P1=0.8, P2=0.1:
 EMPTY
+
 P1=0.8, P2=0.2:
 EMPTY
+
 P1=0.8, P2=0.30000000000000004:
 Average FCCBJ Assignments = 7132
 Average FCCBJDAC Assignments = 1196
