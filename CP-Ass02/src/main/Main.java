@@ -19,7 +19,7 @@ import algoritm.FCCBJDACAlgorithm;
 public class Main {
 
 	public static final int		NUM_OF_PROBLEMS		= 50;
-	public static final long	RANDOM_SEED			= 17;
+	public static final long	RANDOM_SEED			= 1717;
 	public static final int		NUM_OF_VARIABLES	= 15;
 	public static final int		NUM_OF_VALUES		= 10;
 	
