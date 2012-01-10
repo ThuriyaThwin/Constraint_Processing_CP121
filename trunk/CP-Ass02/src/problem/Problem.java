@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import algorithm.VariablesPair;
 
-public class Problem {
+public abstract class Problem {
 
 	protected	int											_n;
 	protected	int											_d;
@@ -15,7 +15,7 @@ public class Problem {
 	protected	double										_p2;
 	protected	Vector<Integer>								_v;
 	protected	Vector<Vector<Integer>>						_domain;
-	protected	Vector<Vector<Map<VariablesPair, Boolean>>>	_constraints;
+	protected	Vector<Vector<Map<VariablesPair, Integer>>>	_constraints;
 	protected	boolean										_solved;
 	protected	int											_CCs;
 	protected	int											_assignments;
@@ -40,11 +40,15 @@ public class Problem {
 		
 		setRandom(random);
 		
+		setSolved(false);
+		setCCs(0);
+		setAssignments(0);
+		
 		initDataStructures();
-		initConstraints();
+		initEdgesConstraints();
 	}
 
-	public void initDataStructures() {
+	protected void initDataStructures() {
 		
 		Vector<Integer> tmpV = new Vector<Integer>(getN());
 		
@@ -64,29 +68,25 @@ public class Problem {
 			
 			getDomain().add(tmpVec);
 		}
-		
-		setSolved(false);
-		setCCs(0);
-		setAssignments(0);
 	}
-	
+
 	/**
 	 * p1 – the probability for a constraint between 2 variables.
 	 * p2 – the probability for a conflict between 2 constrained values.
 	 */
-	protected void initConstraints() {
+	protected void initEdgesConstraints() {
 		
-		Vector<Vector<Map<VariablesPair, Boolean>>> tConstraints =
-			new Vector<Vector<Map<VariablesPair, Boolean>>>(getN());
+		Vector<Vector<Map<VariablesPair, Integer>>> tConstraints =
+			new Vector<Vector<Map<VariablesPair, Integer>>>(getN());
 
-		Vector<Map<VariablesPair, Boolean>> tmpVec = null;
-		Map<VariablesPair, Boolean> tmpMap = null;
+		Vector<Map<VariablesPair, Integer>> tmpVec = null;
+		Map<VariablesPair, Integer> tmpMap = null;
 		
 		boolean dontHaveConstarint = false;
 		
 		for (int i = 0; i < getN(); i++) {
 
-			tmpVec = new Vector<Map<VariablesPair, Boolean>>(getN());
+			tmpVec = new Vector<Map<VariablesPair, Integer>>(getN());
 			
 			for (int j = 0; j < getN(); j++){
 				
@@ -96,7 +96,7 @@ public class Problem {
 					continue;
 				}
 				
-				tmpMap = new HashMap<VariablesPair, Boolean>(getD()*getD());
+				tmpMap = new HashMap<VariablesPair, Integer>(getD()*getD());
 				
 				dontHaveConstarint = (i == j) || getRandom().nextDouble() > getP1();
 				
@@ -104,11 +104,7 @@ public class Problem {
 					
 					for (int dj = 0; dj < getD(); dj++){
 						
-						if (dontHaveConstarint || getRandom().nextDouble() > getP2())
-							tmpMap.put(new VariablesPair(di, dj), true);
-						
-						else
-							tmpMap.put(new VariablesPair(di, dj), false);
+						setEdgeCost(tmpMap, dontHaveConstarint, di, dj);
 					}
 				}
 				
@@ -120,10 +116,13 @@ public class Problem {
 
 		setConstraints(tConstraints);
 	}
+
+	protected abstract void setEdgeCost(Map<VariablesPair, Integer> tmpMap,
+			boolean dontHaveConstarint, int di, int dj);
 	
 	/**
-	 * returns true iff there is no conflict between <var1,val1>
-	 * to <var2,val2> in this CSP problem instance
+	 * returns the cost of the joint assignment {<var1,val1> <var2,val2>}
+	 * in this COP problem instance.
 	 * 
 	 * @param var1
 	 * @param val1
@@ -131,15 +130,15 @@ public class Problem {
 	 * @param val2
 	 * @return
 	 */
-	public boolean check(int var1, int val1, int var2, int val2){
+	public int check(int var1, int val1, int var2, int val2){
 				
 		incCCs();
 		
 		if (var1 <= var2)
-			return getConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
+			return setConstraints().get(var1).get(var2).get(new VariablesPair(val1, val2));
 		
 		else
-			return getConstraints().get(var2).get(var1).get(new VariablesPair(val2, val1));
+			return setConstraints().get(var2).get(var1).get(new VariablesPair(val2, val1));
 	}
 	
 	@Override
@@ -218,11 +217,11 @@ public class Problem {
 		return _domain;
 	}
 
-	public void setConstraints(Vector<Vector<Map<VariablesPair, Boolean>>> constraints) {
+	public void setConstraints(Vector<Vector<Map<VariablesPair, Integer>>> constraints) {
 		this._constraints = constraints;
 	}
 
-	public Vector<Vector<Map<VariablesPair, Boolean>>> getConstraints() {
+	public Vector<Vector<Map<VariablesPair, Integer>>> setConstraints() {
 		return _constraints;
 	}
 
