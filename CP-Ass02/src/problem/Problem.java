@@ -20,6 +20,7 @@ public abstract class Problem {
 	protected	int											_CCs;
 	protected	int											_assignments;
 	protected	Random										_random;
+	protected	int											_solutionCost;
 	
 	/**
 	 * n – the number of variables.
@@ -157,9 +158,17 @@ public abstract class Problem {
 		
 		sb.deleteCharAt(sb.lastIndexOf(","));
 		
-		sb.append(" , CCs=" + getCCs() + ", Assignments=" + getAssignments());
+		sb.append("\nresult = " + getSolutionCost() + ", CCs=" + getCCs() + ", Assignments=" + getAssignments());
 		
 		return sb.toString();
+	}
+
+	public int getSolutionCost() {
+		return _solutionCost;
+	}
+	
+	public void setsolutioncost(int cost){
+		_solutionCost = cost;
 	}
 
 	protected void setN(int n) {
@@ -194,7 +203,7 @@ public abstract class Problem {
 		return _p2;
 	}
 
-	protected void setV(Vector<Integer> v) {
+	public void setV(Vector<Integer> v) {
 		this._v = v;
 	}
 
