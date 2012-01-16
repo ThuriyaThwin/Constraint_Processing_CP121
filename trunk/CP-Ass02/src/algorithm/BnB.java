@@ -82,6 +82,9 @@ public class BnB implements Algorithm {
 					_best_dist = new_dist;
 					curr_sol.set(i, v);
 					_best_sol = curr_sol;
+					
+					_problem.setsolutioncost(_best_dist);
+					_problem.setV(_best_sol);
 				}
 			}
 			else{
