@@ -40,15 +40,11 @@ public abstract class Problem {
 		
 		setRandom(random);
 		
-		setSolved(false);
-		setCCs(0);
-		setAssignments(0);
-		
 		initDataStructures();
 		initEdgesConstraints();
 	}
 
-	protected void initDataStructures() {
+	public void initDataStructures() {
 		
 		Vector<Integer> tmpV = new Vector<Integer>(getN());
 		
@@ -68,6 +64,10 @@ public abstract class Problem {
 			
 			getDomain().add(tmpVec);
 		}
+		
+		setSolved(false);
+		setCCs(0);
+		setAssignments(0);
 	}
 
 	/**
