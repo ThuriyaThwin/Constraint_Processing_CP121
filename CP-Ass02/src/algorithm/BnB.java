@@ -66,9 +66,7 @@ public class BnB implements Algorithm {
 	protected void PEFC3 (Vector<Integer> curr_sol, int dist, int next_var_index, Vector<Vector<Integer>> remaining_dom){
 		
 		int i = next_var_index;
-		
-//		values := sort-values(v, remaining_dom)	TODO
-		
+	
 		while (!remaining_dom.get(i).isEmpty()){
 			
 			boolean hasBeenUpdated = false;
@@ -82,13 +80,13 @@ public class BnB implements Algorithm {
 				if (new_dist < _best_dist){
 					
 					_best_dist = new_dist;
-					curr_sol.set(i, v);			// TODO
+					curr_sol.set(i, v);
 					_best_sol = curr_sol;
 				}
 			}
 			else{
 				
-				if (new_dist + _sum_min_ic < _best_dist){
+				if (new_dist + dac(i) + _sum_min_ic < _best_dist){
 					
 					updateIC(remaining_dom, i, v, 1);
 					
@@ -126,5 +124,9 @@ public class BnB implements Algorithm {
 	
 	protected void restoreIC(Vector<Vector<Integer>> remainingDom, int i, Integer v) {
 		return;
+	}
+
+	protected int dac(int i) {
+		return 0;
 	}
 }
