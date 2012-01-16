@@ -64,12 +64,14 @@ public class BnB implements Algorithm {
 
 	@SuppressWarnings("unchecked")
 	protected void PEFC3 (Vector<Integer> curr_sol, int dist, int next_var_index, Vector<Vector<Integer>> remaining_dom){
-
+		
 		int i = next_var_index;
 		
 //		values := sort-values(v, remaining_dom)	TODO
 		
 		while (!remaining_dom.get(i).isEmpty()){
+			
+			boolean hasBeenUpdated = false;
 			
 			Integer v = remaining_dom.get(i).firstElement();
 			
@@ -88,7 +90,9 @@ public class BnB implements Algorithm {
 				
 				if (new_dist + _sum_min_ic < _best_dist){
 					
-					updateIC(remaining_dom, i, v);
+					updateIC(remaining_dom, i, v, 1);
+					
+					hasBeenUpdated = true;
 					
 					if (new_dist + _sum_min_ic < _best_dist){
 						
@@ -100,6 +104,9 @@ public class BnB implements Algorithm {
 			}
 			
 			remaining_dom.get(i).removeElementAt(0);
+
+			if (hasBeenUpdated)
+				restoreIC(remaining_dom, i, v);
 		}
 	}
 
@@ -113,7 +120,11 @@ public class BnB implements Algorithm {
 		return sum;
 	}
 	
-	protected void updateIC(Vector<Vector<Integer>> remainingDom, int i, Integer v) {
+	protected void updateIC(Vector<Vector<Integer>> remainingDom, int i, Integer v, int x) {
+		return;
+	}
+	
+	protected void restoreIC(Vector<Vector<Integer>> remainingDom, int i, Integer v) {
 		return;
 	}
 }
