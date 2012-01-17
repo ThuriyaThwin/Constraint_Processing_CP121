@@ -85,7 +85,7 @@ public class Main {
 		
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
 				out.append(solveProblems(createMaxCSPProblems(p1, p2, random),
-						false, false, problemsReportType) + "\n");
+						true, false, problemsReportType) + "\n");
 			}
 		}
 		

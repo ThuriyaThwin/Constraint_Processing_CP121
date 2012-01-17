@@ -98,7 +98,7 @@ public class BnB implements Algorithm {
 					
 					_problem.setSolved(true);						//TODO ??..
 					
-					System.out.println(toString() + ": " + _problem.printSolution());	//TODO remove it..
+//					System.out.println(toString() + ": " + _problem.printSolution());	//TODO remove it..
 				}
 			}
 			else{
