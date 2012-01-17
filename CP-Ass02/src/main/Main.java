@@ -1,6 +1,5 @@
 package main;
 
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.util.Random;
@@ -20,10 +19,11 @@ import algorithm.BnBICDAC;
 
 public class Main {
 
-	public static final int		NUM_OF_PROBLEMS		= 50;
 	public static final long	RANDOM_SEED			= 1717;
-	public static final int		NUM_OF_VARIABLES	= 15;
-	public static final int		NUM_OF_VALUES		= 10;
+
+	public static final int		NUM_OF_PROBLEMS		= 50;
+	public static final int		NUM_OF_VARIABLES	= 5;	//TODO 15
+	public static final int		NUM_OF_VALUES		= 5;	//TODO 10
 
 	public static final double	P1_MIN				= 0.2;
 	public static final double	P1_MAX				= 0.8;
@@ -40,8 +40,6 @@ public class Main {
 	public static final int		MC_MIN				= 1;
 	public static final int		MC_MAX				= 10000;
 	public static final int		MC_DELTA			= 10;
-
-	public static final int		MC					= 0;	//TODO
 
 	public static void main(String[] args) throws Exception {
 
