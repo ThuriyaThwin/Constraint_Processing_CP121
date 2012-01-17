@@ -24,167 +24,164 @@ public class Main {
 	public static final long	RANDOM_SEED			= 1717;
 	public static final int		NUM_OF_VARIABLES	= 15;
 	public static final int		NUM_OF_VALUES		= 10;
-	
+
 	public static final double	P1_MIN				= 0.2;
 	public static final double	P1_MAX				= 0.8;
 	public static final double	P1_DELTA			= 0.3;
-	
+
 	public static final double	P2_MIN				= 0.1;
-	public static final double	P2_MAX				= 0.9;
+	public static final double	P2_MAX				= 0.8;
 	public static final double	P2_DELTA			= 0.1;
-	
-	public static final int		ALL					= 0;
-	public static final int		ONLY_UNSOLVED		= 1;
-	public static final int		ONLY_SOLVED			= 2;
-	
+
+	public static final double	P2_2_MIN			= 0.90;
+	public static final double	P2_2_MAX			= 0.97;
+	public static final double	P2_2_DELTA			= 0.01;
+
+	public static final int		MC_MIN				= 1;
+	public static final int		MC_MAX				= 10000;
+	public static final int		MC_DELTA			= 10;
+
 	public static final int		MC					= 0;	//TODO
 
 	public static void main(String[] args) throws Exception {
-	
+
 //		nQueensTests();
-		randomProblemsTests("report.txt", ALL);
-//		randomProblemsTests("report_solved.txt", ONLY_SOLVED);
-//		randomProblemsTests("report_unsolved.txt", ONLY_UNSOLVED);
+		randomMaxCSPProblemsTests("MaxCSP.txt");
+		randomCOPProblemsTests("COP.txt");
 	}
 
-//	private static void nQueensTests() throws FileNotFoundException, Exception {
-//		
-//		PrintWriter out = new PrintWriter("queens.txt");
-//		
-//		Vector<Problem> problems = new Vector<Problem>(24);
-//		
-////		for (int i = 2; i <= 25; i++)
-////			problems.add(new NQueensProblem(i));
-//		
-//		problems.add(new NQueensProblem(10));
-//		
-//		ProblemsSetStats result = solveProblems(problems, true, true, ALL);
+	private static void nQueensTests() throws Exception {
+
+		PrintWriter out = new PrintWriter("queens.txt");
+
+		Vector<Problem> problems = new Vector<Problem>(24);
+
+//		for (int i = 2; i <= 25; i++)
+//			problems.add(new NQueensProblem(i));
+
+		problems.add(new NQueensProblem(10));
+
+		ProblemsSetStats result = solveProblems(problems, true, true);
+
+//		for (int i = 2; i <= 25; i++){
 //
-////		for (int i = 2; i <= 25; i++){
-////			
-////			out.append(problems.get(i-2).toString() + "\n");
-////			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
-////			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
-////			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
-////			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
-////		}
-//		
-//		out.close();
-//	}
-	
-	private static void randomProblemsTests(String fileName, int problemsReportType)
-			throws FileNotFoundException, Exception {
+//			out.append(problems.get(i-2).toString() + "\n");
+//			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
+//			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
+//			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
+//			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
+//		}
+
+		out.close();
+	}
+
+	private static void randomMaxCSPProblemsTests(String fileName) throws Exception {
 
 		Random random = new Random(RANDOM_SEED);
-		
+
 		PrintWriter out = new PrintWriter(fileName);
-		
+
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-		
+
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-		
+
 				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
 				out.append(solveProblems(createMaxCSPProblems(p1, p2, random),
-						true, false, problemsReportType) + "\n");
+						true, true) + "\n");
+			}
+
+			for (double p2 = P2_2_MIN; p2 <= P2_2_MAX; p2 += P2_2_DELTA){
+
+				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+				out.append(solveProblems(createMaxCSPProblems(p1, p2, random),
+						true, true) + "\n");
 			}
 		}
-		
+
 		out.close();
 	}
 
 	private static Vector<Problem> createMaxCSPProblems(double p1, double p2, Random random) {
-		
+
 		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
-		
+
 		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
 			problems.add(new MaxCSPProblem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
-			
-		return problems;		
+
+		return problems;
 	}
-	
-//	private static Vector<Problem> createCOPProblems(double p1, double p2, Random random) {
-//		
-//		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
-//		
-//		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
-//			problems.add(new COPProblem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, MC, random));
-//			
-//		return problems;		
-//	}
+
+	private static void randomCOPProblemsTests(String fileName) throws Exception {
+
+		Random random = new Random(RANDOM_SEED);
+
+		PrintWriter out = new PrintWriter(fileName);
+
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+
+			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA){
+
+				out.append("P1=" + p1 + ", mc=" + mc + ":\n");
+				out.append(solveProblems(createCOPProblems(p1, 0.0, mc, random),
+						true, true) + "\n");
+			}
+		}
+
+		out.close();
+	}
+
+	private static Vector<Problem> createCOPProblems(double p1, double p2, int mc, Random random) {
+
+		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
+
+		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
+			problems.add(new COPProblem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, mc, random));
+
+		return problems;
+	}
 
 	private static ProblemsSetStats solveProblems(Vector<Problem> problems,
-			boolean debug, boolean bnb, int problemsReportType) throws Exception {
+			boolean debug, boolean bnb) throws Exception {
 
 		Algorithm BnB = new BnB();
-		Algorithm BnBIC = new BnBIC();		
+		Algorithm BnBIC = new BnBIC();
 		Algorithm BnBICDAC = new BnBICDAC();
-		
+
 		StringBuffer debugSB = new StringBuffer();
-		
-		ProblemsSetStats solvedStats = new ProblemsSetStats();
-		ProblemsSetStats unsolvedStats = new ProblemsSetStats();
-		ProblemsSetStats allStats = new ProblemsSetStats();
-		
+
+		ProblemsSetStats stats = new ProblemsSetStats();
+
 		for (Problem p: problems){
 
 			debugSB.append("PROBLEM: " + p + "\n");
-			
+
 			if (bnb){
-				
+
 				BnB.solve(p);
-				if (!p.isSolved()) debugSB.append("UNSOLVED: ");
+
+				stats.addBnBAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+				stats.addBnBCCs(new BigInteger(String.valueOf(p.getCCs())));
+
 				debugSB.append(p.printSolution() + "\n");
 			}
 
 			BnBIC.solve(p);
-			
-			if (p.isSolved()){
-				
-				solvedStats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-				solvedStats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
-			}
-			else{
-				
-				unsolvedStats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-				unsolvedStats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
-				
-				debugSB.append("UNSOLVED: ");
-			}
-			
-			allStats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-			allStats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
+
+			stats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
-			
+
 			BnBICDAC.solve(p);
-			
-			if (p.isSolved()){
-				
-				solvedStats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-				solvedStats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
-			}
-			else{
-				
-				unsolvedStats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-				unsolvedStats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
-				
-				debugSB.append("UNSOLVED: ");
-			}
-			
-			allStats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-			allStats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
+
+			stats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 		}
-		
+
 		if (debug) System.out.println(debugSB.toString());
-		
-		switch (problemsReportType){
-		
-			case ONLY_SOLVED: return solvedStats;
-			case ONLY_UNSOLVED: return unsolvedStats;
-			
-			default: return allStats;
-		}
+
+		return stats;
 	}
 }
