@@ -29,9 +29,11 @@ public class COPProblem extends Problem{
 	protected void setEdgeCost(Map<VariablesPair, Integer> tmpMap,
 			boolean dontHaveConstarint, int di, int dj) {
 
-		Integer rand = new Integer((int)(getRandom().nextDouble() * getMC()));
+		double random = getRandom().nextDouble();
 
-		tmpMap.put(new VariablesPair(di, dj), rand);
+		int rand = (int) ((getMC() == 1) ? Math.round(random) : random * getMC());
+
+		tmpMap.put(new VariablesPair(di, dj), new Integer(rand));
 	}
 
 	protected void setMC(int _mc) {
