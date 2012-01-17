@@ -10,11 +10,11 @@ import problem.NQueensProblem;
 import problem.Problem;
 import problem.ProblemsSetStats;
 
-import algoritm.BTAlgorithm;
-import algoritm.CBJAlgorithm;
-import algoritm.CSPAlgorithm;
-import algoritm.FCCBJAlgorithm;
-import algoritm.FCCBJDACAlgorithm;
+import algorithm.Algorithm;
+import algorithm.BnB;
+import algorithm.BnBIC;
+import algorithm.BnBICDAC;
+
 
 public class Main {
 
@@ -38,9 +38,9 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 	
 		nQueensTests();
-		randomProblemsTests("report.txt", ALL);
-		randomProblemsTests("report_solved.txt", ONLY_SOLVED);
-		randomProblemsTests("report_unsolved.txt", ONLY_UNSOLVED);
+//		randomProblemsTests("report.txt", ALL);
+//		randomProblemsTests("report_solved.txt", ONLY_SOLVED);
+//		randomProblemsTests("report_unsolved.txt", ONLY_UNSOLVED);
 	}
 
 	private static void nQueensTests() throws FileNotFoundException, Exception {
@@ -66,44 +66,43 @@ public class Main {
 		out.close();
 	}
 	
-	private static void randomProblemsTests(String fileName, int problemsReportType)
-			throws FileNotFoundException, Exception {
-
-		Random random = new Random(RANDOM_SEED);
-		
-		PrintWriter out = new PrintWriter(fileName);
-		
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-		
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-		
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createProblems(p1, p2, random),
-						false, false, problemsReportType) + "\n");
-			}
-		}
-		
-		out.close();
-	}
-
-	private static Vector<Problem> createProblems(double p1, double p2, Random random) {
-		
-		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
-		
-		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
-			problems.add(new Problem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
-			
-		return problems;		
-	}
-	
-
+//	private static void randomProblemsTests(String fileName, int problemsReportType)
+//			throws FileNotFoundException, Exception {
+//
+//		Random random = new Random(RANDOM_SEED);
+//		
+//		PrintWriter out = new PrintWriter(fileName);
+//		
+//		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+//		
+//			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
+//		
+//				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
+//				out.append(solveProblems(createProblems(p1, p2, random),
+//						false, false, problemsReportType) + "\n");
+//			}
+//		}
+//		
+//		out.close();
+//	}
+//
+//	private static Vector<Problem> createProblems(double p1, double p2, Random random) {
+//		
+//		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
+//		
+//		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
+//			problems.add(new Problem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
+//			
+//		return problems;		
+//	}
+//	
+//
 	private static ProblemsSetStats solveProblems(Vector<Problem> problems,
-			boolean debug, boolean btAndCBJ, int problemsReportType) throws Exception {
+			boolean debug, boolean bnb, int problemsReportType) throws Exception {
 
-		CSPAlgorithm BTAlgorithm = new BTAlgorithm();
-		CSPAlgorithm CBJAlgorithm = new CBJAlgorithm();
-		CSPAlgorithm FCCBJAlgorithm = new FCCBJAlgorithm();		
-		CSPAlgorithm FCCBJDACAlgorithm = new FCCBJDACAlgorithm();
+		Algorithm BnB = new BnB();
+		Algorithm BnBIC = new BnBIC();		
+		Algorithm BnBICDAC = new BnBICDAC();
 		
 		StringBuffer debugSB = new StringBuffer();
 		
@@ -115,18 +114,14 @@ public class Main {
 
 			debugSB.append("PROBLEM: " + p + "\n");
 			
-			if (btAndCBJ){
+			if (bnb){
 				
-				BTAlgorithm.solve(p);
-				if (!p.isSolved()) debugSB.append("UNSOLVED: ");
-				debugSB.append(p.printSolution() + "\n");
-				
-				CBJAlgorithm.solve(p);
+				BnB.solve(p);
 				if (!p.isSolved()) debugSB.append("UNSOLVED: ");
 				debugSB.append(p.printSolution() + "\n");
 			}
 
-			FCCBJAlgorithm.solve(p);
+			BnBIC.solve(p);
 			
 			if (p.isSolved()){
 				
@@ -146,7 +141,7 @@ public class Main {
 
 			debugSB.append(p.printSolution() + "\n");
 			
-			FCCBJDACAlgorithm.solve(p);
+			BnBICDAC.solve(p);
 			
 			if (p.isSolved()){
 				

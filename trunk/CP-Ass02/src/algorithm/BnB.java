@@ -85,6 +85,8 @@ public class BnB implements Algorithm {
 					
 					_problem.setsolutioncost(_best_dist);
 					_problem.setV(_best_sol);
+					
+					_problem.printSolution();	//TODO remove it..
 				}
 			}
 			else{
