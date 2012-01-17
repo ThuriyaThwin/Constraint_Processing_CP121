@@ -22,8 +22,8 @@ public class Main {
 	public static final long	RANDOM_SEED			= 1717;
 
 	public static final int		NUM_OF_PROBLEMS		= 50;
-	public static final int		NUM_OF_VARIABLES	= 15;	//TODO 15
-	public static final int		NUM_OF_VALUES		= 10;	//TODO 10
+	public static final int		NUM_OF_VARIABLES	= 8;	//TODO 15
+	public static final int		NUM_OF_VALUES		= 5;	//TODO 10
 
 	public static final double	P1_MIN				= 0.2;
 	public static final double	P1_MAX				= 0.8;
