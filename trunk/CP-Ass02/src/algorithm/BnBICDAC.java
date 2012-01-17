@@ -5,8 +5,6 @@ import java.util.Vector;
 import problem.Problem;
 
 public class BnBICDAC extends BnBIC {
-
-protected	Vector<Vector<Integer>>	_ic;
 	
 	public BnBICDAC() {
 		super();
@@ -18,13 +16,7 @@ protected	Vector<Vector<Integer>>	_ic;
 	
 	@Override
 	protected void init(Problem problem){
-		
 		super.init(problem);
-		
-		_ic = new Vector<Vector<Integer>>(_problem.getN());
-		
-		for (int i = 0; i < _problem.getN(); i++)
-			_ic.add(new Vector<Integer>(_problem.getD()));
 	}
 	
 	@Override
@@ -44,5 +36,10 @@ protected	Vector<Vector<Integer>>	_ic;
 		}
 		
 		return dac;
+	}
+	
+	@Override
+	public String toString(){
+		return "BnBICDAC";
 	}
 }
