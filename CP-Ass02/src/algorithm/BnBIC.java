@@ -22,8 +22,17 @@ public class BnBIC extends BnB {
 		
 		_ic = new Vector<Vector<Integer>>(_problem.getN());
 		
-		for (int i = 0; i < _problem.getN(); i++)
-			_ic.add(new Vector<Integer>(_problem.getD()));
+		Vector<Integer> tmpVec = null;
+		
+		for (int i = 0; i < _problem.getN(); i++){
+			
+			tmpVec = new Vector<Integer>(_problem.getD());
+			
+			for (int j = 0; j < _problem.getN(); j++)
+				tmpVec.add(new Integer(0));
+			
+			_ic.add(tmpVec);
+		}
 	}
 	
 	@Override
@@ -66,5 +75,10 @@ public class BnBIC extends BnB {
 			
 			_sum_min_ic += min;
 		}
+	}
+	
+	@Override
+	public String toString(){
+		return "BnBIC";
 	}
 }

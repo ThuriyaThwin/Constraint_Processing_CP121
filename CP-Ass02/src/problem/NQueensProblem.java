@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import algoritm.VariablesPair;
+import algorithm.VariablesPair;
+
 
 public class NQueensProblem extends Problem {
 
@@ -14,21 +15,21 @@ public class NQueensProblem extends Problem {
 	}
 
 	@Override
-	protected void initConstraints() {
+	protected void initEdgesConstraints() {
 		
-		Vector<Vector<Map<VariablesPair, Boolean>>> constraint =
-			new Vector<Vector<Map<VariablesPair, Boolean>>>(getN());
+		Vector<Vector<Map<VariablesPair, Integer>>> constraint =
+			new Vector<Vector<Map<VariablesPair, Integer>>>(getN());
 		
-		Vector<Map<VariablesPair, Boolean>> tmpVec = null;
-		Map<VariablesPair, Boolean> tmpMap = null;
+		Vector<Map<VariablesPair, Integer>> tmpVec = null;
+		HashMap<VariablesPair, Integer> tmpMap = null;
 		
 		for (int i = 0; i < getN(); i++){
 			
-			tmpVec = new Vector<Map<VariablesPair, Boolean>>(getN());
+			tmpVec = new Vector<Map<VariablesPair, Integer>>(getN());
 			
 			for (int j = 0; j < getN(); j++){
 				
-				tmpMap = new HashMap<VariablesPair, Boolean>(getD()*getD());
+				tmpMap = new HashMap<VariablesPair, Integer>(getD()*getD());
 				
 				for (int di = 0; di < getD(); di++){
 				
@@ -36,10 +37,10 @@ public class NQueensProblem extends Problem {
 						
 						if (	(di == dj) || (i-j == di-dj) || (j-i == di-dj)
 										   || (i-j == dj-di) || (j-i == dj-di)	)
-							tmpMap.put(new VariablesPair(di, dj), false);
+							tmpMap.put(new VariablesPair(di, dj), 1);
 						
 						else
-							tmpMap.put(new VariablesPair(di, dj), true);
+							tmpMap.put(new VariablesPair(di, dj), 0);
 					}
 				}
 				
@@ -55,5 +56,12 @@ public class NQueensProblem extends Problem {
 	@Override
 	public String toString() {
 		return getN() + " Queens";
+	}
+
+	@Override
+	protected void setEdgeCost(Map<VariablesPair, Integer> tmpMap,
+			boolean dontHaveConstarint, int di, int dj) {
+		// TODO Auto-generated method stub
+		
 	}
 }

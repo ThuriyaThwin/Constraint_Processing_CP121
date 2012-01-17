@@ -49,19 +49,21 @@ public class Main {
 		
 		Vector<Problem> problems = new Vector<Problem>(24);
 		
-		for (int i = 2; i <= 25; i++)
-			problems.add(new NQueensProblem(i));
+//		for (int i = 2; i <= 25; i++)
+//			problems.add(new NQueensProblem(i));
 		
-		ProblemsSetStats result = solveProblems(problems, true, false, ALL);
+		problems.add(new NQueensProblem(10));
+		
+		ProblemsSetStats result = solveProblems(problems, true, true, ALL);
 
-		for (int i = 2; i <= 25; i++){
-			
-			out.append(problems.get(i-2).toString() + "\n");
-			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
-			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
-			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
-			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
-		}
+//		for (int i = 2; i <= 25; i++){
+//			
+//			out.append(problems.get(i-2).toString() + "\n");
+//			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
+//			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
+//			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
+//			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
+//		}
 		
 		out.close();
 	}

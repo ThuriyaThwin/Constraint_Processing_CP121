@@ -52,7 +52,12 @@ public class BnB implements Algorithm {
 		_best_dist = Integer.MAX_VALUE;
 		_sum_min_ic = 0;
 		
-		PEFC3(new Vector<Integer>(), 0, 0, (Vector<Vector<Integer>>)_problem.getDomain().clone());
+		Vector<Integer> currSol = new Vector<Integer>(_problem.getN());
+		
+		for (int i = 0; i < _problem.getN(); i++)
+			currSol.add(new Integer(-1));
+		
+		PEFC3(currSol, 0, 0, (Vector<Vector<Integer>>)_problem.getDomain().clone());
 
 		return null;
 	}
@@ -66,16 +71,21 @@ public class BnB implements Algorithm {
 	protected void PEFC3 (Vector<Integer> curr_sol, int dist, int next_var_index, Vector<Vector<Integer>> remaining_dom){
 		
 		int i = next_var_index;
+		int vi = 0;
 	
-		while (!remaining_dom.get(i).isEmpty()){
+//		while (!remaining_dom.get(i).isEmpty()){
+		while (vi < _problem.getD()){
 			
 			boolean hasBeenUpdated = false;
 			
-			Integer v = remaining_dom.get(i).firstElement();
+//			Integer v = remaining_dom.get(i).firstElement();
+			Integer v = remaining_dom.get(i).get(vi);
+			
+			_problem.setVi(i, v);
 			
 			int new_dist = dist + getIC(i, v, curr_sol);
 			
-			if (i == _problem.getN()){
+			if (i == _problem.getN() - 1){
 				
 				if (new_dist < _best_dist){
 					
@@ -86,7 +96,9 @@ public class BnB implements Algorithm {
 					_problem.setsolutioncost(_best_dist);
 					_problem.setV(_best_sol);
 					
-					_problem.printSolution();	//TODO remove it..
+					_problem.setSolved(true);						//TODO ??..
+					
+					System.out.println(toString() + ": " + _problem.printSolution());	//TODO remove it..
 				}
 			}
 			else{
@@ -106,7 +118,8 @@ public class BnB implements Algorithm {
 				}
 			}
 			
-			remaining_dom.get(i).removeElementAt(0);
+			//remaining_dom.get(i).removeElementAt(0);
+			vi++;
 
 			if (hasBeenUpdated)
 				restoreIC(remaining_dom, i, v);
@@ -133,5 +146,10 @@ public class BnB implements Algorithm {
 
 	protected int dac(int i) {
 		return 0;
+	}
+	
+	@Override
+	public String toString(){
+		return "BnB";
 	}
 }
