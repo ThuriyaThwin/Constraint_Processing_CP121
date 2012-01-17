@@ -50,30 +50,30 @@ public class Main {
 		randomCOPProblemsTests("COP.txt");
 	}
 
-	private static void nQueensTests() throws Exception {
-
-		PrintWriter out = new PrintWriter("queens.txt");
-
-		Vector<Problem> problems = new Vector<Problem>(24);
-
-//		for (int i = 2; i <= 25; i++)
-//			problems.add(new NQueensProblem(i));
-
-		problems.add(new NQueensProblem(10));
-
-		ProblemsSetStats result = solveProblems(problems, true, true);
-
-//		for (int i = 2; i <= 25; i++){
+//	private static void nQueensTests() throws Exception {
 //
-//			out.append(problems.get(i-2).toString() + "\n");
-//			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
-//			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
-//			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
-//			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
-//		}
-
-		out.close();
-	}
+//		PrintWriter out = new PrintWriter("queens.txt");
+//
+//		Vector<Problem> problems = new Vector<Problem>(24);
+//
+////		for (int i = 2; i <= 25; i++)
+////			problems.add(new NQueensProblem(i));
+//
+//		problems.add(new NQueensProblem(10));
+//
+//		ProblemsSetStats result = solveProblems(problems, true, true);
+//
+////		for (int i = 2; i <= 25; i++){
+////
+////			out.append(problems.get(i-2).toString() + "\n");
+////			out.append("FCCBJ Assignments = " + result.getFCCBJAssignmentsVec().get(i-2) + "\n");
+////			out.append("FCCBJDAC Assignments = " + result.getFCCBJDACAssignmentsVec().get(i-2) + "\n");
+////			out.append("FCCBJ CCs = " + result.getFCCBJCCsVec().get(i-2) + "\n");
+////			out.append("FCCBJDAC CCs = " + result.getFCCBJDACCCsVec().get(i-2) + "\n\n");
+////		}
+//
+//		out.close();
+//	}
 
 	private static void randomMaxCSPProblemsTests(String fileName) throws Exception {
 
@@ -81,21 +81,27 @@ public class Main {
 
 		PrintWriter out = new PrintWriter(fileName);
 
+		out.append(	"P1," +
+					"P2," +
+					"Average BnB Assignments," +
+					"Average BnBIC Assignments," +
+					"Average BnBICDAC Assignments," +
+					"Average BnB CCs," +
+					"Average BnBIC CCs," +
+					"Average BnBICDAC CCs" +
+					"\n");
+
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
 
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA){
-
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createMaxCSPProblems(p1, p2, random),
+			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
+				out.append(p1 + "," + p2 + "," +
+						solveProblems(createMaxCSPProblems(p1, p2, random),
 						true, true) + "\n");
-			}
 
-			for (double p2 = P2_2_MIN; p2 <= P2_2_MAX; p2 += P2_2_DELTA){
-
-				out.append("P1=" + p1 + ", P2=" + p2 + ":\n");
-				out.append(solveProblems(createMaxCSPProblems(p1, p2, random),
+			for (double p2 = P2_2_MIN; p2 <= P2_2_MAX; p2 += P2_2_DELTA)
+				out.append(p1 + "," + p2 + "," +
+						solveProblems(createMaxCSPProblems(p1, p2, random),
 						true, true) + "\n");
-			}
 		}
 
 		out.close();
@@ -117,15 +123,21 @@ public class Main {
 
 		PrintWriter out = new PrintWriter(fileName);
 
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+		out.append(	"P1," +
+					"MC," +
+					"Average BnB Assignments," +
+					"Average BnBIC Assignments," +
+					"Average BnBICDAC Assignments," +
+					"Average BnB CCs," +
+					"Average BnBIC CCs," +
+					"Average BnBICDAC CCs" +
+					"\n");
 
-			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA){
-
-				out.append("P1=" + p1 + ", mc=" + mc + ":\n");
-				out.append(solveProblems(createCOPProblems(p1, 0.0, mc, random),
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA)
+			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA)
+				out.append(p1 + "," + mc + "," +
+						solveProblems(createCOPProblems(p1, 0.0, mc, random),
 						true, true) + "\n");
-			}
-		}
 
 		out.close();
 	}
@@ -167,15 +179,15 @@ public class Main {
 
 			BnBIC.solve(p);
 
-			stats.addFCCBJAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-			stats.addFCCBJCCs(new BigInteger(String.valueOf(p.getCCs())));
+			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 
 			BnBICDAC.solve(p);
 
-			stats.addFCCBJDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-			stats.addFCCBJDACCCs(new BigInteger(String.valueOf(p.getCCs())));
+			stats.addBnBICDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addBnBICDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 		}
