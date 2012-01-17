@@ -7,16 +7,22 @@ import algorithm.VariablesPair;
 
 public class COPProblem extends Problem{
 
-	private	int	_mc;
-	
+	protected	int	_mc;
+
 	public COPProblem(int n, int d, double p1, double p2, int mc) {
 		super(n, d, p1, p2);
 		setMC(mc);
 	}
-	
+
 	public COPProblem(int n, int d, double p1, double p2, int mc, Random random) {
 		super(n, d, p1, p2, random);
 		setMC(mc);
+		super.initEdgesConstraints();
+	}
+
+	@Override
+	protected void initEdgesConstraints() {
+		return;
 	}
 
 	@Override
@@ -24,7 +30,7 @@ public class COPProblem extends Problem{
 			boolean dontHaveConstarint, int di, int dj) {
 
 		Integer rand = new Integer((int)(getRandom().nextDouble() * getMC()));
-		
+
 		tmpMap.put(new VariablesPair(di, dj), rand);
 	}
 
