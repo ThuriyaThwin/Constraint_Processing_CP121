@@ -44,8 +44,8 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 //		nQueensTests();
-		randomMaxCSPProblemsTests("MaxCSP.txt");
-		randomCOPProblemsTests("COP.txt");
+		randomMaxCSPProblemsTests("MaxCSP.csv");
+		randomCOPProblemsTests("COP.csv");
 	}
 
 //	private static void nQueensTests() throws Exception {
