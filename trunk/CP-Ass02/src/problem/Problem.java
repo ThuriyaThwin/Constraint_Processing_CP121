@@ -13,6 +13,7 @@ public abstract class Problem {
 	protected	int											_d;
 	protected	double										_p1;
 	protected	double										_p2;
+	protected	int											_mc;
 	protected	Vector<Integer>								_v;
 	protected	Vector<Vector<Integer>>						_domain;
 	protected	Vector<Vector<Map<VariablesPair, Integer>>>	_constraints;
@@ -28,16 +29,17 @@ public abstract class Problem {
 	 * p1 - the probability for a constraint between 2 variables.
 	 * p2 - the probability for a conflict between 2 constrained values.
 	 */
-	public Problem(int n, int d, double p1, double p2) {
-		this(n, d, p1, p2, new Random(17));
+	public Problem(int n, int d, double p1, double p2, int mc) {
+		this(n, d, p1, p2, mc, new Random(17));
 	}
 
-	public Problem(int n, int d, double p1, double p2, Random random) {
+	public Problem(int n, int d, double p1, double p2, int mc, Random random) {
 
 		setN(n);
 		setD(d);
 		setP1(p1);
 		setP2(p2);
+		setMC(mc);
 
 		setRandom(random);
 
@@ -201,6 +203,14 @@ public abstract class Problem {
 
 	public double getP2() {
 		return _p2;
+	}
+	
+	public void setMC(int _mc) {
+		this._mc = _mc;
+	}
+
+	public int getMC() {
+		return _mc;
 	}
 
 	public void setV(Vector<Integer> v) {

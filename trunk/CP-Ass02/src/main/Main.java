@@ -23,8 +23,8 @@ public class Main {
 	public static final long	RANDOM_SEED			= 1717;
 
 	public static final int		NUM_OF_PROBLEMS		= 50;
-	public static final int		NUM_OF_VARIABLES	= 10;	//TODO 15
-	public static final int		NUM_OF_VALUES		= 7;	//TODO 10
+	public static final int		NUM_OF_VARIABLES	= 8;	//TODO 15
+	public static final int		NUM_OF_VALUES		= 5;	//TODO 10
 
 	public static final double	P1_MIN				= 0.2;
 	public static final double	P1_MAX				= 0.8;
@@ -33,6 +33,8 @@ public class Main {
 	public static final double	P2_MIN				= 0.1;
 	public static final double	P2_MAX				= 0.8;
 	public static final double	P2_DELTA			= 0.1;
+	
+	public static final double	ZERO_P2				= 0;
 
 	public static final double	P2_2_MIN			= 0.90;
 	public static final double	P2_2_MAX			= 0.97;
@@ -42,10 +44,12 @@ public class Main {
 	public static final int		MC_MAX				= 10000;
 	public static final int		MC_DELTA			= 10;
 
+	public static final int		ZERO_MC				= 0;
+
 	public static void main(String[] args) throws Exception {
 
 //		nQueensTests();
-		randomMaxCSPProblemsTests("MaxCSP.csv");
+//		randomMaxCSPProblemsTests("MaxCSP.csv");
 		randomCOPProblemsTests("COP.csv");
 	}
 
@@ -98,12 +102,12 @@ public class Main {
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
 				out.append(p1 + "," + p2 + "," +
 						solveProblems(createMaxCSPProblems(p1, p2, random),
-						true, true) + "\n");
+								true, true) + "\n");
 
 			for (double p2 = P2_2_MIN; p2 <= P2_2_MAX; p2 += P2_2_DELTA)
 				out.append(p1 + "," + p2 + "," +
 						solveProblems(createMaxCSPProblems(p1, p2, random),
-						true, true) + "\n");
+								true, true) + "\n");
 		}
 
 		out.close();
@@ -114,7 +118,7 @@ public class Main {
 		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
 
 		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
-			problems.add(new MaxCSPProblem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, random));
+			problems.add(new MaxCSPProblem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, ZERO_MC, random));
 
 		return problems;
 	}
@@ -142,8 +146,8 @@ public class Main {
 			
 			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA)
 				out.append(p1 + "," + mc + "," +
-						solveProblems(createCOPProblems(p1, 0.0, mc, random),
-						true, true) + "\n");
+						solveProblems(createCOPProblems(p1, ZERO_P2, mc, random),
+							true, false) + "\n");
 		}
 
 		out.close();
@@ -179,6 +183,8 @@ public class Main {
 
 				BnB.solve(p);
 
+				if (!p.isSolved()) debugSB.append("UNSOLVED ");
+				
 				stats.addBnBAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 				stats.addBnBCCs(new BigInteger(String.valueOf(p.getCCs())));
 
@@ -187,12 +193,16 @@ public class Main {
 
 			BnBIC.solve(p);
 
+			if (!p.isSolved()) debugSB.append("UNSOLVED ");
+			
 			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 			
 			BnBDAC.solve(p);
+			
+			if (!p.isSolved()) debugSB.append("UNSOLVED ");
 
 			stats.addBnBDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBDACCCs(new BigInteger(String.valueOf(p.getCCs())));
@@ -200,6 +210,8 @@ public class Main {
 			debugSB.append(p.printSolution() + "\n");
 
 			BnBICDAC.solve(p);
+			
+			if (!p.isSolved()) debugSB.append("UNSOLVED ");
 
 			stats.addBnBICDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBICDACCCs(new BigInteger(String.valueOf(p.getCCs())));
