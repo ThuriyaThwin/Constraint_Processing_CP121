@@ -7,32 +7,40 @@ public class ProblemsSetStats {
 
 	protected	BigInteger			_bnBAssignments;
 	protected	BigInteger			_bnBICAssignments;
+	protected	BigInteger			_bnBDACAssignments;
 	protected	BigInteger			_bnBICDACAssignments;
 	protected	BigInteger			_bnBCCs;
 	protected	BigInteger			_bnBICCCs;
+	protected	BigInteger			_bnBDACCCs;
 	protected	BigInteger			_bnBICDACCCs;
 
 	protected	Vector<BigInteger>	_bnBAssignmentsVec;
 	protected	Vector<BigInteger>	_bnBICAssignmentsVec;
+	protected	Vector<BigInteger>	_bnBDACAssignmentsVec;
 	protected	Vector<BigInteger>	_bnBICDACAssignmentsVec;
 	protected	Vector<BigInteger>	_bnBCCsVec;
 	protected	Vector<BigInteger>	_bnBICCCsVec;
+	protected	Vector<BigInteger>	_bnBDACCCsVec;
 	protected	Vector<BigInteger>	_bnBICDACCCsVec;
 
 	public ProblemsSetStats() {
 
 		_bnBAssignments = new BigInteger("0");
 		_bnBICAssignments = new BigInteger("0");
+		_bnBDACAssignments = new BigInteger("0");
 		_bnBICDACAssignments = new BigInteger("0");
 		_bnBCCs = new BigInteger("0");
 		_bnBICCCs = new BigInteger("0");
+		_bnBDACCCs = new BigInteger("0");
 		_bnBICDACCCs = new BigInteger("0");
 
 		_bnBAssignmentsVec = new Vector<BigInteger>();
 		_bnBICAssignmentsVec = new Vector<BigInteger>();
+		_bnBDACAssignmentsVec = new Vector<BigInteger>();
 		_bnBICDACAssignmentsVec = new Vector<BigInteger>();
 		_bnBCCsVec = new Vector<BigInteger>();
 		_bnBICCCsVec = new Vector<BigInteger>();
+		_bnBDACCCsVec = new Vector<BigInteger>();
 		_bnBICDACCCsVec = new Vector<BigInteger>();
 	}
 
@@ -47,9 +55,11 @@ public class ProblemsSetStats {
 
 		ans += _bnBAssignments.divide(numOfProblems) + ",";
 		ans += _bnBICAssignments.divide(numOfProblems) + ",";
+		ans += _bnBDACAssignments.divide(numOfProblems) + ",";
 		ans += _bnBICDACAssignments.divide(numOfProblems) + ",";
 		ans += _bnBCCs.divide(numOfProblems) + ",";
 		ans += _bnBICCCs.divide(numOfProblems) + ",";
+		ans += _bnBDACCCs.divide(numOfProblems) + ",";
 		ans += _bnBICDACCCs.divide(numOfProblems);
 
 		return ans;
@@ -83,6 +93,16 @@ public class ProblemsSetStats {
 	public void addBnBICDACCCs(BigInteger num) {
 		_bnBICDACCCs = _bnBICDACCCs.add(num);
 		_bnBICDACCCsVec.add(num);
+	}
+
+	public void addBnBDACAssignments(BigInteger num) {
+		_bnBDACAssignments = _bnBDACAssignments.add(num);
+		_bnBDACAssignmentsVec.add(num);
+	}
+
+	public void addBnBDACCCs(BigInteger num) {
+		_bnBDACCCs = _bnBDACCCs.add(num);
+		_bnBDACCCsVec.add(num);
 	}
 
 }
