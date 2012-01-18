@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import main.Main;
+
 import algorithm.VariablesPair;
 
 
@@ -11,7 +13,7 @@ public class NQueensProblem extends Problem {
 
 	public NQueensProblem(int n) {
 
-		super(n, n, 1/n, 1/n);
+		super(n, n, 1/n, 1/n, Main.ZERO_MC);
 	}
 
 	@Override

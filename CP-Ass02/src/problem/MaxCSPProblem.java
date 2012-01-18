@@ -7,12 +7,12 @@ import algorithm.VariablesPair;
 
 public class MaxCSPProblem extends Problem {
 
-	public MaxCSPProblem(int n, int d, double p1, double p2) {
-		super(n, d, p1, p2);
+	public MaxCSPProblem(int n, int d, double p1, double p2, int mc) {
+		super(n, d, p1, p2, mc);
 	}
 	
-	public MaxCSPProblem(int n, int d, double p1, double p2, Random random) {
-		super(n, d, p1, p2, random);
+	public MaxCSPProblem(int n, int d, double p1, double p2, int mc, Random random) {
+		super(n, d, p1, p2, mc, random);
 	}
 
 	@Override

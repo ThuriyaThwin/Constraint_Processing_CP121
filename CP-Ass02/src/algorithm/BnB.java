@@ -96,9 +96,12 @@ public class BnB implements Algorithm {
 					_problem.setsolutioncost(_best_dist);
 					_problem.setV(_best_sol);
 					
-					_problem.setSolved(true);						//TODO ??..
-					
-//					System.out.println(toString() + ": " + _problem.printSolution());	//TODO remove it..
+					//TODO ??..
+					if (_best_dist <= _problem.getMC()){
+						
+						_problem.setSolved(true);
+						return;
+					}
 				}
 			}
 			else{
