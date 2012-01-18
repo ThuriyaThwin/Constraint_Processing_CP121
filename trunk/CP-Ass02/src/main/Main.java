@@ -7,12 +7,13 @@ import java.util.Vector;
 
 import problem.COPProblem;
 import problem.MaxCSPProblem;
-import problem.NQueensProblem;
+//import problem.NQueensProblem;
 import problem.Problem;
 import problem.ProblemsSetStats;
 
 import algorithm.Algorithm;
 import algorithm.BnB;
+import algorithm.BnBDAC;
 import algorithm.BnBIC;
 import algorithm.BnBICDAC;
 
@@ -22,8 +23,8 @@ public class Main {
 	public static final long	RANDOM_SEED			= 1717;
 
 	public static final int		NUM_OF_PROBLEMS		= 50;
-	public static final int		NUM_OF_VARIABLES	= 15;	//TODO 15
-	public static final int		NUM_OF_VALUES		= 10;	//TODO 10
+	public static final int		NUM_OF_VARIABLES	= 10;	//TODO 15
+	public static final int		NUM_OF_VALUES		= 7;	//TODO 10
 
 	public static final double	P1_MIN				= 0.2;
 	public static final double	P1_MAX				= 0.8;
@@ -57,7 +58,7 @@ public class Main {
 ////		for (int i = 2; i <= 25; i++)
 ////			problems.add(new NQueensProblem(i));
 //
-//		problems.add(new NQueensProblem(10));
+//		problems.add(new NQueensProblem(17));
 //
 //		ProblemsSetStats result = solveProblems(problems, true, true);
 //
@@ -79,18 +80,21 @@ public class Main {
 
 		PrintWriter out = new PrintWriter(fileName);
 
-		out.append(	"P1," +
-					"P2," +
-					"Average BnB Assignments," +
-					"Average BnBIC Assignments," +
-					"Average BnBICDAC Assignments," +
-					"Average BnB CCs," +
-					"Average BnBIC CCs," +
-					"Average BnBICDAC CCs" +
-					"\n");
-
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
 
+			out.append(	"\n" +
+						"P1," +
+						"P2," +
+						"Average BnB Assignments," +
+						"Average BnBIC Assignments," +
+						"Average BnBDAC Assignments," +
+						"Average BnBICDAC Assignments," +
+						"Average BnB CCs," +
+						"Average BnBIC CCs," +
+						"Average BnBDAC CCs," +
+						"Average BnBICDAC CCs" +
+						"\n");
+			
 			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
 				out.append(p1 + "," + p2 + "," +
 						solveProblems(createMaxCSPProblems(p1, p2, random),
@@ -121,21 +125,26 @@ public class Main {
 
 		PrintWriter out = new PrintWriter(fileName);
 
-		out.append(	"P1," +
-					"MC," +
-					"Average BnB Assignments," +
-					"Average BnBIC Assignments," +
-					"Average BnBICDAC Assignments," +
-					"Average BnB CCs," +
-					"Average BnBIC CCs," +
-					"Average BnBICDAC CCs" +
-					"\n");
-
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA)
+		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+			
+			out.append(	"\n" +
+						"P1," +
+						"MC," +
+						"Average BnB Assignments," +
+						"Average BnBIC Assignments," +
+						"Average BnBDAC Assignments," +
+						"Average BnBICDAC Assignments," +
+						"Average BnB CCs," +
+						"Average BnBIC CCs," +
+						"Average BnBDAC CCs," +
+						"Average BnBICDAC CCs" +
+						"\n");
+			
 			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA)
 				out.append(p1 + "," + mc + "," +
 						solveProblems(createCOPProblems(p1, 0.0, mc, random),
 						true, true) + "\n");
+		}
 
 		out.close();
 	}
@@ -155,6 +164,7 @@ public class Main {
 
 		Algorithm BnB = new BnB();
 		Algorithm BnBIC = new BnBIC();
+		Algorithm BnBDAC = new BnBDAC(); 
 		Algorithm BnBICDAC = new BnBICDAC();
 
 		StringBuffer debugSB = new StringBuffer();
@@ -179,6 +189,13 @@ public class Main {
 
 			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
+
+			debugSB.append(p.printSolution() + "\n");
+			
+			BnBDAC.solve(p);
+
+			stats.addBnBDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addBnBDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append(p.printSolution() + "\n");
 
