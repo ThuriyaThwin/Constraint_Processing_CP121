@@ -23,8 +23,8 @@ public class Main {
 	public static final long	RANDOM_SEED			= 1717;
 
 	public static final int		NUM_OF_PROBLEMS		= 50;
-	public static final int		NUM_OF_VARIABLES	= 8;	//TODO 15
-	public static final int		NUM_OF_VALUES		= 5;	//TODO 10
+	public static final int		NUM_OF_VARIABLES	= 12;
+	public static final int		NUM_OF_VALUES		= 5;
 
 	public static final double	P1_MIN				= 0.2;
 	public static final double	P1_MAX				= 0.8;
@@ -49,7 +49,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 //		nQueensTests();
-//		randomMaxCSPProblemsTests("MaxCSP.csv");
+		randomMaxCSPProblemsTests("MaxCSP.csv");
 		randomCOPProblemsTests("COP.csv");
 	}
 
@@ -147,7 +147,7 @@ public class Main {
 			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA)
 				out.append(p1 + "," + mc + "," +
 						solveProblems(createCOPProblems(p1, ZERO_P2, mc, random),
-							true, false) + "\n");
+							true, true) + "\n");
 		}
 
 		out.close();
