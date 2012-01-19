@@ -63,7 +63,6 @@ public class NQueensProblem extends Problem {
 	@Override
 	protected void setEdgeCost(Map<VariablesPair, Integer> tmpMap,
 			boolean dontHaveConstarint, int di, int dj) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
 }
