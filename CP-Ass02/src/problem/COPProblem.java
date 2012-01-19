@@ -21,11 +21,17 @@ public class COPProblem extends Problem{
 	protected void setEdgeCost(Map<VariablesPair, Integer> tmpMap,
 			boolean dontHaveConstarint, int di, int dj) {
 
-		double random = getRandom().nextDouble();
+		if (dontHaveConstarint)
+			tmpMap.put(new VariablesPair(di, dj), 0);
+		
+		else{
+			
+			double random = getRandom().nextDouble();
 
-		int rand = (int) ((getMC() == 1) ? Math.round(random) : random * getMC());
+			int rand = (int) ((getMC() == 1) ? Math.round(random) : random * getMC());
 
-		tmpMap.put(new VariablesPair(di, dj), new Integer(rand));
+			tmpMap.put(new VariablesPair(di, dj), new Integer(rand));
+		}
 	}
 	
 	@Override
