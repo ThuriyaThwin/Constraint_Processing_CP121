@@ -27,8 +27,6 @@ public class BnB implements Algorithm {
 
 		_problem = problem;
 		_status = INITIALIZED;
-
-		//TODO
 	}
 
 	@Override
@@ -46,8 +44,6 @@ public class BnB implements Algorithm {
 
 		_problem.initDataStructures();
 
-		//TODO
-
 		_best_sol = new Vector<Integer>(_problem.getN());
 		_best_dist = Integer.MAX_VALUE;
 		_sum_min_ic = 0;
@@ -64,24 +60,23 @@ public class BnB implements Algorithm {
 
 	protected	int						_best_dist;		// ub
 	protected	Vector<Integer>			_best_sol;
-//	protected	Vector<Vector<Integer>>	_currentDomain;
 	protected	int						_sum_min_ic;
 
 	@SuppressWarnings("unchecked")
 	protected void PEFC3 (Vector<Integer> curr_sol, int dist, int next_var_index, Vector<Vector<Integer>> remaining_dom){
 
+		if (_best_dist == 0) return;
+		
 		int i = next_var_index;
 		int vi = 0;
 
-//		while (!remaining_dom.get(i).isEmpty()){
 		while (vi < _problem.getD()){
 
 			boolean hasBeenUpdated = false;
 
-//			Integer v = remaining_dom.get(i).firstElement();
 			Integer v = remaining_dom.get(i).get(vi);
 
-			_problem.setVi(i, v);
+			_problem.incAssignments();
 
 			int new_dist = dist + getIC(i, v, curr_sol);
 
@@ -96,12 +91,10 @@ public class BnB implements Algorithm {
 					_problem.setsolutioncost(_best_dist);
 					_problem.setV(_best_sol);
 
-					//TODO ??..
-					if (_best_dist <= _problem.getMC()){
-
+					if (_best_dist <= _problem.getMC())
 						_problem.setSolved(true);
-//						return;
-					}
+
+					if (_best_dist == 0) return;
 				}
 			}
 			else{
@@ -121,11 +114,12 @@ public class BnB implements Algorithm {
 				}
 			}
 
-			//remaining_dom.get(i).removeElementAt(0);
 			vi++;
 
 			if (hasBeenUpdated)
 				restoreIC(remaining_dom, i, v);
+			
+			if (_best_dist == 0) return;
 		}
 	}
 
