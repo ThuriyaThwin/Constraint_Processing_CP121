@@ -49,15 +49,15 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		nQueensTests();
-//		randomMaxCSPProblemsTests("MaxCSP.csv");
-//		randomCOPProblemsTests("COP.csv");
+		randomMaxCSPProblemsTests("MaxCSP.csv");
+		randomCOPProblemsTests("COP.csv");
 	}
 
 	private static void nQueensTests() throws Exception {
 
 		Vector<Problem> problems = new Vector<Problem>(1);
 
-		problems.add(new NQueensProblem(4));
+		problems.add(new NQueensProblem(8));
 
 		solveProblems(problems, true, true);
 
@@ -176,32 +176,32 @@ public class Main {
 				debugSB.append(p.printSolution() + "\n");
 			}
 
-//			BnBIC.solve(p);
-//
-//			if (!p.isSolved()) debugSB.append("UNSOLVED ");
-//			
-//			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-//			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
-//
-//			debugSB.append(p.printSolution() + "\n");
-//			
-//			BnBDAC.solve(p);
-//			
-//			if (!p.isSolved()) debugSB.append("UNSOLVED ");
-//
-//			stats.addBnBDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-//			stats.addBnBDACCCs(new BigInteger(String.valueOf(p.getCCs())));
-//
-//			debugSB.append(p.printSolution() + "\n");
-//
-//			BnBICDAC.solve(p);
-//			
-//			if (!p.isSolved()) debugSB.append("UNSOLVED ");
-//
-//			stats.addBnBICDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
-//			stats.addBnBICDACCCs(new BigInteger(String.valueOf(p.getCCs())));
-//
-//			debugSB.append(p.printSolution() + "\n");
+			BnBIC.solve(p);
+
+			if (!p.isSolved()) debugSB.append("UNSOLVED ");
+			
+			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
+
+			debugSB.append(p.printSolution() + "\n");
+			
+			BnBDAC.solve(p);
+			
+			if (!p.isSolved()) debugSB.append("UNSOLVED ");
+
+			stats.addBnBDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addBnBDACCCs(new BigInteger(String.valueOf(p.getCCs())));
+
+			debugSB.append(p.printSolution() + "\n");
+
+			BnBICDAC.solve(p);
+			
+			if (!p.isSolved()) debugSB.append("UNSOLVED ");
+
+			stats.addBnBICDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
+			stats.addBnBICDACCCs(new BigInteger(String.valueOf(p.getCCs())));
+
+			debugSB.append(p.printSolution() + "\n");
 		}
 
 		if (debug) System.out.println(debugSB.toString());
