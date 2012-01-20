@@ -57,7 +57,9 @@ public class BnB implements Algorithm {
 
 		return null;
 	}
-
+	
+	
+	//TODO:why are these fields here , and not up?
 	protected	int						_best_dist;		// ub
 	protected	Vector<Integer>			_best_sol;
 	protected	int						_sum_min_ic;
@@ -65,20 +67,20 @@ public class BnB implements Algorithm {
 	@SuppressWarnings("unchecked")
 	protected void PEFC3 (Vector<Integer> curr_sol, int dist, int next_var_index, Vector<Vector<Integer>> remaining_dom){
 
-		if (_best_dist == 0) return;
+		if (_best_dist == 0) return;//TODO:Do we still need this?Why?
 		
 		int i = next_var_index;
 		int vi = 0;
 
 		while (vi < _problem.getD()){
 
-			boolean hasBeenUpdated = false;
+			boolean hasBeenUpdated = false;//TODO:why do we need this again?
 
 			Integer v = remaining_dom.get(i).get(vi);
 
 			_problem.incAssignments();
 
-			int new_dist = dist + getIC(i, v, curr_sol);
+			int new_dist = dist + getIC(i, v, curr_sol);//TODO: Are we sure we need to call this?This it BnB?
 
 			if (i == _problem.getN() - 1){
 
@@ -94,7 +96,7 @@ public class BnB implements Algorithm {
 					if (_best_dist <= _problem.getMC())
 						_problem.setSolved(true);
 
-					if (_best_dist == 0) return;
+					if (_best_dist == 0) return;//TODO:Again this is first solution?
 				}
 			}
 			else{
@@ -122,7 +124,8 @@ public class BnB implements Algorithm {
 			if (_best_dist == 0) return;
 		}
 	}
-
+	
+	//TODO: Are we using this here?or should it be downer in the hierechy.
 	protected int getIC(int i, Integer v, Vector<Integer> currSol) {
 
 		int sum = 0;

@@ -12,8 +12,8 @@ import problem.ProblemsSetStats;
 
 import algoritm.BTAlgorithm;
 import algoritm.CBJAlgorithm;
-import algoritm.CSPAlgorithm;
 import algoritm.FCCBJAlgorithm;
+import algoritm.CSPAlgorithm;
 import algoritm.FCCBJDACAlgorithm;
 
 public class Main {
