@@ -53,7 +53,7 @@ public class BnB implements Algorithm {
 		for (int i = 0; i < _problem.getN(); i++)
 			currSol.add(new Integer(-1));
 
-		PEFC3(currSol, 0, 0, (Vector<Vector<Integer>>)_problem.getDomain().clone());
+		PEFC3(currSol, 0, 0, (Vector<Vector<Integer>>)_problem.getDomain().clone());//TODO:What's this?
 
 		return null;
 	}
