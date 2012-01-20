@@ -49,7 +49,9 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		nQueensTests();
-		randomMaxCSPProblemsTests("MaxCSP.csv");
+		randomMaxCSPProblemsTests("MaxCSP_02.csv", P1_MIN);
+		randomMaxCSPProblemsTests("MaxCSP_05.csv", P1_MIN + P1_DELTA);
+		randomMaxCSPProblemsTests("MaxCSP_08.csv", P1_MAX);
 		randomCOPProblemsTests("COP.csv");
 	}
 
@@ -63,37 +65,34 @@ public class Main {
 
 	}
 
-	private static void randomMaxCSPProblemsTests(String fileName) throws Exception {
+	private static void randomMaxCSPProblemsTests(String fileName, double p1) throws Exception {
 
 		Random random = new Random(RANDOM_SEED);
 
 		PrintWriter out = new PrintWriter(fileName);
 
-		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
+		out.append(	"\n" +
+					"P1," +
+					"P2," +
+					"Average BnB Assignments," +
+					"Average BnBIC Assignments," +
+					"Average BnBDAC Assignments," +
+					"Average BnBICDAC Assignments," +
+					"Average BnB CCs," +
+					"Average BnBIC CCs," +
+					"Average BnBDAC CCs," +
+					"Average BnBICDAC CCs" +
+					"\n");
+		
+		for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
+			out.append(p1 + "," + p2 + "," +
+					solveProblems(createMaxCSPProblems(p1, p2, random),
+							true, true) + "\n");
 
-			out.append(	"\n" +
-						"P1," +
-						"P2," +
-						"Average BnB Assignments," +
-						"Average BnBIC Assignments," +
-						"Average BnBDAC Assignments," +
-						"Average BnBICDAC Assignments," +
-						"Average BnB CCs," +
-						"Average BnBIC CCs," +
-						"Average BnBDAC CCs," +
-						"Average BnBICDAC CCs" +
-						"\n");
-			
-			for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
-				out.append(p1 + "," + p2 + "," +
-						solveProblems(createMaxCSPProblems(p1, p2, random),
-								true, true) + "\n");
-
-			for (double p2 = P2_2_MIN; p2 <= P2_2_MAX; p2 += P2_2_DELTA)
-				out.append(p1 + "," + p2 + "," +
-						solveProblems(createMaxCSPProblems(p1, p2, random),
-								true, true) + "\n");
-		}
+		for (double p2 = P2_2_MIN; p2 <= P2_2_MAX; p2 += P2_2_DELTA)
+			out.append(p1 + "," + p2 + "," +
+					solveProblems(createMaxCSPProblems(p1, p2, random),
+							true, true) + "\n");
 
 		out.close();
 	}
