@@ -19,7 +19,23 @@ public class BnBDAC extends BnBICDAC{
 	
 	@Override
 	protected void calcSumMinIC(int i) {
-		return;	// in order to keek (_sum_min_ic == 0)
+		
+		_sum_min_ic = 0;
+		
+		for (int j = i + 1; j < _problem.getN(); j++){
+			
+			int min =  + _dac.get(j).get(0);
+			
+			for (int k = 1; k < _problem.getD(); k++){
+	
+				int x = _dac.get(j).get(k);
+				
+				if (x < min)
+					min = x;
+			}
+			
+			_sum_min_ic += min;
+		}
 	}
 	
 	@Override

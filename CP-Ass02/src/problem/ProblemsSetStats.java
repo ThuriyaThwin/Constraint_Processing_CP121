@@ -47,7 +47,7 @@ public class ProblemsSetStats {
 	@Override
 	public String toString() {
 
-		BigInteger numOfProblems = new BigInteger(String.valueOf(_bnBAssignmentsVec.size()));
+		BigInteger numOfProblems = new BigInteger(String.valueOf(_bnBICDACCCsVec.size()));
 
 		if (0 == numOfProblems.compareTo(new BigInteger("0"))) return "EMPTY\n";
 

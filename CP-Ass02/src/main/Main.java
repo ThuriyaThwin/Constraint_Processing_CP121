@@ -173,7 +173,7 @@ public class Main {
 				stats.addBnBAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 				stats.addBnBCCs(new BigInteger(String.valueOf(p.getCCs())));
 
-				debugSB.append(p.printSolution() + "\n");
+				debugSB.append("BnB:\n" + p.printSolution() + "\n");
 			}
 
 			BnBIC.solve(p);
@@ -183,7 +183,7 @@ public class Main {
 			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
 
-			debugSB.append(p.printSolution() + "\n");
+			debugSB.append("BnBIC:\n" + p.printSolution() + "\n");
 			
 			BnBDAC.solve(p);
 			
@@ -192,7 +192,7 @@ public class Main {
 			stats.addBnBDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 
-			debugSB.append(p.printSolution() + "\n");
+			debugSB.append("BnBDAC:\n" + p.printSolution() + "\n");
 
 			BnBICDAC.solve(p);
 			
@@ -201,7 +201,7 @@ public class Main {
 			stats.addBnBICDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBICDACCCs(new BigInteger(String.valueOf(p.getCCs())));
 
-			debugSB.append(p.printSolution() + "\n");
+			debugSB.append("BnBICDAC:\n" + p.printSolution() + "\n");
 		}
 
 		if (debug) System.out.println(debugSB.toString());

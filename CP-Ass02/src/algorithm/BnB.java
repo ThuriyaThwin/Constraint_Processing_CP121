@@ -53,6 +53,8 @@ public class BnB implements Algorithm {
 		for (int i = 0; i < _problem.getN(); i++)
 			currSol.add(new Integer(-1));
 
+		updateDAC();
+		
 		PEFC3(currSol, 0, 0, (Vector<Vector<Integer>>)_problem.getDomain().clone());//TODO:What's this?
 
 		return null;
@@ -71,7 +73,7 @@ public class BnB implements Algorithm {
 		
 		int i = next_var_index;
 		int vi = 0;
-
+		
 		while (vi < _problem.getD()){
 
 			boolean hasBeenUpdated = false;//TODO:why do we need this again?
@@ -101,7 +103,7 @@ public class BnB implements Algorithm {
 			}
 			else{
 
-				if (new_dist + dac(i) + _sum_min_ic < _best_dist){
+				if (new_dist + dac(i,v) + _sum_min_ic < _best_dist){
 
 					updateIC(remaining_dom, i, v, 1);
 
@@ -124,7 +126,7 @@ public class BnB implements Algorithm {
 			if (_best_dist == 0) return;
 		}
 	}
-	
+
 	//TODO: Are we using this here?or should it be downer in the hierechy.
 	protected int getIC(int i, Integer v, Vector<Integer> currSol) {
 
@@ -143,8 +145,12 @@ public class BnB implements Algorithm {
 	protected void restoreIC(Vector<Vector<Integer>> remainingDom, int i, Integer v) {
 		return;
 	}
+	
+	protected void updateDAC() {
+		return;
+	}
 
-	protected int dac(int i) {
+	protected int dac(int i, int v) {
 		return 0;
 	}
 
