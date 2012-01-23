@@ -140,8 +140,7 @@ public class Main {
 	private static Vector<Problem> createCOPProblems(double p1, double p2, int mc, Random random) {
 
 		Vector<Problem> problems = new Vector<Problem>(NUM_OF_PROBLEMS);
-		//TODO: shouldn't this be a different random seed for every problem?how are we
-		//Creating the same problems?
+
 		for (int i = 0; i < NUM_OF_PROBLEMS; i++)
 			problems.add(new COPProblem(NUM_OF_VARIABLES, NUM_OF_VALUES, p1, p2, mc, random));
 
