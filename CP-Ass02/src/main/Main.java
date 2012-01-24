@@ -33,7 +33,7 @@ public class Main {
 	public static final double	P2_MIN				= 0.1;
 	public static final double	P2_MAX				= 0.8;
 	public static final double	P2_DELTA			= 0.1;
-	
+
 	public static final double	ZERO_P2				= 0;
 
 	public static final double	P2_2_MIN			= 0.90;
@@ -83,7 +83,7 @@ public class Main {
 					"Average BnBDAC CCs," +
 					"Average BnBICDAC CCs" +
 					"\n");
-		
+
 		for (double p2 = P2_MIN; p2 <= P2_MAX; p2 += P2_DELTA)
 			out.append(p1 + "," + p2 + "," +
 					solveProblems(createMaxCSPProblems(p1, p2, random),
@@ -114,7 +114,7 @@ public class Main {
 		PrintWriter out = new PrintWriter(fileName);
 
 		for (double p1 = P1_MIN; p1 <= P1_MAX; p1 += P1_DELTA){
-			
+
 			out.append(	"\n" +
 						"P1," +
 						"MC," +
@@ -127,7 +127,7 @@ public class Main {
 						"Average BnBDAC CCs," +
 						"Average BnBICDAC CCs" +
 						"\n");
-			
+
 			for (int mc = MC_MIN; mc <= MC_MAX; mc *= MC_DELTA)
 				out.append(p1 + "," + mc + "," +
 						solveProblems(createCOPProblems(p1, ZERO_P2, mc, random),
@@ -152,7 +152,7 @@ public class Main {
 
 		Algorithm BnB = new BnB();
 		Algorithm BnBIC = new BnBIC();
-		Algorithm BnBDAC = new BnBDAC(); 
+		Algorithm BnBDAC = new BnBDAC();
 		Algorithm BnBICDAC = new BnBICDAC();
 
 		StringBuffer debugSB = new StringBuffer();
@@ -168,7 +168,7 @@ public class Main {
 				BnB.solve(p);
 
 				if (!p.isSolved()) debugSB.append("UNSOLVED ");
-				
+
 				stats.addBnBAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 				stats.addBnBCCs(new BigInteger(String.valueOf(p.getCCs())));
 
@@ -178,14 +178,14 @@ public class Main {
 			BnBIC.solve(p);
 
 			if (!p.isSolved()) debugSB.append("UNSOLVED ");
-			
+
 			stats.addBnBICAssignments(new BigInteger(String.valueOf(p.getAssignments())));
 			stats.addBnBICCCs(new BigInteger(String.valueOf(p.getCCs())));
 
 			debugSB.append("BnBIC:\n" + p.printSolution() + "\n");
-			
+
 			BnBDAC.solve(p);
-			
+
 			if (!p.isSolved()) debugSB.append("UNSOLVED ");
 
 			stats.addBnBDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
@@ -194,7 +194,7 @@ public class Main {
 			debugSB.append("BnBDAC:\n" + p.printSolution() + "\n");
 
 			BnBICDAC.solve(p);
-			
+
 			if (!p.isSolved()) debugSB.append("UNSOLVED ");
 
 			stats.addBnBICDACAssignments(new BigInteger(String.valueOf(p.getAssignments())));
