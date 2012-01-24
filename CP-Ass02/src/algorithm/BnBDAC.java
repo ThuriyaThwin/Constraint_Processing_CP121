@@ -1,5 +1,7 @@
 package algorithm;
 
+import java.util.Vector;
+
 import problem.Problem;
 
 public class BnBDAC extends BnBICDAC{
@@ -36,6 +38,16 @@ public class BnBDAC extends BnBICDAC{
 
 			_sum_min_ic += min;
 		}
+	}
+
+	@Override
+	protected void updateIC(Vector<Vector<Integer>> remainingDom, int i, Integer v, int x) {
+		calcSumMinIC(i);
+	}
+
+	@Override
+	protected void restoreIC(Vector<Vector<Integer>> remainingDom, int i, Integer v) {
+		return;
 	}
 
 	@Override
