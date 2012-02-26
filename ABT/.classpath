@@ -8,5 +8,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Avi Digmi/EclipseWorkspace/.az/lib/AZCoreImpl.jar"/>
+	<classpathentry kind="lib" path="O:/workspace/.az/lib/AZAPI.jar"/>
+	<classpathentry kind="lib" path="O:/workspace/.az/lib/AZCoreImpl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
