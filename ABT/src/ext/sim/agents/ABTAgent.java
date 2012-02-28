@@ -1,10 +1,13 @@
 package ext.sim.agents;
 
+import java.util.Set;
+
 import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.ds.ImmutableSet;
 import bgu.dcr.az.api.tools.*;
+import bgu.dcr.az.api.ano.WhenReceived;
 
 @Algorithm(name = "ABT", useIdleDetector = false)
 public class ABTAgent extends SimpleAgent {
@@ -71,7 +74,7 @@ public class ABTAgent extends SimpleAgent {
 
 	private void checkAgentView() {
 
-		// TODO ...
+		// TODO Auto-generated method stub
 		
 		if (!agent_view.isConsistentWith(getId(), current_value, getProblem())){
 			
@@ -98,9 +101,25 @@ public class ABTAgent extends SimpleAgent {
 		
 		return true;
 	}
-	
+
 	private void addNewNeighborsFromNogood(Assignment noGood) {
-		// TODO Auto-generated method stub
+
+		ImmutableSet<Integer> noGoodVariables = noGood.assignedVariables();
+		Set<Integer> neighbors = getNeighbors();
 		
+		for (Integer v : noGoodVariables){
+			
+			if (!neighbors.contains(v)){
+				
+				send("ADD_NEIGHBOR").to(v);
+				agent_view.assign(v, noGood.getAssignment(v));
+			}
+		}
+	}
+
+	@WhenReceived("ADD_NEIGHBOR")
+	public void handleADDNEIGHBOR(){
+		getNeighbors().add(getCurrentMessage().getSender());
+		// TODO: add the sender also to the agent_view or something else??..
 	}
 }
