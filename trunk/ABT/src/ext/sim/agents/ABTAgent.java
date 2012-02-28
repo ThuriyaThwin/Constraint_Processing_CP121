@@ -3,6 +3,7 @@ package ext.sim.agents;
 import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
+import bgu.dcr.az.api.ds.ImmutableSet;
 import bgu.dcr.az.api.tools.*;
 
 @Algorithm(name = "ABT", useIdleDetector = false)
@@ -47,24 +48,59 @@ public class ABTAgent extends SimpleAgent {
 	public void handleOK(int value) {
 
 		agent_view.assign(getCurrentMessage().getSender(), value);
-		// TODO: remove non consistent NOGOODS;
+		// TODO: "remove non consistent NOGOODS";
 		checkAgentView();
 	}
 
 	@WhenReceived("NOGOOD")
-	public void handleNOGOOD(Assignment sentCpa) {
+	public void handleNOGOOD(Assignment noGood) {
 		
 		old_value = current_value;
 		
-		// TODO Auto-generated method stub
-//		isConsistentWith
+		if (isNogoodConsistentWithAgentView(noGood) &&
+			noGood.isConsistentWith(getId(), current_value, getProblem())){
+			
+			// TODO: "store noGood"
+			addNewNeighborsFromNogood(noGood);
+			checkAgentView();
+		}
+		
+		if (old_value == current_value)
+			 send("OK", current_value).to(getCurrentMessage().getSender());
 	}
-	
+
 	private void checkAgentView() {
-		// TODO Auto-generated method stub
+
+		// TODO ...
+		
+		if (!agent_view.isConsistentWith(getId(), current_value, getProblem())){
+			
+		}
 	}
 	
 	private void backtrack() {
 		// TODO Auto-generated method stub
+	}
+	
+	private boolean isNogoodConsistentWithAgentView(Assignment noGood) {
+		
+		ImmutableSet<Integer> noGoodVariables = noGood.assignedVariables();
+		ImmutableSet<Integer> agentViewVariables = agent_view.assignedVariables();
+		
+		for (Integer v : noGoodVariables){
+			
+			if (!agentViewVariables.contains(v))
+				continue;
+			
+			else if (noGood.getAssignment(v.intValue()) != agent_view.getAssignment(v.intValue()))
+				return false;
+		}
+		
+		return true;
+	}
+	
+	private void addNewNeighborsFromNogood(Assignment noGood) {
+		// TODO Auto-generated method stub
+		
 	}
 }
