@@ -3,7 +3,6 @@ package ext.sim.agents;
 import java.util.Set;
 import java.util.Vector;
 
-import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.ds.ImmutableSet;
