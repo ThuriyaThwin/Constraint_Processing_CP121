@@ -1,6 +1,7 @@
 package ext.sim.agents;
 
 import java.util.Set;
+import java.util.Vector;
 
 import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
@@ -14,19 +15,25 @@ public class ABTAgent extends SimpleAgent {
 
 //	http://azapi-test.googlecode.com/svn/trunk/bin/documentation/javadoc/index.html
 	
-	private Assignment	agent_view		= null;
-	private Integer		current_value	= null;
-	private Integer		old_value		= null;
+	private Assignment			agent_view		= null;
+	private Integer				current_value	= null;
+	private Vector<Assignment>	nogoods			= null;
 	
 	@Override
 	public void start() {
+		
+		current_value = getDomainSize() + 1;
+		
+		for (Integer d : getDomain())
+			if (d < current_value)
+				current_value = d;
 
-		agent_view		= new Assignment();
-		current_value	= new Integer(0);
-		old_value		= new Integer(-1);
-
-		// TODO:	KICK START THE ALGORITHM..
-		//			giving the first variable of the domain maybe?..
+		agent_view = new Assignment();	// TODO: should we add current_value to agent_view?... i don't thunk..
+		
+		nogoods = new Vector<Assignment>();
+		
+		// KICK START THE ALGORITHM..
+		send("OK", current_value).toAllAgentsAfterMe();
 	}
 	
 	@WhenReceived("OK")
@@ -40,12 +47,12 @@ public class ABTAgent extends SimpleAgent {
 	@WhenReceived("NOGOOD")
 	public void handleNOGOOD(Assignment noGood) {
 		
-		old_value = current_value;
+		int old_value = current_value;
 		
 		if (isNogoodConsistentWithAgentView(noGood) &&
 			noGood.isConsistentWith(getId(), current_value, getProblem())){
 			
-			// TODO: "store noGood"
+			nogoods.add(noGood);				// TODO: "store noGood" check if ok..
 			addNewNeighborsFromNogood(noGood);
 			checkAgentView();
 		}
@@ -71,7 +78,7 @@ public class ABTAgent extends SimpleAgent {
 
 	private void backtrack() {
 		
-		Assignment noGood = resolveInconsistentSubset(); //TODO: is it should be a global variable?..
+		Assignment noGood = resolveInconsistentSubset();
 		
 		if (noGood.getNumberOfAssignedVariables() == 0){
 			
