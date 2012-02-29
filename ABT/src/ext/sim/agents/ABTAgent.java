@@ -21,31 +21,13 @@ public class ABTAgent extends SimpleAgent {
 	@Override
 	public void start() {
 
-		// TODO: ADD INITIALIZING CODE HERE - DO NOT INITIALIZE ANYTHING IN THE
-		// CONSTRACTOR!
-		
 		agent_view		= new Assignment();
 		current_value	= new Integer(0);
 		old_value		= new Integer(-1);
-		
-		//TODO ...
-		
-//		if (isFirstAgent()) {
-//			// TODO: KICK START THE ALGORITHM
-//			cpa = new Assignment();
-//			assignCpa();
-//		}
-	}
 
-//	//TODO: remove..
-//	private void assignCpa() {
-//
-//		cpa.assign(getId(), random(getDomain()));
-//		
-//		if (isLastAgent()) finish(cpa);
-//		
-//		else send("CPA", cpa).toNextAgent();
-//	}
+		// TODO:	KICK START THE ALGORITHM..
+		//			giving the first variable of the domain maybe?..
+	}
 	
 	@WhenReceived("OK")
 	public void handleOK(int value) {
@@ -74,17 +56,45 @@ public class ABTAgent extends SimpleAgent {
 
 	private void checkAgentView() {
 
-		// TODO Auto-generated method stub
-		
 		if (!agent_view.isConsistentWith(getId(), current_value, getProblem())){
 			
+			if (!isThereAValueInDWhichConsistentWithAgentView())
+				backtrack();
+			
+			else{
+				
+				current_value = getValueFromDWhichConsistentWithAgentView();
+				send("OK", current_value).toAllAgentsAfterMe();	// TODO: is it going to send the message to the low_priority_neighbors??..
+			}
 		}
 	}
-	
+
 	private void backtrack() {
-		// TODO Auto-generated method stub
+		
+		Assignment noGood = resolveInconsistentSubset(); //TODO: is it should be a global variable?..
+		
+		if (noGood.getNumberOfAssignedVariables() == 0){
+			
+			send("NO_SOLUTION").toAllAgentsAfterMe(); // TODO: is this sufficient?...
+			finish();
+			return;
+		}
+		
+		int lowerPriorityVar = -1;
+		
+		for (Integer v : noGood.assignedVariables())
+			if (v > lowerPriorityVar)
+				lowerPriorityVar = v;
+		
+		send("NOGOOD", noGood).to(lowerPriorityVar);
+		
+		agent_view.unassign(lowerPriorityVar);
+		
+		// TODO: remove all Nogoods caontaining 'lowerPriorityVar' and 'noGood.getAssignment(lowerPriorityVar)'
+		
+		checkAgentView();
 	}
-	
+
 	private boolean isNogoodConsistentWithAgentView(Assignment noGood) {
 		
 		ImmutableSet<Integer> noGoodVariables = noGood.assignedVariables();
@@ -122,4 +132,26 @@ public class ABTAgent extends SimpleAgent {
 		getNeighbors().add(getCurrentMessage().getSender());
 		// TODO: add the sender also to the agent_view or something else??..
 	}
+	
+	private boolean isThereAValueInDWhichConsistentWithAgentView() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	private int getValueFromDWhichConsistentWithAgentView() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	private Assignment resolveInconsistentSubset() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@WhenReceived("NO_SOLUTION")
+	public void handleNOSOLUTION(){
+		finish();	// TODO: is this sufficient?..
+	}
+
+	
 }
