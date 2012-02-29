@@ -17,7 +17,7 @@ public class ABTAgent extends SimpleAgent {
 	
 	private Assignment			agent_view		= null;
 	private Integer				current_value	= null;
-	private Vector<Assignment>	nogoods			= null;
+	private Vector<Assignment>	nogoods			= null;	// TODO: is that a good representation?..
 	
 	@Override
 	public void start() {
@@ -28,7 +28,7 @@ public class ABTAgent extends SimpleAgent {
 			if (d < current_value)
 				current_value = d;
 
-		agent_view = new Assignment();	// TODO: should we add current_value to agent_view?... i don't thunk..
+		agent_view = new Assignment();	// TODO: should we add current_value to agent_view?... i don't think..
 		
 		nogoods = new Vector<Assignment>();
 		
@@ -39,8 +39,10 @@ public class ABTAgent extends SimpleAgent {
 	@WhenReceived("OK")
 	public void handleOK(int value) {
 
-		agent_view.assign(getCurrentMessage().getSender(), value);
-		// TODO: "remove non consistent NOGOODS";
+		int sender = getCurrentMessage().getSender();
+		
+		agent_view.assign(sender, value);
+		removeNonConsistentNoGoods(sender, value);
 		checkAgentView();
 	}
 
@@ -97,9 +99,23 @@ public class ABTAgent extends SimpleAgent {
 		
 		agent_view.unassign(lowerPriorityVar);
 		
-		// TODO: remove all Nogoods caontaining 'lowerPriorityVar' and 'noGood.getAssignment(lowerPriorityVar)'
+		removeNogoodsThatContainThisVariable(lowerPriorityVar, noGood.getAssignment(lowerPriorityVar));
 		
 		checkAgentView();
+	}
+
+	private void removeNonConsistentNoGoods(int sender, int value) {
+
+		// TODO: is that what we want to do?..
+		
+		Vector<Assignment> toRemove = new Vector<Assignment>();
+		
+		for (Assignment a : nogoods)
+			if (a.assignedVariables().contains(sender) &&
+					a.getAssignment(sender) != value)
+				toRemove.add(a);
+		
+		nogoods.removeAll(toRemove);
 	}
 
 	private boolean isNogoodConsistentWithAgentView(Assignment noGood) {
@@ -153,6 +169,20 @@ public class ABTAgent extends SimpleAgent {
 	private Assignment resolveInconsistentSubset() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private void removeNogoodsThatContainThisVariable(int var, int val) {
+		
+		// TODO: is that what we want to do?..
+		
+		Vector<Assignment> toRemove = new Vector<Assignment>();
+		
+		for (Assignment a : nogoods)
+			if (a.assignedVariables().contains(var) &&
+					a.getAssignment(var) == val)
+				toRemove.add(a);
+		
+		nogoods.removeAll(toRemove);
 	}
 
 	@WhenReceived("NO_SOLUTION")
