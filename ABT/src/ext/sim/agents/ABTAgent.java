@@ -67,13 +67,15 @@ public class ABTAgent extends SimpleAgent {
 
 		if (!agent_view.isConsistentWith(getId(), current_value, getProblem())){
 			
-			if (!isThereAValueInDWhichConsistentWithAgentView())
+			int d = getValueFromDWhichConsistentWithAgentView();
+			
+			if (-1 == d)	//	There is no value in D which consistent with agent_view..
 				backtrack();
 			
 			else{
 				
 				current_value = getValueFromDWhichConsistentWithAgentView();
-				send("OK", current_value).toAllAgentsAfterMe();	// TODO: is it going to send the message to the low_priority_neighbors??..
+				send("OK", current_value).toAllAgentsAfterMe();	// TODO: is it going to send the message to the low_priority_neighbors??.. i think it is..
 			}
 		}
 	}
@@ -156,18 +158,17 @@ public class ABTAgent extends SimpleAgent {
 		// TODO: add the sender also to the agent_view or something else??..
 	}
 	
-	private boolean isThereAValueInDWhichConsistentWithAgentView() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
 	private int getValueFromDWhichConsistentWithAgentView() {
-		// TODO Auto-generated method stub
-		return 0;
+
+		for (Integer v : getDomain())
+			if (agent_view.isConsistentWith(getId(), v, getProblem()))
+				return v.intValue();
+		
+		return -1;
 	}
 	
 	private Assignment resolveInconsistentSubset() {
-		// TODO Auto-generated method stub
+		// TODO WTF??... something which related to DBT??..
 		return null;
 	}
 	
