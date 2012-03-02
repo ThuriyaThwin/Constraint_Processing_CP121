@@ -1,0 +1,10 @@
+<experiment>
+    <async-test name="AgentZeroTest_test"  seed="0" repeat-count="100" run-var="p1" start="0.1" end="0.9" tick-size="0.1">
+        <algorithm name="AgentZeroTest"/>
+        <dcop-unstructured n="5" d="5" max-cost="100"/>
+        <nccc-sc/>
+        <ncsc-sc />
+        <cc-sc />
+        <default-tester/>
+    </async-test>        
+</experiment>
