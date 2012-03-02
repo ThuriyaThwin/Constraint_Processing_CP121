@@ -39,6 +39,8 @@ public class ABTAgent extends SimpleAgent {
 		
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAllAgentsAfterMe();
+		System.err.println("SEND OK: from " + getId() + " toAllAgentsAfterMe");
+		System.err.flush();
 	}
 	
 	@WhenReceived("OK")
@@ -66,8 +68,11 @@ public class ABTAgent extends SimpleAgent {
 			checkAgentView();
 		}
 		
-		if (old_value == current_value)
+		if (old_value == current_value){
 			 send("OK", current_value).to(getCurrentMessage().getSender());
+			 System.err.println("SEND OK: from " + getId() + " to " + getCurrentMessage().getSender());
+			 System.err.flush();
+		}
 	}
 
 	private void checkAgentView() {
@@ -85,6 +90,7 @@ public class ABTAgent extends SimpleAgent {
 				send("OK", current_value).toAllAgentsAfterMe();	// TODO: is it going to send the message to the low_priority_neighbors??.. i think it is..
 				
 				System.err.println("SEND OK: from " + getId() + " toAllAgentsAfterMe");
+				System.err.flush();
 			}
 		}
 	}
@@ -97,6 +103,7 @@ public class ABTAgent extends SimpleAgent {
 			
 			send("NO_SOLUTION").toAllAgentsAfterMe(); // TODO: is this sufficient?...
 			System.err.println("SEND NO_SOLUTION: from " + getId() + " toAllAgentsAfterMe");
+			System.err.flush();
 			finish();
 			return;
 		}
@@ -110,6 +117,7 @@ public class ABTAgent extends SimpleAgent {
 		send("NOGOOD", noGood).to(lowerPriorityVar);
 		
 		System.err.println("SEND NOGOOD: from " + getId() + " to " + lowerPriorityVar);
+		System.err.flush();
 		
 		agent_view.unassign(lowerPriorityVar);
 		
@@ -169,6 +177,7 @@ public class ABTAgent extends SimpleAgent {
 				send("ADD_NEIGHBOR").to(v);
 				
 				System.err.println("SEND ADD_NEIGHBOR: from " + getId() + " to " + v);
+				System.err.flush();
 				
 				agent_view.assign(v, noGood.getAssignment(v));
 			}
