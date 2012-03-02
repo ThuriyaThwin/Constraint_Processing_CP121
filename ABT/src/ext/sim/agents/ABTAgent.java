@@ -1,5 +1,7 @@
 package ext.sim.agents;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -16,7 +18,9 @@ public class ABTAgent extends SimpleAgent {
 	
 	private Assignment			agent_view		= null;
 	private Integer				current_value	= null;
+	
 	private Vector<Assignment>	nogoods			= null;	// TODO: is that a good representation?..
+	private Map<Integer,Assignment> nogoodsPerRemovedValue;	// TODO: experimental..
 	
 	@Override
 	public void start() {
@@ -30,6 +34,8 @@ public class ABTAgent extends SimpleAgent {
 		agent_view = new Assignment();	// TODO: should we add current_value to agent_view?... i don't think..
 		
 		nogoods = new Vector<Assignment>();
+		
+		nogoodsPerRemovedValue = new HashMap<Integer, Assignment>();
 		
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAllAgentsAfterMe();
@@ -54,6 +60,8 @@ public class ABTAgent extends SimpleAgent {
 			noGood.isConsistentWith(getId(), current_value, getProblem())){
 			
 			nogoods.add(noGood);				// TODO: "store noGood" check if ok..
+			nogoodsPerRemovedValue.put(current_value, noGood);	// TODO: experimental.. what to do when already have nogood for some value?..
+			
 			addNewNeighborsFromNogood(noGood);
 			checkAgentView();
 		}
@@ -112,11 +120,19 @@ public class ABTAgent extends SimpleAgent {
 		Vector<Assignment> toRemove = new Vector<Assignment>();
 		
 		for (Assignment a : nogoods)
-			if (a.assignedVariables().contains(sender) &&
-					a.getAssignment(sender) != value)
+			if (a.isAssigned(sender) && a.getAssignment(sender) != value)
 				toRemove.add(a);
 		
 		nogoods.removeAll(toRemove);
+		
+		// TODO: experimental..
+		for (Integer val : nogoodsPerRemovedValue.keySet()){
+			
+			Assignment a = nogoodsPerRemovedValue.get(val);
+			
+			if (a.isAssigned(sender) && a.getAssignment(sender) != value)
+				nogoodsPerRemovedValue.remove(val);			
+		}
 	}
 
 	private boolean isNogoodConsistentWithAgentView(Assignment noGood) {
@@ -168,7 +184,15 @@ public class ABTAgent extends SimpleAgent {
 	
 	private Assignment resolveInconsistentSubset() {
 		// TODO WTF??... something which related to DBT??..
-		return null;
+		
+//		Assignment nogood = new Assignment();
+//		
+//		for (Assignment a : nogoods)
+//			if (a.assignedVariables().contains(getId()) &&
+//					a.getAssignment(getId()) == current_value)
+//				nogood.as
+		
+		return nogoodsPerRemovedValue.get(current_value);
 	}
 	
 	private void removeNogoodsThatContainThisVariable(int var, int val) {
@@ -183,6 +207,16 @@ public class ABTAgent extends SimpleAgent {
 				toRemove.add(a);
 		
 		nogoods.removeAll(toRemove);
+		
+		// TODO: experimental..
+
+		for (Integer value : nogoodsPerRemovedValue.keySet()){
+			
+			Assignment a = nogoodsPerRemovedValue.get(value);
+			
+			if (a.isAssigned(var) && a.getAssignment(var) == value)
+				nogoodsPerRemovedValue.remove(value);	
+		}
 	}
 
 	@WhenReceived("NO_SOLUTION")
