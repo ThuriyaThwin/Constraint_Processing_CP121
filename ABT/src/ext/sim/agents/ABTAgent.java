@@ -16,11 +16,11 @@ public class ABTAgent extends SimpleAgent {
 
 //	http://azapi-test.googlecode.com/svn/trunk/bin/documentation/javadoc/index.html
 	
-	private Assignment			agent_view		= null;
-	private Integer				current_value	= null;
+	private Assignment				agent_view				= null;
+	private Integer					current_value			= null;
 	
-	private Vector<Assignment>	nogoods			= null;	// TODO: is that a good representation?..
-	private Map<Integer,Assignment> nogoodsPerRemovedValue;	// TODO: experimental..
+	private Vector<Assignment>		nogoods					= null;	// TODO: is that a good representation?..
+	private Map<Integer,Assignment> nogoodsPerRemovedValue	= null;	// TODO: experimental..
 	
 	@Override
 	public void start() {
