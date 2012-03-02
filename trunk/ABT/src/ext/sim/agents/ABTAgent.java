@@ -81,8 +81,10 @@ public class ABTAgent extends SimpleAgent {
 			
 			else{
 				
-				current_value = getValueFromDWhichConsistentWithAgentView();
+				current_value = d;
 				send("OK", current_value).toAllAgentsAfterMe();	// TODO: is it going to send the message to the low_priority_neighbors??.. i think it is..
+				
+				System.err.println("SEND OK: from " + getId() + " toAllAgentsAfterMe");
 			}
 		}
 	}
@@ -94,6 +96,7 @@ public class ABTAgent extends SimpleAgent {
 		if (noGood.getNumberOfAssignedVariables() == 0){
 			
 			send("NO_SOLUTION").toAllAgentsAfterMe(); // TODO: is this sufficient?...
+			System.err.println("SEND NO_SOLUTION: from " + getId() + " toAllAgentsAfterMe");
 			finish();
 			return;
 		}
@@ -105,6 +108,8 @@ public class ABTAgent extends SimpleAgent {
 				lowerPriorityVar = v;
 		
 		send("NOGOOD", noGood).to(lowerPriorityVar);
+		
+		System.err.println("SEND NOGOOD: from " + getId() + " to " + lowerPriorityVar);
 		
 		agent_view.unassign(lowerPriorityVar);
 		
@@ -162,6 +167,9 @@ public class ABTAgent extends SimpleAgent {
 			if (!neighbors.contains(v)){
 				
 				send("ADD_NEIGHBOR").to(v);
+				
+				System.err.println("SEND ADD_NEIGHBOR: from " + getId() + " to " + v);
+				
 				agent_view.assign(v, noGood.getAssignment(v));
 			}
 		}
