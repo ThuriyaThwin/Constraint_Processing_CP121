@@ -1,6 +1,7 @@
 package ext.sim.agents;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -11,7 +12,7 @@ import bgu.dcr.az.api.ds.ImmutableSet;
 import bgu.dcr.az.api.tools.*;
 import bgu.dcr.az.api.ano.WhenReceived;
 
-@Algorithm(name = "ABT", useIdleDetector = false)
+@Algorithm(name = "ABT", useIdleDetector = true)
 public class ABTAgent extends SimpleAgent {
 
 //	http://azapi-test.googlecode.com/svn/trunk/bin/documentation/javadoc/index.html
@@ -22,6 +23,8 @@ public class ABTAgent extends SimpleAgent {
 	private Vector<Assignment>		nogoods					= null;	// TODO: is that a good representation?..
 	private Map<Integer,Assignment> nogoodsPerRemovedValue	= null;	// TODO: experimental..
 	
+	private Set<Integer>			myNeighbors				= null;
+	
 	@Override
 	public void start() {
 		
@@ -31,21 +34,30 @@ public class ABTAgent extends SimpleAgent {
 			if (d < current_value)
 				current_value = d;
 
-		agent_view = new Assignment();	// TODO: should we add current_value to agent_view?... i don't think..
+		agent_view = new Assignment();
 		
 		nogoods = new Vector<Assignment>();
 		
 		nogoodsPerRemovedValue = new HashMap<Integer, Assignment>();
 		
+		myNeighbors = new HashSet<Integer>();
+		
+		for (Integer n : getNeighbors())			
+			if (n > getId())
+				myNeighbors.add(n);	
+	
 		// KICK START THE ALGORITHM..
-		send("OK", current_value).toAllAgentsAfterMe();
-		System.err.println("SEND OK: from " + getId() + " toAllAgentsAfterMe");
+		send("OK", current_value).toAll(myNeighbors);
+		System.err.println("SEND OK: from " + getId() + " toAllAgentsAfterMe with value " + current_value);
 		System.err.flush();
 	}
 	
 	@WhenReceived("OK")
 	public void handleOK(int value) {
 
+		System.err.println(getId() + " got OK: from " + getCurrentMessage().getSender() + " with value " + value);
+		System.err.flush();
+		
 		int sender = getCurrentMessage().getSender();
 		
 		agent_view.assign(sender, value);
@@ -58,8 +70,8 @@ public class ABTAgent extends SimpleAgent {
 		
 		int old_value = current_value;
 		
-		if (isNogoodConsistentWithAgentView(noGood) &&
-			noGood.isConsistentWith(getId(), current_value, getProblem())){
+		if (	isNogoodConsistentWithAgentView(noGood) &&
+				noGood.getAssignment(getId()) == current_value){			
 			
 			nogoods.add(noGood);				// TODO: "store noGood" check if ok..
 			nogoodsPerRemovedValue.put(current_value, noGood);	// TODO: experimental.. what to do when already have nogood for some value?..
@@ -87,7 +99,7 @@ public class ABTAgent extends SimpleAgent {
 			else{
 				
 				current_value = d;
-				send("OK", current_value).toAllAgentsAfterMe();	// TODO: is it going to send the message to the low_priority_neighbors??.. i think it is..
+				send("OK", current_value).toAll(myNeighbors);
 				
 				System.err.println("SEND OK: from " + getId() + " toAllAgentsAfterMe");
 				System.err.flush();
@@ -100,11 +112,10 @@ public class ABTAgent extends SimpleAgent {
 		Assignment noGood = resolveInconsistentSubset();
 		
 		if (noGood.getNumberOfAssignedVariables() == 0){
-			
-			send("NO_SOLUTION").toAllAgentsAfterMe(); // TODO: is this sufficient?...
+
 			System.err.println("SEND NO_SOLUTION: from " + getId() + " toAllAgentsAfterMe");
 			System.err.flush();
-			finish();
+			finish(agent_view);
 			return;
 		}
 		
@@ -119,9 +130,11 @@ public class ABTAgent extends SimpleAgent {
 		System.err.println("SEND NOGOOD: from " + getId() + " to " + lowerPriorityVar);
 		System.err.flush();
 		
-		agent_view.unassign(lowerPriorityVar);
+		
 		
 		removeNogoodsThatContainThisVariable(lowerPriorityVar, noGood.getAssignment(lowerPriorityVar));
+		
+		agent_view.unassign(lowerPriorityVar);
 		
 		checkAgentView();
 	}
@@ -168,26 +181,24 @@ public class ABTAgent extends SimpleAgent {
 	private void addNewNeighborsFromNogood(Assignment noGood) {
 
 		ImmutableSet<Integer> noGoodVariables = noGood.assignedVariables();
-		Set<Integer> neighbors = getNeighbors();
 		
 		for (Integer v : noGoodVariables){
 			
-			if (!neighbors.contains(v)){
+			if (!myNeighbors.contains(v) && (getId() != v)){
 				
 				send("ADD_NEIGHBOR").to(v);
 				
 				System.err.println("SEND ADD_NEIGHBOR: from " + getId() + " to " + v);
 				System.err.flush();
 				
-				agent_view.assign(v, noGood.getAssignment(v));
+				agent_view.assign(v, noGood.getAssignment(v).intValue());
 			}
 		}
 	}
 
 	@WhenReceived("ADD_NEIGHBOR")
 	public void handleADDNEIGHBOR(){
-		getNeighbors().add(getCurrentMessage().getSender());
-		// TODO: add the sender also to the agent_view or something else??..
+		myNeighbors.add(getCurrentMessage().getSender());
 	}
 	
 	private int getValueFromDWhichConsistentWithAgentView() {
@@ -209,7 +220,7 @@ public class ABTAgent extends SimpleAgent {
 //					a.getAssignment(getId()) == current_value)
 //				nogood.as
 		
-		return nogoodsPerRemovedValue.get(current_value);
+		return agent_view;//nogoodsPerRemovedValue.get(current_value);
 	}
 	
 	private void removeNogoodsThatContainThisVariable(int var, int val) {
@@ -235,11 +246,4 @@ public class ABTAgent extends SimpleAgent {
 				nogoodsPerRemovedValue.remove(value);	
 		}
 	}
-
-	@WhenReceived("NO_SOLUTION")
-	public void handleNOSOLUTION(){
-		finish();	// TODO: is this sufficient?..
-	}
-
-	
 }
