@@ -1,0 +1,1 @@
+<experiment><async-test name="ABT_test" seed="1717" repeat-count="1" run-var="p2" start="0.1" end="1.0" tick-size="0.1"><nccc-sc /><ncsc-sc /><cc-sc /><algorithm name="ABT" instance-name="default" /><dcsp-unstructured n="8" d="8" p1="0.3" p2="0.7" /><default-tester /></async-test><debug-info test-name="ABT_test" algorithm-name="ABT" name="1330789931807" number="7" /></experiment>
