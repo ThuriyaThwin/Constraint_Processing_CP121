@@ -5,8 +5,29 @@ import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
 
-@Algorithm(name="ABTDO", useIdleDetector=false)
+@Algorithm(name="ABTDO", useIdleDetector=true)
 public class ABTDOAgent extends SimpleAgent {
+
+    // Current order which is an ordered list of pairs.
+    // Every pair includes the ID of one of the agents and a counter
+    
+    // Each agent can
+    // propose a new order for agents that have lower priority, each time it replaces its
+    // assignment.
+    
+    // The counters attached to each agent ID in the order list form a time-stamp.
+    // Initially, all time-stamp counters are set to zero and all agents start with the same
+    // Current Order.
+    
+    // Each agent Ai that proposes a new order, changes the order of the
+    // pairs in its own ordered list and updates the counters as follows:
+    // 1. The counters of agents with higher priority than Ai, according to the
+    //    Current order, are not changed.
+    // 2. The counter of Ai is incremented by one.
+    // 3. The counters of agents with lower priority than Ai in the Current order are set
+    //    to zero.
+
+
 
     @Override
     public void start() {
@@ -15,16 +36,4 @@ public class ABTDOAgent extends SimpleAgent {
             //TODO: KICK START THE ALGORITHM
         }
     }
-
-    /* This is an example of message handling.
-     * With Simple Agent you are not required to define any message classes,
-     * All that required is to define the actions to take when a message, with some name, arrives and what fields it should contain.  
-     * @WhenReceived("MESSAGE_NAME")
-     * public void handleCPA(Type1 field1, Type2 field2, ..., TypeN fieldN) {
- 	 * 		Handling code... 
-     * }
-     * 
-     * when you want to send a message all you have to do is call: 
-     * send("MESSAGE_NAME", field1, field2, ..., fieldN).to(RECEIVING_AGENT_ID);
-     */
 }
