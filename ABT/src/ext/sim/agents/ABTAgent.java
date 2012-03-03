@@ -22,7 +22,7 @@ public class ABTAgent extends SimpleAgent {
 
 	private Vector<Assignment> nogoods = null; // TODO: is that a good
 												// representation?..
-	private Map<Integer, Assignment> nogoodsPerRemovedValue = null; // TODO:
+	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null; // TODO:
 																	// experimental..
 
 	private Set<Integer> myNeighbors = null;
@@ -40,7 +40,7 @@ public class ABTAgent extends SimpleAgent {
 
 		nogoods = new Vector<Assignment>();
 
-		nogoodsPerRemovedValue = new HashMap<Integer, Assignment>();
+		nogoodsPerRemovedValue = new HashMap<Integer, Vector<Assignment>>();
 
 		myNeighbors = new HashSet<Integer>();
 
@@ -78,13 +78,27 @@ public class ABTAgent extends SimpleAgent {
 				&& noGood.getAssignment(getId()) == current_value) {
 
 			nogoods.add(noGood); // TODO: "store noGood" check if ok..
-			nogoodsPerRemovedValue.put(current_value, noGood); // TODO:
-																// experimental..
-																// what to do
-																// when already
-																// have nogood
-																// for some
-																// value?..
+			
+			// TODO:
+			// experimental..
+			// what to do
+			// when already
+			// have nogood
+			// for some
+			// value?..
+			
+			Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
+			
+			if (null == x){
+				
+				Vector<Assignment> y = new Vector<Assignment>();
+				y.add(noGood);
+				nogoodsPerRemovedValue.put(current_value, y);
+			}
+			else{
+				
+				x.add(noGood);
+			}
 
 			addNewNeighborsFromNogood(noGood);
 			checkAgentView();
@@ -124,7 +138,8 @@ public class ABTAgent extends SimpleAgent {
 
 		Assignment noGood = resolveInconsistentSubset();
 
-		if (noGood.getNumberOfAssignedVariables() == 0) {
+		if (noGood.getNumberOfAssignedVariables() == 0
+				|| (isFirstAgent() && (getDomainSize() - 1 == current_value))) {
 
 			System.err.println("SEND NO_SOLUTION: from " + getId()
 					+ " toAllAgentsAfterMe");
@@ -168,9 +183,13 @@ public class ABTAgent extends SimpleAgent {
 		// TODO: experimental..
 		for (Integer val : nogoodsPerRemovedValue.keySet()) {
 
-			Assignment a = nogoodsPerRemovedValue.get(val);
+			Vector<Assignment> va = nogoodsPerRemovedValue.get(val);
 
-			if (a.isAssigned(sender) && a.getAssignment(sender) != value)
+			for (Assignment a : va)
+				if (a.isAssigned(sender) && a.getAssignment(sender) != value)
+					va.remove(val);
+			
+			if (va.isEmpty())
 				nogoodsPerRemovedValue.remove(val);
 		}
 	}
@@ -216,15 +235,49 @@ public class ABTAgent extends SimpleAgent {
 	@WhenReceived("ADD_NEIGHBOR")
 	public void handleADDNEIGHBOR() {
 		myNeighbors.add(getCurrentMessage().getSender());
+		send("OK", current_value).to(getCurrentMessage().getSender());
 	}
 
 	private int getValueFromDWhichConsistentWithAgentView() {
 
 		for (Integer v : getDomain())
 			if (agent_view.isConsistentWith(getId(), v, getProblem()))
-				return v.intValue();
+				if(checkAgentViewWithNoGoods(v)){
+					return v.intValue();
+				}
 
 		return -1;
+	}
+
+	private boolean checkAgentViewWithNoGoods(Integer v) {
+		
+		boolean tAns = false;
+		
+//		Set<Integer> assignedVars = agent_view.assignedVariables();
+		Vector<Assignment> noGoods = nogoodsPerRemovedValue.get(v);
+		
+//		if (null == noGoods ) return true;
+		
+		for (Assignment noGood : noGoods) {
+			tAns = false;
+			for (Integer var : noGood.assignedVariables()) {
+				
+				if(agent_view.isAssigned(var) && 
+						(agent_view.getAssignment(var) == noGood.getAssignment(var))){
+					continue;
+				}
+				else if((var == getId()) && noGood.getAssignment(var) == current_value){
+					continue;
+				}
+				else{
+					tAns = true;
+				}
+			}
+			if(!tAns){
+				break;
+			}
+		}
+		return tAns;
 	}
 
 	private Assignment resolveInconsistentSubset() {
@@ -254,21 +307,22 @@ public class ABTAgent extends SimpleAgent {
 		nogoods.removeAll(toRemove);
 
 		// TODO: experimental..
-
+		
 		for (Integer value : nogoodsPerRemovedValue.keySet()) {
 
-			Assignment a = nogoodsPerRemovedValue.get(value);
+			Vector<Assignment> va = nogoodsPerRemovedValue.get(value);
 
-			if (a.isAssigned(var) && a.getAssignment(var) == value)
-				nogoodsPerRemovedValue.remove(value);
+			for (Assignment a : va)
+				if (a.isAssigned(var) && a.getAssignment(var) != val)
+					va.remove(val);
+			
+			if (va.isEmpty())
+				nogoodsPerRemovedValue.remove(val);
 		}
 	}
 
 	@Override
 	public void onIdleDetected() {
-		// if (!isFinished())
-		// finish(agent_view);
-		//
 		finish(current_value);
 	}
 }
