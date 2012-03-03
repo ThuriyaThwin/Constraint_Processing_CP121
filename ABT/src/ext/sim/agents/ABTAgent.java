@@ -17,35 +17,47 @@ public class ABTAgent extends SimpleAgent {
 
 	// http://azapi-test.googlecode.com/svn/trunk/bin/documentation/javadoc/index.html
 
-	private Assignment							agent_view				= null;
-	private Integer								current_value			= null;
-	private Map<Integer, Vector<Assignment>>	nogoodsPerRemovedValue	= null;
-	private Set<Integer>						myNeighbors				= null;
+	private Assignment agent_view = null;
+	private Integer current_value = null;
+	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null;
+	private Set<Integer> myNeighbors = null;
 
 	@Override
 	public void start() {
 
-		current_value = getDomainSize() + 1;
-
-		for (Integer d : getDomain())
-			if (d < current_value)
-				current_value = d;
+		assignFirstVariable();
 
 		agent_view = new Assignment();
 
 		nogoodsPerRemovedValue = new HashMap<Integer, Vector<Assignment>>();
+
+		initializeNeighbors();
+
+		// KICK START THE ALGORITHM..
+		send("OK", current_value).toAll(myNeighbors);
+
+		System.err.println(getId()
+				+ " sends OK: to all his neighbors with value " + current_value
+				+ " from method 'start'");
+		System.err.flush();
+	}
+
+	private void initializeNeighbors() {
 
 		myNeighbors = new HashSet<Integer>();
 
 		for (Integer n : getNeighbors())
 			if (n > getId())
 				myNeighbors.add(n);
+	}
 
-		// KICK START THE ALGORITHM..
-		send("OK", current_value).toAll(myNeighbors);
-		System.err.println("SEND OK: from " + getId()
-				+ " toAllAgentsAfterMe with value " + current_value);
-		System.err.flush();
+	private void assignFirstVariable() {
+
+		current_value = getDomainSize() + 1;
+
+		for (Integer d : getDomain())
+			if (d < current_value)
+				current_value = d;
 	}
 
 	@WhenReceived("OK")
@@ -64,6 +76,10 @@ public class ABTAgent extends SimpleAgent {
 
 	@WhenReceived("NOGOOD")
 	public void handleNOGOOD(Assignment noGood) {
+
+		System.err.println(getId() + " got NOGOOD: from "
+				+ getCurrentMessage().getSender() + " with noGood " + noGood);
+		System.err.flush();
 
 		int old_value = current_value;
 
@@ -88,8 +104,10 @@ public class ABTAgent extends SimpleAgent {
 
 		if (old_value == current_value) {
 			send("OK", current_value).to(getCurrentMessage().getSender());
-			System.err.println("SEND OK: from " + getId() + " to "
-					+ getCurrentMessage().getSender() + " with value: " + current_value);
+
+			System.err.println(getId() + " sends OK: to "
+					+ getCurrentMessage().getSender() + " with value "
+					+ current_value + " from method 'handleNOGOOD'");
 			System.err.flush();
 		}
 	}
@@ -110,8 +128,9 @@ public class ABTAgent extends SimpleAgent {
 				current_value = d;
 				send("OK", current_value).toAll(myNeighbors);
 
-				System.err.println("SEND OK: from " + getId()
-						+ " toAllAgentsAfterMe with value " + current_value);
+				System.err.println(getId()
+						+ " sends OK: to all his neighbors with value "
+						+ current_value + " from method 'checkAgentView'");
 				System.err.flush();
 			}
 		}
@@ -124,9 +143,9 @@ public class ABTAgent extends SimpleAgent {
 		if (noGood.getNumberOfAssignedVariables() == 0
 				|| (isFirstAgent() && (getDomainSize() - 1 == current_value))) {
 
-			System.err.println("SEND NO_SOLUTION: from " + getId()
-					+ " toAllAgentsAfterMe");
+			System.err.println(getId() + " says: NO SOLUTION");
 			System.err.flush();
+
 			finishWithNoSolution();
 			return;
 		}
@@ -140,7 +159,13 @@ public class ABTAgent extends SimpleAgent {
 		send("NOGOOD", noGood).to(lowerPriorityVar);
 
 		System.err.println("SEND NOGOOD: from " + getId() + " to "
-				+ lowerPriorityVar + " because its value: " + noGood.getAssignment(lowerPriorityVar));
+				+ lowerPriorityVar + " because its value: "
+				+ noGood.getAssignment(lowerPriorityVar));
+		
+		System.err.println(getId()
+				+ " sends NOGOOD: to " + lowerPriorityVar + " because its value: " + current_value
+				+ " from method 'backtrack'");
+		
 		System.err.flush();
 
 		agent_view.unassign(lowerPriorityVar);
@@ -156,7 +181,7 @@ public class ABTAgent extends SimpleAgent {
 		for (Integer val : nogoodsPerRemovedValue.keySet()) {
 
 			Vector<Assignment> va = nogoodsPerRemovedValue.get(val);
-			
+
 			for (Assignment a : va)
 				if (a.isAssigned(sender) && a.getAssignment(sender) != value)
 					va.remove(val);
@@ -197,6 +222,9 @@ public class ABTAgent extends SimpleAgent {
 
 				System.err.println("SEND ADD_NEIGHBOR: from " + getId()
 						+ " to " + v);
+				
+				System.err.println(getId()
+						+ " sends ADD_NEIGHBOR: to " + v + " from method 'addNewNeighborsFromNogood'");
 				System.err.flush();
 
 				agent_view.assign(v, noGood.getAssignment(v).intValue());
@@ -206,8 +234,18 @@ public class ABTAgent extends SimpleAgent {
 
 	@WhenReceived("ADD_NEIGHBOR")
 	public void handleADDNEIGHBOR() {
+		
+		System.err.println(getId() + " got ADD_NEIGHBOR: from "
+				+ getCurrentMessage().getSender());
+		System.err.flush();
+		
 		myNeighbors.add(getCurrentMessage().getSender());
-//		send("OK", current_value).to(getCurrentMessage().getSender());
+		
+		send("OK", current_value).to(getCurrentMessage().getSender());
+		
+		System.err.println(getId()
+				+ " sends OK: to " + getCurrentMessage().getSender() + " with value " + current_value
+				+ " from method 'handleADDNEIGHBOR'");		
 	}
 
 	private int getValueFromDWhichConsistentWithAgentView() {
@@ -252,14 +290,14 @@ public class ABTAgent extends SimpleAgent {
 	}
 
 	private Assignment resolveInconsistentSubset() {
-		
+
 		// TODO WTF??... something which related to DBT??..
 
 		Assignment nogood = new Assignment();
 
 		for (Integer var : agent_view.assignedVariables())
 			nogood.assign(var, agent_view.getAssignment(var));
-		
+
 		return nogood;
 	}
 
