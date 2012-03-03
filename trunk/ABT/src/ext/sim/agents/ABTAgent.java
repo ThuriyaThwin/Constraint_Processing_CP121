@@ -36,10 +36,10 @@ public class ABTAgent extends SimpleAgent {
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAll(myNeighbors);
 
-		System.err.println(getId()
-				+ " sends OK: to all his neighbors with value " + current_value
-				+ " from method 'start'");
-		System.err.flush();
+//		System.err.println(getId()
+//				+ " sends OK: to all his neighbors with value " + current_value
+//				+ " from method 'start'");
+//		System.err.flush();
 	}
 
 	private void initializeNeighbors() {
@@ -63,9 +63,9 @@ public class ABTAgent extends SimpleAgent {
 	@WhenReceived("OK")
 	public void handleOK(int value) {
 
-		System.err.println(getId() + " got OK: from "
-				+ getCurrentMessage().getSender() + " with value " + value);
-		System.err.flush();
+//		System.err.println(getId() + " got OK: from "
+//				+ getCurrentMessage().getSender() + " with value " + value);
+//		System.err.flush();
 
 		int sender = getCurrentMessage().getSender();
 
@@ -77,9 +77,9 @@ public class ABTAgent extends SimpleAgent {
 	@WhenReceived("NOGOOD")
 	public void handleNOGOOD(Assignment noGood) {
 
-		System.err.println(getId() + " got NOGOOD: from "
-				+ getCurrentMessage().getSender() + " with noGood " + noGood);
-		System.err.flush();
+//		System.err.println(getId() + " got NOGOOD: from "
+//				+ getCurrentMessage().getSender() + " with noGood " + noGood);
+//		System.err.flush();
 
 		int old_value = current_value;
 
@@ -105,10 +105,10 @@ public class ABTAgent extends SimpleAgent {
 		if (old_value == current_value) {
 			send("OK", current_value).to(getCurrentMessage().getSender());
 
-			System.err.println(getId() + " sends OK: to "
-					+ getCurrentMessage().getSender() + " with value "
-					+ current_value + " from method 'handleNOGOOD'");
-			System.err.flush();
+//			System.err.println(getId() + " sends OK: to "
+//					+ getCurrentMessage().getSender() + " with value "
+//					+ current_value + " from method 'handleNOGOOD'");
+//			System.err.flush();
 		}
 	}
 
@@ -128,10 +128,10 @@ public class ABTAgent extends SimpleAgent {
 				current_value = d;
 				send("OK", current_value).toAll(myNeighbors);
 
-				System.err.println(getId()
-						+ " sends OK: to all his neighbors with value "
-						+ current_value + " from method 'checkAgentView'");
-				System.err.flush();
+//				System.err.println(getId()
+//						+ " sends OK: to all his neighbors with value "
+//						+ current_value + " from method 'checkAgentView'");
+//				System.err.flush();
 			}
 		}
 	}
@@ -143,8 +143,9 @@ public class ABTAgent extends SimpleAgent {
 		if (noGood.getNumberOfAssignedVariables() == 0
 				|| (isFirstAgent() && (getDomainSize() - 1 == current_value))) {
 
-			System.err.println(getId() + " says: NO SOLUTION for problem " + getProblem());
-			System.err.flush();
+//			System.err.println(getId() + " says: NO SOLUTION for problem "
+//					+ getProblem());
+//			System.err.flush();
 
 			finishWithNoSolution();
 			return;
@@ -158,10 +159,10 @@ public class ABTAgent extends SimpleAgent {
 
 		send("NOGOOD", noGood).to(lowerPriorityVar);
 
-		System.err.println(getId()
-				+ " sends NOGOOD: to " + lowerPriorityVar + " because its value: " + current_value
-				+ " from method 'backtrack'");
-		System.err.flush();
+//		System.err.println(getId() + " sends NOGOOD: to " + lowerPriorityVar
+//				+ " because its value: " + current_value
+//				+ " from method 'backtrack'");
+//		System.err.flush();
 
 		agent_view.unassign(lowerPriorityVar);
 
@@ -178,13 +179,14 @@ public class ABTAgent extends SimpleAgent {
 			Vector<Assignment> tNogoods = nogoodsPerRemovedValue.get(key);
 
 			Vector<Assignment> toRemove = new Vector<Assignment>();
-			
+
 			for (Assignment tNogood : tNogoods)
-				if (tNogood.isAssigned(var) && tNogood.getAssignment(var) != val)
+				if (tNogood.isAssigned(var)
+						&& tNogood.getAssignment(var) != val)
 					toRemove.add(tNogood);
 
 			tNogoods.remove(toRemove);
-			
+
 			if (tNogoods.isEmpty())
 				nogoodsPerRemovedValue.remove(key);
 		}
@@ -218,10 +220,10 @@ public class ABTAgent extends SimpleAgent {
 			if (!myNeighbors.contains(v) && (getId() != v)) {
 
 				send("ADD_NEIGHBOR").to(v);
-				
-				System.err.println(getId()
-						+ " sends ADD_NEIGHBOR: to " + v + " from method 'addNewNeighborsFromNogood'");
-				System.err.flush();
+
+//				System.err.println(getId() + " sends ADD_NEIGHBOR: to " + v
+//						+ " from method 'addNewNeighborsFromNogood'");
+//				System.err.flush();
 
 				agent_view.assign(v, noGood.getAssignment(v).intValue());
 			}
@@ -230,19 +232,19 @@ public class ABTAgent extends SimpleAgent {
 
 	@WhenReceived("ADD_NEIGHBOR")
 	public void handleADDNEIGHBOR() {
-		
-		System.err.println(getId() + " got ADD_NEIGHBOR: from "
-				+ getCurrentMessage().getSender());
-		System.err.flush();
-		
+
+//		System.err.println(getId() + " got ADD_NEIGHBOR: from "
+//				+ getCurrentMessage().getSender());
+//		System.err.flush();
+
 		myNeighbors.add(getCurrentMessage().getSender());
-		
+
 		send("OK", current_value).to(getCurrentMessage().getSender());
-		
-		System.err.println(getId()
-				+ " sends OK: to " + getCurrentMessage().getSender() + " with value " + current_value
-				+ " from method 'handleADDNEIGHBOR'");	
-		System.err.flush();
+
+//		System.err.println(getId() + " sends OK: to "
+//				+ getCurrentMessage().getSender() + " with value "
+//				+ current_value + " from method 'handleADDNEIGHBOR'");
+//		System.err.flush();
 	}
 
 	private int getValueFromDWhichConsistentWithAgentView() {
@@ -272,8 +274,7 @@ public class ABTAgent extends SimpleAgent {
 						&& (agent_view.getAssignment(var) == noGood
 								.getAssignment(var))) {
 					continue;
-				} else if ((var == getId())
-						&& noGood.getAssignment(var) == v) {
+				} else if ((var == getId()) && noGood.getAssignment(var) == v) {
 					continue;
 				} else {
 					tAns = true;
@@ -294,7 +295,7 @@ public class ABTAgent extends SimpleAgent {
 
 		for (Integer var : agent_view.assignedVariables())
 			nogood.assign(var, agent_view.getAssignment(var));
-		
+
 		return nogood;
 	}
 
@@ -302,15 +303,16 @@ public class ABTAgent extends SimpleAgent {
 
 		for (Integer key : nogoodsPerRemovedValue.keySet()) {
 
-			Vector<Assignment> tNogoods = nogoodsPerRemovedValue.get(key);	
+			Vector<Assignment> tNogoods = nogoodsPerRemovedValue.get(key);
 			Vector<Assignment> toRemove = new Vector<Assignment>();
-			
+
 			for (Assignment tNogood : tNogoods)
-				if (tNogood.isAssigned(var) && tNogood.getAssignment(var) == val)
+				if (tNogood.isAssigned(var)
+						&& tNogood.getAssignment(var) == val)
 					toRemove.add(tNogood);
 
 			tNogoods.remove(toRemove);
-			
+
 			if (tNogoods.isEmpty())
 				nogoodsPerRemovedValue.remove(key);
 		}
