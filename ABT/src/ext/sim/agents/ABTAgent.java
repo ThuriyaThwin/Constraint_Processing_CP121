@@ -79,13 +79,7 @@ public class ABTAgent extends SimpleAgent {
 
 			nogoods.add(noGood); // TODO: "store noGood" check if ok..
 			
-			// TODO:
-			// experimental..
-			// what to do
-			// when already
-			// have nogood
-			// for some
-			// value?..
+			// TODO: experimental.. what to do when already have nogood for some value?..
 			
 			Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
 			
@@ -160,10 +154,10 @@ public class ABTAgent extends SimpleAgent {
 				+ lowerPriorityVar);
 		System.err.flush();
 
+		agent_view.unassign(lowerPriorityVar);
+		
 		removeNogoodsThatContainThisVariable(lowerPriorityVar,
 				noGood.getAssignment(lowerPriorityVar));
-
-		agent_view.unassign(lowerPriorityVar);
 
 		checkAgentView();
 	}
@@ -242,9 +236,8 @@ public class ABTAgent extends SimpleAgent {
 
 		for (Integer v : getDomain())
 			if (agent_view.isConsistentWith(getId(), v, getProblem()))
-				if(checkAgentViewWithNoGoods(v)){
+				if(checkAgentViewWithNoGoods(v))
 					return v.intValue();
-				}
 
 		return -1;
 	}
@@ -252,11 +245,10 @@ public class ABTAgent extends SimpleAgent {
 	private boolean checkAgentViewWithNoGoods(Integer v) {
 		
 		boolean tAns = false;
-		
-//		Set<Integer> assignedVars = agent_view.assignedVariables();
+
 		Vector<Assignment> noGoods = nogoodsPerRemovedValue.get(v);
 		
-//		if (null == noGoods ) return true;
+		if (null == noGoods) return true;
 		
 		for (Assignment noGood : noGoods) {
 			tAns = false;
@@ -290,7 +282,12 @@ public class ABTAgent extends SimpleAgent {
 		// a.getAssignment(getId()) == current_value)
 		// nogood.as
 
-		return agent_view;// nogoodsPerRemovedValue.get(current_value);
+		Assignment nogood = new Assignment();
+		
+		for (Integer var : agent_view.assignedVariables())
+			nogood.assign(var, agent_view.getAssignment(var));
+		
+		return nogood;// nogoodsPerRemovedValue.get(current_value);
 	}
 
 	private void removeNogoodsThatContainThisVariable(int var, int val) {
