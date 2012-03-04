@@ -158,8 +158,9 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 	}
 
-	// 
-	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood, int except) {
+	//
+	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood,
+			int except) {
 
 		// lowest priority = highest position
 
@@ -258,7 +259,7 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 	}
 
-	// TODO: is this ok?..
+	// TODO: is this ok?.. I added what did in ABT..
 	private int getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView() {
 
 		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
@@ -266,7 +267,8 @@ public class ABTDOAgent extends SimpleAgent {
 		for (Integer v : getDomain())
 			if (isThisValueConsistentWithAllHigherPriorityAssignmentsInAgentView(
 					v, higherPriorityNeighbors))
-				return v;
+				if (isAgentViewConsistentWithNoGoods(v))
+					return v.intValue();
 
 		return -1;
 	}
@@ -291,6 +293,24 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 
 		return ans;
+	}
+
+	private boolean isAgentViewConsistentWithNoGoods(Integer v) {
+
+		Vector<Assignment> noGoods = nogoodsPerRemovedValue.get(v);
+
+		if (null == noGoods)
+			return true;
+
+		for (Assignment noGood : noGoods)
+			for (Integer var : noGood.assignedVariables())
+				if (agent_view.isAssigned(var)
+						&& ((agent_view.getAssignment(var) != noGood
+								.getAssignment(var)) || ((var == getId()) && noGood
+								.getAssignment(var) == v)))
+					return false;
+
+		return true;
 	}
 
 	private Set<Integer> getLowestPriorityNeighbors() {
@@ -332,7 +352,8 @@ public class ABTDOAgent extends SimpleAgent {
 			return;
 		}
 
-		int lowestPriorityVar = getTheLowestPriorityAgentFromNoGood(noGood, getId());
+		int lowestPriorityVar = getTheLowestPriorityAgentFromNoGood(noGood,
+				getId());
 
 		send("NOGOOD", noGood).to(lowestPriorityVar);
 
@@ -400,7 +421,7 @@ public class ABTDOAgent extends SimpleAgent {
 	}
 
 	private void print(String string) {
-		 System.err.println(string);
-		 System.err.flush();
+		System.err.println(string);
+		System.err.flush();
 	}
 }
