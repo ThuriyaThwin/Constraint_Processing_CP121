@@ -251,7 +251,7 @@ public class ABTDOAgent extends SimpleAgent {
 				print(getId() + " sends OK: to all his neighbors with value "
 						+ current_value + " from method 'checkAgentView'");
 
-				send("ORDER", current_order).toAll(getLowerPriorityNeighbors());
+				send("ORDER", current_order).toAll(getLowestPriorityNeighbors());
 
 				print(getId()
 						+ " sends ORDER: to all his lower priority neighbors with order: "
@@ -260,17 +260,37 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 	}
 
+	// TODO: is this ok?..
 	private boolean isCurrentAssignmentConsistentWithAllHigherPriorityAssignmentsInAgentView() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
+		
+		boolean ans = true;
+		
+		for (Integer var : higherPriorityNeighbors){
+			
+			if (!agent_view.isAssigned(var))
+				continue;
+			
+			if (!getProblem().isConsistent(getId(), current_value, var, agent_view.getAssignment(var))){
+				
+				ans = false;
+				break;
+			}
+		}
+		
+		return ans;
 	}
 
 	private int getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView() {
 		// TODO Auto-generated method stub
+		
+		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
+		
 		return 0;
 	}
 
-	private Collection<Integer> getLowerPriorityNeighbors() {
+	private Set<Integer> getLowestPriorityNeighbors() {
 		
 		Set<Integer> lowerPriorityNeighbors = new HashSet<Integer>();
 		
@@ -283,6 +303,19 @@ public class ABTDOAgent extends SimpleAgent {
 		return lowerPriorityNeighbors;
 	}
 
+	private Set<Integer> getHighestPriorityNeighbors() {
+		
+		Set<Integer> higherPriorityNeighbors = new HashSet<Integer>();
+		
+		int myPosition = current_order.getPosition(getId());
+		
+		for (int neighbor : myAllNeighbors)
+			if (myPosition > current_order.getPosition(neighbor))
+				higherPriorityNeighbors.add(neighbor);
+		
+		return higherPriorityNeighbors;
+	}
+	
 	private void backtrack() {
 
 		Assignment noGood = resolveInconsistentSubset();
