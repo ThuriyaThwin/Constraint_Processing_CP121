@@ -4,5 +4,5 @@ import bgu.dcr.az.api.Agent;
 
 public interface Heuristic {
 
-	public void changeOrder(Order order, Agent agent);
+	public void changeOrder(Order order, ABTDOAgent agent);
 }

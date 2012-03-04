@@ -25,4 +25,9 @@ public class Pair {
 	public void resetCounter() {
 		mCounter = 0;
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + mAgent + "," + mCounter +")"; 
+	}
 }

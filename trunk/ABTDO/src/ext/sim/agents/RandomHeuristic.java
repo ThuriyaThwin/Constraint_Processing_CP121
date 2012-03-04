@@ -1,12 +1,25 @@
 package ext.sim.agents;
 
-import bgu.dcr.az.api.Agent;
-
 public class RandomHeuristic implements Heuristic {
 
-	public void changeOrder(Order order, Agent agent) {
+	public void changeOrder(Order order, ABTDOAgent agent) {
 
-		int startIndex = agent.getId();
+		System.err.println("order before for agent " + agent.getId() + ": " + order);
+		System.err.flush();
+		
+		int startIndex = -1;
 		int endIndex = order.getSize() - 1;
+		
+		for (int i = 0; i < order.getSize(); i++)
+			if (order.getAgent(i) == agent.getId())
+				startIndex = i;
+		
+		for (int i = startIndex; i < endIndex; i++)
+			for (int j = i + 1; j <= endIndex; j++)
+				if (Math.random() > 0.5)
+					order.replace(i, j);
+		
+		System.err.println("order after for agent " + agent.getId() + ": " + order);
+		System.err.flush();
 	}
 }

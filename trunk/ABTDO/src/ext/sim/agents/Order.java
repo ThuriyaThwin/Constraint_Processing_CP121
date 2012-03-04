@@ -42,4 +42,15 @@ public class Order {
 	public void resetCounter(int i) {
 		mOrder.get(i).resetCounter();
 	}
+	
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+		
+		for (Pair pair : mOrder)
+			sb.append(pair);
+		
+		return sb.toString();
+	}
 }
