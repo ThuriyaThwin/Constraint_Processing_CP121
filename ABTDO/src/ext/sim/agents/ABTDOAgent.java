@@ -10,43 +10,32 @@ import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
+import bgu.dcr.az.api.ano.WhenReceived;
+import bgu.dcr.az.api.ds.ImmutableSet;
 
 @Algorithm(name = "ABTDO", useIdleDetector = true)
 public class ABTDOAgent extends SimpleAgent {
 
-	// Current order which is an ordered list of pairs.
-	// Every pair includes the ID of one of the agents and a counter
-
-	// Each agent can
-	// propose a new order for agents that have lower priority, each time it
-	// replaces its
-	// assignment.
-
-	// The counters attached to each agent ID in the order list form a
-	// time-stamp.
-	// Initially, all time-stamp counters are set to zero and all agents start
-	// with the same
-	// Current Order.
-
-	// Each agent Ai that proposes a new order, changes the order of the
-	// pairs in its own ordered list and updates the counters as follows:
-	// 1. The counters of agents with higher priority than Ai, according to the
-	// Current order, are not changed.
-	// 2. The counter of Ai is incremented by one.
-	// 3. The counters of agents with lower priority than Ai in the Current
-	// order are set
-	// to zero.
+	// In ABT DO agents send ok? messages to all constraining agents (i.e.,
+	// their
+	// neighbors in the constraints graph). Although agents might hold in their
+	// Agent views
+	// assignments of agents with lower priorities, according to their Current
+	// order, they
+	// eliminate values from their domain only if they violate constraints with
+	// higher
+	// priority agents.
 
 	private Assignment agent_view = null;
 	private Integer current_value = null;
 	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null;
-	
+
 	private Set<Integer> myAllNeighbors = null;
 	private Set<Integer> myLowerPriorityNeighbors = null;
-	
+
 	private Order current_order = null;
 	private Heuristic heuristic = null;
-	
+
 	@Override
 	public void start() {
 
@@ -61,12 +50,21 @@ public class ABTDOAgent extends SimpleAgent {
 		current_order = new Order(getNumberOfVariables());
 
 		heuristic = new RandomHeuristic();
-		
+
 		// KICK START THE ALGORITHM..
-		send("OK", current_value).toAll(myNeighbors); // TODO: to all?..
+		send("OK", current_value).toAll(myAllNeighbors); // TODO: to all..
 
 		print(getId() + " sends OK: to all his neighbors with value "
 				+ current_value + " from method 'start'");
+	}
+
+	private void assignFirstVariable() {
+
+		current_value = getDomainSize() + 1;
+
+		for (Integer d : getDomain())
+			if (d < current_value)
+				current_value = d;
 	}
 
 	private void initializeNeighbors() {
@@ -83,13 +81,172 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 	}
 
-	private void assignFirstVariable() {
+	@WhenReceived("OK")
+	public void handleOK(int value) {
 
-		current_value = getDomainSize() + 1;
+		print(getId() + " got OK: from " + getCurrentMessage().getSender()
+				+ " with value " + value);
 
-		for (Integer d : getDomain())
-			if (d < current_value)
-				current_value = d;
+		int sender = getCurrentMessage().getSender();
+
+		agent_view.assign(sender, value);
+		removeNonConsistentNoGoods(sender, value);
+		checkAgentView();
+	}
+
+	private void removeNonConsistentNoGoods(int var, int val) {
+
+		for (Integer key : nogoodsPerRemovedValue.keySet()) {
+
+			Vector<Assignment> tNogoods = nogoodsPerRemovedValue.get(key);
+
+			Vector<Assignment> toRemove = new Vector<Assignment>();
+
+			for (Assignment tNogood : tNogoods)
+				if (tNogood.isAssigned(var)
+						&& tNogood.getAssignment(var) != val)
+					toRemove.add(tNogood);
+
+			tNogoods.remove(toRemove);
+
+			if (tNogoods.isEmpty())
+				nogoodsPerRemovedValue.remove(key);
+		}
+	}
+
+	@WhenReceived("ORDER")
+	public void handleORDER(Order received_order) {
+
+		print(getId() + " got ORDER: from " + getCurrentMessage().getSender()
+				+ " with order " + received_order);
+
+		if (received_order.compareTo(current_order) > 0) {
+
+			print(getId() + " says that the received_order: " + received_order
+					+ " is more up to date than the current_order: "
+					+ current_order);
+
+			current_order = received_order;
+
+			// TODO: what parameters?..
+			removeNonConsistentNoGoods(getId(), current_value);
+
+			checkAgentView();
+		}
+	}
+
+	@WhenReceived("NOGOOD")
+	public void handleNOGOOD(Assignment noGood) {
+
+		print(getId() + " got NOGOOD: from " + getCurrentMessage().getSender()
+				+ " with noGood " + noGood);
+
+		int lowerThanMe = getLowerPriorityAgentThanMeFromNoGood(noGood);
+
+		if (-1 != lowerThanMe) {
+
+			send("NOGOOD", noGood).to(lowerThanMe);
+
+			print(getId()
+					+ " sends NOGOOD: to "
+					+ lowerThanMe
+					+ " because he is lower than me and appearing in the received nogood, from method 'handleNOGOOD'");
+
+			send("OK", current_value).to(getCurrentMessage().getSender());
+
+			print(getId() + " sends OK: to " + getCurrentMessage().getSender()
+					+ " with value " + current_value
+					+ " from method 'handleNOGOOD'");
+		} else {
+
+			if (isNogoodConsistentWithAgentView(noGood)
+					&& noGood.getAssignment(getId()) == current_value) {
+
+				storeNogood(noGood);
+
+				addNewNeighborsFromNogood(noGood);
+				checkAgentView();
+			} else {
+
+				send("OK", current_value).to(getCurrentMessage().getSender());
+
+				print(getId() + " sends OK: to "
+						+ getCurrentMessage().getSender() + " with value "
+						+ current_value + " from method 'handleNOGOOD'");
+			}
+		}
+	}
+
+	private int getLowerPriorityAgentThanMeFromNoGood(Assignment noGood) {
+		
+		int minAgent = current_order.getPosition(getId());
+		
+		ImmutableSet<Integer> nogoodVariables = noGood.assignedVariables();
+		
+		for (int agent : nogoodVariables)
+			if (current_order.getPosition(agent) < minAgent)
+				minAgent = agent;
+		
+		return (getId() == minAgent) ? -1 : minAgent;
+	}
+
+	// TODO: check if ok..
+	private boolean isNogoodConsistentWithAgentView(Assignment noGood) {
+
+		ImmutableSet<Integer> noGoodVariables = noGood.assignedVariables();
+		ImmutableSet<Integer> agentViewVariables = agent_view
+				.assignedVariables();
+
+		for (Integer v : noGoodVariables) {
+
+			if (!agentViewVariables.contains(v))
+				continue;
+
+			else if (noGood.getAssignment(v.intValue()) != agent_view
+					.getAssignment(v.intValue()))
+				return false;
+		}
+
+		return true;
+	}
+
+	private void storeNogood(Assignment noGood) {
+
+		Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
+
+		if (null == x) {
+
+			Vector<Assignment> y = new Vector<Assignment>();
+			y.add(noGood);
+			nogoodsPerRemovedValue.put(current_value, y);
+		} else {
+
+			x.add(noGood);
+		}
+	}
+
+	private void addNewNeighborsFromNogood(Assignment noGood) {
+
+		ImmutableSet<Integer> noGoodVariables = noGood.assignedVariables();
+
+		for (Integer v : noGoodVariables) {
+
+			// TODO: check against all neighbors or not?.. and if so, also with
+			// lowerNeighbors??..
+			if (!myAllNeighbors.contains(v) && (getId() != v)) {
+
+				send("ADD_NEIGHBOR").to(v);
+
+				print(getId() + " sends ADD_NEIGHBOR: to " + v
+						+ " from method 'addNewNeighborsFromNogood'");
+
+				agent_view.assign(v, noGood.getAssignment(v).intValue());
+			}
+		}
+	}
+
+	private void checkAgentView() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
