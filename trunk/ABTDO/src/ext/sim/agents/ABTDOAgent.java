@@ -1,5 +1,6 @@
 package ext.sim.agents;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,12 +19,7 @@ public class ABTDOAgent extends SimpleAgent {
 	private Assignment agent_view = null;
 	private Integer current_value = null;
 	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null;
-
 	private Set<Integer> myAllNeighbors = null;
-
-	// TODO: should maintain the myLowerPriorityNeighbors in every time the the
-	// current_order is changes..
-//	private Set<Integer> myLowerPriorityNeighbors = null;
 
 	private Order current_order = null;
 	private Heuristic heuristic = null;
@@ -62,15 +58,9 @@ public class ABTDOAgent extends SimpleAgent {
 	private void initializeNeighbors() {
 
 		myAllNeighbors = new HashSet<Integer>();
-//		myLowerPriorityNeighbors = new HashSet<Integer>();
 
-		for (Integer n : getNeighbors()) {
-
+		for (Integer n : getNeighbors())
 			myAllNeighbors.add(n);
-
-//			if (n > getId())
-//				myLowerPriorityNeighbors.add(n);
-		}
 	}
 
 	@WhenReceived("OK")
@@ -172,7 +162,7 @@ public class ABTDOAgent extends SimpleAgent {
 	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood) {
 
 		// lowest priority = highest position
-		
+
 		int minAgent = current_order.getPosition(getId());
 
 		ImmutableSet<Integer> nogoodVariables = noGood.assignedVariables();
@@ -224,8 +214,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 		for (Integer v : noGoodVariables) {
 
-			// TODO: check against myAllNeighbors or not?.. and if so, also with
-			// lowerNeighbors??..
 			if (!myAllNeighbors.contains(v) && (getId() != v)) {
 
 				send("ADD_NEIGHBOR").to(v);
@@ -239,7 +227,52 @@ public class ABTDOAgent extends SimpleAgent {
 	}
 
 	private void checkAgentView() {
+
+		// TODO: if (!agent_view.isConsistentWith(getId(), current_value,
+		// getProblem())
+		// || !isAgentViewNotConsistentWithNoGoods(current_value))
+
+		if (!isCurrentAssignmentConsistentWithAllHigherPriorityAssignmentsInAgentView()) {
+
+			int d = getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView();
+
+			if (-1 == d) // There is no value in D which consistent with
+							// agent_view..
+				backtrack();
+
+			else {
+
+				current_value = d;
+
+				heuristic.changeOrder(current_order, this);
+
+				send("OK", current_value).toAll(myAllNeighbors);
+
+				print(getId() + " sends OK: to all his neighbors with value "
+						+ current_value + " from method 'checkAgentView'");
+
+				send("ORDER", current_order).toAll(getLowerPriorityNeighbors());
+
+				print(getId()
+						+ " sends ORDER: to all his lower priority neighbors with order: "
+						+ current_order + " from method 'checkAgentView'");
+			}
+		}
+	}
+
+	private boolean isCurrentAssignmentConsistentWithAllHigherPriorityAssignmentsInAgentView() {
 		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private int getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private Collection<Integer> getLowerPriorityNeighbors() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private void backtrack() {
@@ -282,7 +315,7 @@ public class ABTDOAgent extends SimpleAgent {
 
 		return nogood;
 	}
-	
+
 	private void removeNogoodsThatContainThisVariable(int var, int val) {
 
 		for (Integer key : nogoodsPerRemovedValue.keySet()) {
@@ -309,8 +342,6 @@ public class ABTDOAgent extends SimpleAgent {
 				+ getCurrentMessage().getSender());
 
 		myAllNeighbors.add(getCurrentMessage().getSender());
-
-		// TODO: should also handle the lower priority neighbors..
 
 		send("OK", current_value).to(getCurrentMessage().getSender());
 
