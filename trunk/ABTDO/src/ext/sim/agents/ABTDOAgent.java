@@ -33,13 +33,9 @@ public class ABTDOAgent extends SimpleAgent {
 
 	@Override
 	public void start() {
-		// TODO: ADD INITIALIZING CODE HERE - DO NOT INITIALIZE ANYTHING IN THE
-		// CONSTRACTOR!
-		if (isFirstAgent()) {
-			// TODO: KICK START THE ALGORITHM
-		}
+
 	}
-	
+
 	@Override
 	public void onIdleDetected() {
 		// TODO Auto-generated method stub
