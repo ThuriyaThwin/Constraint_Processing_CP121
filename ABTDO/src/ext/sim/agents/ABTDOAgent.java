@@ -40,10 +40,13 @@ public class ABTDOAgent extends SimpleAgent {
 	private Assignment agent_view = null;
 	private Integer current_value = null;
 	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null;
+	
 	private Set<Integer> myAllNeighbors = null;
 	private Set<Integer> myLowerPriorityNeighbors = null;
+	
 	private Order current_order = null;
-
+	private Heuristic heuristic = null;
+	
 	@Override
 	public void start() {
 
@@ -57,6 +60,8 @@ public class ABTDOAgent extends SimpleAgent {
 
 		current_order = new Order(getNumberOfVariables());
 
+		heuristic = new RandomHeuristic();
+		
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAll(myNeighbors); // TODO: to all?..
 
