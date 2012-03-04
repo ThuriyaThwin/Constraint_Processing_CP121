@@ -23,7 +23,7 @@ public class ABTDOAgent extends SimpleAgent {
 
 	// TODO: should maintain the myLowerPriorityNeighbors in every time the the
 	// current_order is changes..
-	private Set<Integer> myLowerPriorityNeighbors = null;
+//	private Set<Integer> myLowerPriorityNeighbors = null;
 
 	private Order current_order = null;
 	private Heuristic heuristic = null;
@@ -62,14 +62,14 @@ public class ABTDOAgent extends SimpleAgent {
 	private void initializeNeighbors() {
 
 		myAllNeighbors = new HashSet<Integer>();
-		myLowerPriorityNeighbors = new HashSet<Integer>();
+//		myLowerPriorityNeighbors = new HashSet<Integer>();
 
 		for (Integer n : getNeighbors()) {
 
 			myAllNeighbors.add(n);
 
-			if (n > getId())
-				myLowerPriorityNeighbors.add(n);
+//			if (n > getId())
+//				myLowerPriorityNeighbors.add(n);
 		}
 	}
 
@@ -171,12 +171,14 @@ public class ABTDOAgent extends SimpleAgent {
 
 	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood) {
 
+		// lowest priority = highest position
+		
 		int minAgent = current_order.getPosition(getId());
 
 		ImmutableSet<Integer> nogoodVariables = noGood.assignedVariables();
 
 		for (int agent : nogoodVariables)
-			if (current_order.getPosition(agent) < minAgent)
+			if (current_order.getPosition(agent) > minAgent)
 				minAgent = agent;
 
 		return minAgent;
