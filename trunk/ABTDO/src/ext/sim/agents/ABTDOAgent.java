@@ -1,5 +1,11 @@
 package ext.sim.agents;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
 import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
@@ -31,14 +37,63 @@ public class ABTDOAgent extends SimpleAgent {
 	// order are set
 	// to zero.
 
+	private Assignment agent_view = null;
+	private Integer current_value = null;
+	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null;
+	private Set<Integer> myAllNeighbors = null;
+	private Set<Integer> myLowerPriorityNeighbors = null;
+	private Order current_order = null;
+
 	@Override
 	public void start() {
 
+		assignFirstVariable();
+
+		agent_view = new Assignment();
+
+		nogoodsPerRemovedValue = new HashMap<Integer, Vector<Assignment>>();
+
+		initializeNeighbors();
+
+		current_order = new Order(getNumberOfVariables());
+
+		// KICK START THE ALGORITHM..
+		send("OK", current_value).toAll(myNeighbors); // TODO: to all?..
+
+		print(getId() + " sends OK: to all his neighbors with value "
+				+ current_value + " from method 'start'");
+	}
+
+	private void initializeNeighbors() {
+
+		myAllNeighbors = new HashSet<Integer>();
+		myLowerPriorityNeighbors = new HashSet<Integer>();
+
+		for (Integer n : getNeighbors()) {
+
+			myAllNeighbors.add(n);
+
+			if (n > getId())
+				myLowerPriorityNeighbors.add(n);
+		}
+	}
+
+	private void assignFirstVariable() {
+
+		current_value = getDomainSize() + 1;
+
+		for (Integer d : getDomain())
+			if (d < current_value)
+				current_value = d;
 	}
 
 	@Override
 	public void onIdleDetected() {
-		// TODO Auto-generated method stub
-		super.onIdleDetected();
+		finish(current_value);
+	}
+
+	private void print(String string) {
+		// System.err.println(string);
+		// System.err.flush();
 	}
 }
