@@ -271,8 +271,16 @@ public class ABTDOAgent extends SimpleAgent {
 	}
 
 	private Collection<Integer> getLowerPriorityNeighbors() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Set<Integer> lowerPriorityNeighbors = new HashSet<Integer>();
+		
+		int myPosition = current_order.getPosition(getId());
+		
+		for (int neighbor : myAllNeighbors)
+			if (myPosition < current_order.getPosition(neighbor))
+				lowerPriorityNeighbors.add(neighbor);
+		
+		return lowerPriorityNeighbors;
 	}
 
 	private void backtrack() {
