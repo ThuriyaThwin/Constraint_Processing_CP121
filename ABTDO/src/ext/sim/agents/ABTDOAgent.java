@@ -228,11 +228,8 @@ public class ABTDOAgent extends SimpleAgent {
 
 	private void checkAgentView() {
 
-		// TODO: if (!agent_view.isConsistentWith(getId(), current_value,
-		// getProblem())
-		// || !isAgentViewNotConsistentWithNoGoods(current_value))
-
-		if (!isCurrentAssignmentConsistentWithAllHigherPriorityAssignmentsInAgentView()) {
+		if (!isThisValueConsistentWithAllHigherPriorityAssignmentsInAgentView(
+				current_value, getHighestPriorityNeighbors())) {
 
 			int d = getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView();
 
@@ -251,7 +248,8 @@ public class ABTDOAgent extends SimpleAgent {
 				print(getId() + " sends OK: to all his neighbors with value "
 						+ current_value + " from method 'checkAgentView'");
 
-				send("ORDER", current_order).toAll(getLowestPriorityNeighbors());
+				send("ORDER", current_order)
+						.toAll(getLowestPriorityNeighbors());
 
 				print(getId()
 						+ " sends ORDER: to all his lower priority neighbors with order: "
@@ -261,61 +259,66 @@ public class ABTDOAgent extends SimpleAgent {
 	}
 
 	// TODO: is this ok?..
-	private boolean isCurrentAssignmentConsistentWithAllHigherPriorityAssignmentsInAgentView() {
-		
+	private int getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView() {
+
 		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
-		
+
+		for (Integer v : getDomain())
+			if (isThisValueConsistentWithAllHigherPriorityAssignmentsInAgentView(
+					v, higherPriorityNeighbors))
+				return v;
+
+		return -1;
+	}
+
+	// TODO: is this ok?..
+	private boolean isThisValueConsistentWithAllHigherPriorityAssignmentsInAgentView(
+			Integer value, Set<Integer> higherPriorityNeighbors) {
+
 		boolean ans = true;
-		
-		for (Integer var : higherPriorityNeighbors){
-			
+
+		for (Integer var : higherPriorityNeighbors) {
+
 			if (!agent_view.isAssigned(var))
 				continue;
-			
-			if (!getProblem().isConsistent(getId(), current_value, var, agent_view.getAssignment(var))){
-				
+
+			if (!getProblem().isConsistent(getId(), value, var,
+					agent_view.getAssignment(var))) {
+
 				ans = false;
 				break;
 			}
 		}
-		
+
 		return ans;
 	}
 
-	private int getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView() {
-		// TODO Auto-generated method stub
-		
-		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
-		
-		return 0;
-	}
-
 	private Set<Integer> getLowestPriorityNeighbors() {
-		
+
 		Set<Integer> lowerPriorityNeighbors = new HashSet<Integer>();
-		
+
 		int myPosition = current_order.getPosition(getId());
-		
+
 		for (int neighbor : myAllNeighbors)
 			if (myPosition < current_order.getPosition(neighbor))
 				lowerPriorityNeighbors.add(neighbor);
-		
+
 		return lowerPriorityNeighbors;
 	}
 
 	private Set<Integer> getHighestPriorityNeighbors() {
-		
+
 		Set<Integer> higherPriorityNeighbors = new HashSet<Integer>();
-		
+
 		int myPosition = current_order.getPosition(getId());
-		
+
 		for (int neighbor : myAllNeighbors)
 			if (myPosition > current_order.getPosition(neighbor))
 				higherPriorityNeighbors.add(neighbor);
-		
+
 		return higherPriorityNeighbors;
 	}
-	
+
 	private void backtrack() {
 
 		Assignment noGood = resolveInconsistentSubset();
