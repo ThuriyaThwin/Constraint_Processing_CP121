@@ -82,17 +82,7 @@ public class ABTAgent extends SimpleAgent {
 		if (isNogoodConsistentWithAgentView(noGood)
 				&& noGood.getAssignment(getId()) == current_value) {
 
-			Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
-
-			if (null == x) {
-
-				Vector<Assignment> y = new Vector<Assignment>();
-				y.add(noGood);
-				nogoodsPerRemovedValue.put(current_value, y);
-			} else {
-
-				x.add(noGood);
-			}
+			storeNogood(noGood);
 
 			addNewNeighborsFromNogood(noGood);
 			checkAgentView();
@@ -104,6 +94,21 @@ public class ABTAgent extends SimpleAgent {
 			print(getId() + " sends OK: to " + getCurrentMessage().getSender()
 					+ " with value " + current_value
 					+ " from method 'handleNOGOOD'");
+		}
+	}
+
+	private void storeNogood(Assignment noGood) {
+		
+		Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
+
+		if (null == x) {
+
+			Vector<Assignment> y = new Vector<Assignment>();
+			y.add(noGood);
+			nogoodsPerRemovedValue.put(current_value, y);
+		} else {
+
+			x.add(noGood);
 		}
 	}
 
@@ -142,24 +147,31 @@ public class ABTAgent extends SimpleAgent {
 			return;
 		}
 
-		int lowerPriorityVar = -1;
+		int lowestPriorityVar = getTheLowestPriorityVarFromNogood(noGood);
 
-		for (Integer v : noGood.assignedVariables())
-			if (v > lowerPriorityVar)
-				lowerPriorityVar = v;
+		send("NOGOOD", noGood).to(lowestPriorityVar);
 
-		send("NOGOOD", noGood).to(lowerPriorityVar);
-
-		print(getId() + " sends NOGOOD: to " + lowerPriorityVar
+		print(getId() + " sends NOGOOD: to " + lowestPriorityVar
 				+ " because its value: " + current_value
 				+ " from method 'backtrack'");
 
-		agent_view.unassign(lowerPriorityVar);
+		agent_view.unassign(lowestPriorityVar);
 
-		removeNogoodsThatContainThisVariable(lowerPriorityVar,
-				noGood.getAssignment(lowerPriorityVar));
+		removeNogoodsThatContainThisVariable(lowestPriorityVar,
+				noGood.getAssignment(lowestPriorityVar));
 
 		checkAgentView();
+	}
+
+	private int getTheLowestPriorityVarFromNogood(Assignment noGood) {
+		
+		int minVar = -1;
+
+		for (Integer v : noGood.assignedVariables())
+			if (v > minVar)
+				minVar = v;
+		
+		return minVar;
 	}
 
 	private void removeNonConsistentNoGoods(int var, int val) {
@@ -311,7 +323,7 @@ public class ABTAgent extends SimpleAgent {
 	}
 
 	private void print(String string) {
-//		System.err.println(string);
-//		System.err.flush();
+		System.err.println(string);
+		System.err.flush();
 	}
 }
