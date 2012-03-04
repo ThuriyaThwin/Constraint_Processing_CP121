@@ -1,6 +1,5 @@
 package ext.sim.agents;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -123,7 +122,7 @@ public class ABTDOAgent extends SimpleAgent {
 		print(getId() + " got NOGOOD: from " + getCurrentMessage().getSender()
 				+ " with noGood " + noGood);
 
-		int lowestAgent = getTheLowestPriorityAgentFromNoGood(noGood);
+		int lowestAgent = getTheLowestPriorityAgentFromNoGood(noGood, -1);
 
 		if (getId() != lowestAgent) {
 
@@ -159,16 +158,17 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 	}
 
-	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood) {
+	// 
+	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood, int except) {
 
 		// lowest priority = highest position
 
-		int minAgent = current_order.getPosition(getId());
+		int minAgent = -1;
 
 		ImmutableSet<Integer> nogoodVariables = noGood.assignedVariables();
 
 		for (int agent : nogoodVariables)
-			if (current_order.getPosition(agent) > minAgent)
+			if (agent != except && current_order.getPosition(agent) > minAgent)
 				minAgent = agent;
 
 		return minAgent;
@@ -332,7 +332,7 @@ public class ABTDOAgent extends SimpleAgent {
 			return;
 		}
 
-		int lowestPriorityVar = getTheLowestPriorityAgentFromNoGood(noGood);
+		int lowestPriorityVar = getTheLowestPriorityAgentFromNoGood(noGood, getId());
 
 		send("NOGOOD", noGood).to(lowestPriorityVar);
 
@@ -400,7 +400,7 @@ public class ABTDOAgent extends SimpleAgent {
 	}
 
 	private void print(String string) {
-		// System.err.println(string);
-		// System.err.flush();
+		 System.err.println(string);
+		 System.err.flush();
 	}
 }
