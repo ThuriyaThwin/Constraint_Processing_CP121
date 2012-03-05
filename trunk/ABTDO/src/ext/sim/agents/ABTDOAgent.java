@@ -41,8 +41,8 @@ public class ABTDOAgent extends SimpleAgent {
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAll(myAllNeighbors); // TODO: to all..
 
-		print(getId() + " sends OK: to all his neighbors with value "
-				+ current_value + " from method 'start'");
+		print(getId() + " sends OK: to all his neighbors: " + myAllNeighbors
+				+ " with value " + current_value + " from method 'start'");
 	}
 
 	private void assignFirstVariable() {
@@ -158,7 +158,6 @@ public class ABTDOAgent extends SimpleAgent {
 		}
 	}
 
-	//
 	private int getTheLowestPriorityAgentFromNoGood(Assignment noGood,
 			int except) {
 
@@ -198,11 +197,13 @@ public class ABTDOAgent extends SimpleAgent {
 
 		Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
 
+		int whereToput = noGood.getAssignment(getId());
+
 		if (null == x) {
 
 			Vector<Assignment> y = new Vector<Assignment>();
 			y.add(noGood);
-			nogoodsPerRemovedValue.put(current_value, y);
+			nogoodsPerRemovedValue.put(whereToput, y);
 		} else {
 
 			x.add(noGood);
@@ -230,7 +231,8 @@ public class ABTDOAgent extends SimpleAgent {
 	private void checkAgentView() {
 
 		if (!isThisValueConsistentWithAllHigherPriorityAssignmentsInAgentView(
-				current_value, getHighestPriorityNeighbors())) {
+				current_value, getHighestPriorityNeighbors())
+				|| !isAgentViewConsistentWithNoGoods(current_value)) {
 
 			int d = getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView();
 
@@ -249,11 +251,11 @@ public class ABTDOAgent extends SimpleAgent {
 				print(getId() + " sends OK: to all his neighbors with value "
 						+ current_value + " from method 'checkAgentView'");
 
-				send("ORDER", current_order)
-						.toAll(getLowestPriorityNeighbors());
+				send("ORDER", current_order).toAll(getLowerPriorityNeighbors());
 
 				print(getId()
-						+ " sends ORDER: to all his lower priority neighbors with order: "
+						+ " sends ORDER: to all his lower priority neighbors: "
+						+ getLowerPriorityNeighbors() + " with order: "
 						+ current_order + " from method 'checkAgentView'");
 			}
 		}
@@ -299,21 +301,23 @@ public class ABTDOAgent extends SimpleAgent {
 
 		Vector<Assignment> noGoods = nogoodsPerRemovedValue.get(v);
 
-		if (null == noGoods)
-			return true;
+		// if (null == noGoods)
+		// return true;
+		//
+		// for (Assignment noGood : noGoods)
+		// for (Integer var : noGood.assignedVariables())
+		// if (agent_view.isAssigned(var)
+		// && ((agent_view.getAssignment(var) != noGood
+		// .getAssignment(var)) || ((var == getId()) && noGood
+		// .getAssignment(var) == v)))
+		// return false;
+		//
+		// return true;
 
-		for (Assignment noGood : noGoods)
-			for (Integer var : noGood.assignedVariables())
-				if (agent_view.isAssigned(var)
-						&& ((agent_view.getAssignment(var) != noGood
-								.getAssignment(var)) || ((var == getId()) && noGood
-								.getAssignment(var) == v)))
-					return false;
-
-		return true;
+		return null == noGoods;
 	}
 
-	private Set<Integer> getLowestPriorityNeighbors() {
+	private Set<Integer> getLowerPriorityNeighbors() {
 
 		Set<Integer> lowerPriorityNeighbors = new HashSet<Integer>();
 
@@ -344,7 +348,8 @@ public class ABTDOAgent extends SimpleAgent {
 		Assignment noGood = resolveInconsistentSubset();
 
 		if (noGood.getNumberOfAssignedVariables() == 0
-				|| (isFirstAgent() && (getDomainSize() - 1 == current_value))) {
+		// || (isFirstAgent() && (getDomainSize() - 1 == current_value))) {
+		) {
 
 			print(getId() + " says: NO SOLUTION for problem " + getProblem());
 
@@ -358,7 +363,7 @@ public class ABTDOAgent extends SimpleAgent {
 		send("NOGOOD", noGood).to(lowestPriorityVar);
 
 		print(getId() + " sends NOGOOD: to " + lowestPriorityVar
-				+ " because its value: " + current_value
+				+ " because its value: " + agent_view.getAssignment(lowestPriorityVar)
 				+ " from method 'backtrack'");
 
 		agent_view.unassign(lowestPriorityVar);
@@ -391,6 +396,7 @@ public class ABTDOAgent extends SimpleAgent {
 			for (Assignment tNogood : tNogoods)
 				if (tNogood.isAssigned(var)
 						&& tNogood.getAssignment(var) == val)
+
 					toRemove.add(tNogood);
 
 			tNogoods.remove(toRemove);

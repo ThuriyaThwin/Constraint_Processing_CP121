@@ -14,10 +14,20 @@ public class RandomHeuristic implements Heuristic {
 			if (order.getAgent(i) == agent.getId())
 				startIndex = i;
 		
-		for (int i = startIndex; i < endIndex; i++)
-			for (int j = i + 1; j <= endIndex; j++)
-				if (Math.random() > 0.5)
-					order.replace(i, j);
+		if (startIndex != endIndex){
+			
+			order.incCounter(startIndex);
+			
+			startIndex++;
+		
+			for (int i = startIndex; i < endIndex; i++)
+				for (int j = i + 1; j <= endIndex; j++)
+					if (Math.random() > 0.5)
+						order.replace(i, j);
+			
+			for (int i = startIndex; i <= endIndex; i++)
+				order.resetCounter(i);
+		}
 		
 		System.err.println("order after for agent " + agent.getId() + ": " + order);
 		System.err.flush();
