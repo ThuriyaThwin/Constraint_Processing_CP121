@@ -101,11 +101,13 @@ public class ABTAgent extends SimpleAgent {
 		
 		Vector<Assignment> x = nogoodsPerRemovedValue.get(current_value);
 
+		int whereToput = noGood.getAssignment(getId());
+		
 		if (null == x) {
 
 			Vector<Assignment> y = new Vector<Assignment>();
 			y.add(noGood);
-			nogoodsPerRemovedValue.put(current_value, y);
+			nogoodsPerRemovedValue.put(whereToput, y);
 		} else {
 
 			x.add(noGood);
