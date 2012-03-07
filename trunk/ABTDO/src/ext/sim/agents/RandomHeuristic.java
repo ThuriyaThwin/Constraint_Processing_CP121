@@ -14,9 +14,9 @@ public class RandomHeuristic implements Heuristic {
 			if (order.getAgent(i) == agent.getId())
 				startIndex = i;
 		
+		order.incCounter(startIndex);
+		
 		if (startIndex != endIndex){
-			
-			order.incCounter(startIndex);
 			
 			startIndex++;
 		
