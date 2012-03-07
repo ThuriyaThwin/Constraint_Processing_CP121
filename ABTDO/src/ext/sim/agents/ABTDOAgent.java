@@ -426,15 +426,14 @@ public class ABTDOAgent extends SimpleAgent {
 		ImmutableSet<Integer> nogoodVariables = noGood.assignedVariables();
 
 		for (int agent : nogoodVariables)
-			if (agent != getId() && current_order.getPosition(agent) > tAgent)
+			if (agent < getId() && current_order.getPosition(agent) > tAgent)
 				tAgent = agent;
 
 		return tAgent;
 	}
 
+	// TODO WTF??... something which related to DBT??..
 	private Assignment resolveInconsistentSubset() {
-
-		// TODO WTF??... something which related to DBT??..
 
 		Assignment nogood = new Assignment();
 
