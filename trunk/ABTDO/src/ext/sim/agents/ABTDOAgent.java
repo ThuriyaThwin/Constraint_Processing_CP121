@@ -239,6 +239,8 @@ public class ABTDOAgent extends SimpleAgent {
 
 			int d = getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView();
 
+			print(getId() + ": D = " + d);
+			
 			if (-1 == d) // There is no value in D which consistent with
 							// agent_view..
 				backtrack();
@@ -271,14 +273,38 @@ public class ABTDOAgent extends SimpleAgent {
 //				current_value, getHighestPriorityNeighbors())
 //				|| !isAgentViewConsistentWithNoGoods(current_value);
 		
-		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
+		Set<Integer> higherPriorityNeighbors = getHigherPriorityNeighbors();
 		
 		for (Integer neighbor : higherPriorityNeighbors){
+
+			if (!agent_view.isAssigned(neighbor))
+				continue;
 			
 			int neighborAssignment = agent_view.getAssignment(neighbor);
 			
 			if (!getProblem().isConsistent(getId(), current_value, neighbor, neighborAssignment))
 				return false;
+		}
+		
+		Vector<Assignment> nogoods = nogoodsPerRemovedValue.get(current_value);
+		
+		if (null != nogoods){
+			
+			for (Assignment nogood : nogoods){
+				
+				for (Integer var : nogood.assignedVariables()){
+					
+					if (getId() == var && nogood.getAssignment(var) == current_value)
+						return false;
+					
+					if (!agent_view.isAssigned(var))
+						continue;
+					
+					//TODO: think again..
+					if (agent_view.getAssignment(var) == nogood.getAssignment(var))
+						return false;
+				}
+			}
 		}
 		
 		return true;
@@ -296,7 +322,9 @@ public class ABTDOAgent extends SimpleAgent {
 //
 //		return -1;
 		
-		Set<Integer> higherPriorityNeighbors = getHighestPriorityNeighbors();
+		Set<Integer> higherPriorityNeighbors = getHigherPriorityNeighbors();
+		
+		Set<Integer> consistentValues = new HashSet<Integer>();
 		
 		for (Integer v : getDomain()){
 			
@@ -306,6 +334,9 @@ public class ABTDOAgent extends SimpleAgent {
 				
 				for (Integer neighbor : higherPriorityNeighbors){
 					
+					if (!agent_view.isAssigned(neighbor))
+						continue;
+					
 					int neighborAssignment = agent_view.getAssignment(neighbor);
 					
 					if (!getProblem().isConsistent(getId(), v, neighbor, neighborAssignment))
@@ -313,10 +344,14 @@ public class ABTDOAgent extends SimpleAgent {
 				}
 				
 				if (isConsistent)
-					return v;
+					consistentValues.add(v);
 			}
 		}
-		
+
+		for (Integer v : consistentValues)
+			if (null == nogoodsPerRemovedValue.get(v))
+				return v;
+			
 		return -1;
 	}
 
@@ -375,7 +410,7 @@ public class ABTDOAgent extends SimpleAgent {
 		return lowerPriorityNeighbors;
 	}
 
-	private Set<Integer> getHighestPriorityNeighbors() {
+	private Set<Integer> getHigherPriorityNeighbors() {
 
 		Set<Integer> higherPriorityNeighbors = new HashSet<Integer>();
 
@@ -425,8 +460,9 @@ public class ABTDOAgent extends SimpleAgent {
 
 		ImmutableSet<Integer> nogoodVariables = noGood.assignedVariables();
 
+		//TODO: != or <
 		for (int agent : nogoodVariables)
-			if (agent < getId() && current_order.getPosition(agent) > tAgent)
+			if (agent != getId() && current_order.getPosition(agent) > tAgent)
 				tAgent = agent;
 
 		return tAgent;
