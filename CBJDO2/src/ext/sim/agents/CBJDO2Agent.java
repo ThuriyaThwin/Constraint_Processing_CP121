@@ -1,11 +1,11 @@
 package ext.sim.agents;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
-import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
@@ -100,8 +100,16 @@ public class CBJDO2Agent extends SimpleAgent {
 			finishWithNoSolution();
 
 		else if (consistent) {
-			assignedVariables.add(getId());
-			send("LABEL", cpa, assignedVariables).to(toWho);
+			
+//			if (!assignedVariables.contains(getId()))
+//				assignedVariables.add(getId());
+			
+			Vector<Integer> tAV = new Vector<Integer>(assignedVariables);
+			
+			if (!tAV.contains(getId()) && toWho != getId())
+				tAV.add(getId());
+			
+			send("LABEL", cpa, tAV).to(toWho);
 		}
 
 		else if (!consistent) {
@@ -115,6 +123,8 @@ public class CBJDO2Agent extends SimpleAgent {
 
 			confSet.remove(new Integer(h));
 
+			cpa.unassign(getId());
+			
 			send("UNLABEL", cpa, confSet).to(h);
 		}
 	}
@@ -138,19 +148,55 @@ public class CBJDO2Agent extends SimpleAgent {
 
 		confSet.addAll(confSetOfI);
 
+		// TODO
+		clearAndRestore2(cpa);
+
+		currentDomain.remove(cpa.getAssignment(getId()));
+		
+		desicion(!currentDomain.isEmpty(), cpa, getId());
+	}
+
+	protected void clearAndRestore(Assignment cpa) {
+		
 		int j;
 		
 		for (j = 0; j < assignedVariables.size(); j++)
 			if (assignedVariables.get(j) == getId())
 				break;
 		
-		for (j++; j < assignedVariables.size(); j++)
-			send("CLEAR_AND_RESTORE").to(j);
-
-		currentDomain.remove(cpa.getAssignment(getId()));
-
-		desicion(!currentDomain.isEmpty(), cpa, getId());
+		for (j++; j < assignedVariables.size(); j++){
+			cpa.unassign(assignedVariables.get(j));
+			send("CLEAR_AND_RESTORE").to(assignedVariables.get(j));
+		}
+		
+		send("CLEAR_AND_RESTORE").to(getCurrentMessage().getSender());
 	}
+	
+	protected void clearAndRestore2(Assignment cpa) {
+		
+		Set<Integer> tSet = new HashSet<Integer>();
+		
+		for (int j = 0; j < assignedVariables.size(); j++){
+			
+			if (assignedVariables.get(j) == getId())
+				break;
+			
+			else
+				tSet.add(assignedVariables.get(j));
+		}
+		
+		for (int i = 0; i < getNumberOfVariables(); i++){
+			
+			if (!tSet.contains(i)){
+				
+				cpa.unassign(i);
+				send("CLEAR_AND_RESTORE").to(i);
+			}
+		}
+			
+		send("CLEAR_AND_RESTORE").to(getCurrentMessage().getSender());
+	}
+
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@WhenReceived("CLEAR_AND_RESTORE")
