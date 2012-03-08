@@ -101,9 +101,6 @@ public class CBJDO2Agent extends SimpleAgent {
 
 		else if (consistent) {
 			
-//			if (!assignedVariables.contains(getId()))
-//				assignedVariables.add(getId());
-			
 			Vector<Integer> tAV = new Vector<Integer>(assignedVariables);
 			
 			if (!tAV.contains(getId()) && toWho != getId())
@@ -148,10 +145,10 @@ public class CBJDO2Agent extends SimpleAgent {
 
 		confSet.addAll(confSetOfI);
 
+		currentDomain.remove(cpa.getAssignment(getId()));
+		
 		// TODO
 		clearAndRestore2(cpa);
-
-		currentDomain.remove(cpa.getAssignment(getId()));
 		
 		desicion(!currentDomain.isEmpty(), cpa, getId());
 	}
@@ -174,27 +171,24 @@ public class CBJDO2Agent extends SimpleAgent {
 	
 	protected void clearAndRestore2(Assignment cpa) {
 		
-		Set<Integer> tSet = new HashSet<Integer>();
+		Set<Integer> dontSend = new HashSet<Integer>();
 		
-		for (int j = 0; j < assignedVariables.size(); j++){
+		for (Integer var : assignedVariables){
 			
-			if (assignedVariables.get(j) == getId())
+			if (getId() == var)
 				break;
 			
-			else
-				tSet.add(assignedVariables.get(j));
+			dontSend.add(var);
 		}
 		
 		for (int i = 0; i < getNumberOfVariables(); i++){
 			
-			if (!tSet.contains(i)){
+			if (!dontSend.contains(i) && getId() != i){
 				
 				cpa.unassign(i);
 				send("CLEAR_AND_RESTORE").to(i);
 			}
 		}
-			
-		send("CLEAR_AND_RESTORE").to(getCurrentMessage().getSender());
 	}
 
 
