@@ -2,7 +2,7 @@
     <async-test name="CBJDO_p1_03" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
         <algorithm name="CBJDO"/>
         <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="12" d="5" p1="0.3"/>
+        <dcsp-unstructured n="3" d="3" p1="0.3"/>
         <nccc-sc></nccc-sc>
         <ncsc-sc />
         <cc-sc />
@@ -11,7 +11,7 @@
     <async-test name="CBJDO_p1_05" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
         <algorithm name="CBJDO"/>
         <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="12" d="5" p1="0.5"/>
+        <dcsp-unstructured n="3" d="3" p1="0.5"/>
         <nccc-sc></nccc-sc>
         <ncsc-sc />
         <cc-sc />
@@ -20,7 +20,7 @@
     <async-test name="CBJDO_p1_08" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
         <algorithm name="CBJDO"/>
         <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="12" d="5" p1="0.8"/>
+        <dcsp-unstructured n="3" d="3" p1="0.8"/>
         <nccc-sc></nccc-sc>
         <ncsc-sc />
         <cc-sc />
