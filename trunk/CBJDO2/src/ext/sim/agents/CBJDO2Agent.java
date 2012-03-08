@@ -42,7 +42,19 @@ public class CBJDO2Agent extends SimpleAgent {
 	}
 
 	private int getNextAgent() {
-		return getId() + 1;
+		
+		Set<Integer> allRemainingVars = new HashSet<Integer>();
+		
+		for (int i = 0; i < getNumberOfVariables(); i++)
+			if (!assignedVariables.contains(i) && getId() != i)
+				allRemainingVars.add(i);
+		
+		if (allRemainingVars.isEmpty())
+			return -1;
+		
+		return random(allRemainingVars);
+		
+//		return getId() + 1;
 	}
 
 	protected int getFirstElementInCurrentDomain() {
@@ -83,7 +95,7 @@ public class CBJDO2Agent extends SimpleAgent {
 
 			if (!consistent) {
 
-				confSet.add(new Integer(h - 1));
+				confSet.add(assignedVariables.get(h - 1));
 				removeFirstElementFromCurrentDomain();
 			}
 		}
@@ -128,7 +140,7 @@ public class CBJDO2Agent extends SimpleAgent {
 
 	private int getH() {
 
-		int last = -1;
+		int last = assignedVariables.lastElement();
 
 		for (Integer var : assignedVariables)
 			if (confSet.contains(var))
@@ -148,28 +160,12 @@ public class CBJDO2Agent extends SimpleAgent {
 		currentDomain.remove(cpa.getAssignment(getId()));
 		
 		// TODO
-		clearAndRestore2(cpa);
+		clearAndRestore(cpa);
 		
 		desicion(!currentDomain.isEmpty(), cpa, getId());
 	}
-
-	protected void clearAndRestore(Assignment cpa) {
-		
-		int j;
-		
-		for (j = 0; j < assignedVariables.size(); j++)
-			if (assignedVariables.get(j) == getId())
-				break;
-		
-		for (j++; j < assignedVariables.size(); j++){
-			cpa.unassign(assignedVariables.get(j));
-			send("CLEAR_AND_RESTORE").to(assignedVariables.get(j));
-		}
-		
-		send("CLEAR_AND_RESTORE").to(getCurrentMessage().getSender());
-	}
 	
-	protected void clearAndRestore2(Assignment cpa) {
+	protected void clearAndRestore(Assignment cpa) {
 		
 		Set<Integer> dontSend = new HashSet<Integer>();
 		
