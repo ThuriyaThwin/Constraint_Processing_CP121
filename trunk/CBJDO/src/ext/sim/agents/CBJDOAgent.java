@@ -13,7 +13,7 @@ import bgu.dcr.az.api.ano.WhenReceived;
 @Algorithm(name="CBJDO", useIdleDetector=false)
 public class CBJDOAgent extends SimpleAgent {
 	
-	protected Set<Integer>			currentDomain	= null;
+	protected SortedSet<Integer>	currentDomain	= null;
 	protected SortedSet<Integer>	confSet			= null;
 	
 	
@@ -21,7 +21,7 @@ public class CBJDOAgent extends SimpleAgent {
 	@Override
 	public void start() {
 		
-		currentDomain = new HashSet(getDomain());
+		currentDomain = new TreeSet(getDomain());
 		confSet = new TreeSet<Integer>();
 		
 		if (isFirstAgent()) {
@@ -34,13 +34,12 @@ public class CBJDOAgent extends SimpleAgent {
 
 	protected int getFirstElementInCurrentDomain() {
 		
-		// TODO Auto-generated method stub
-		return 0;
+		return currentDomain.first();
 	}
 
 	private void removeFirstElementFromCurrentDomain() {
 		
-		// TODO Auto-generated method stub
+		currentDomain.remove(currentDomain.first());
 	}
 
 	@WhenReceived("LABEL")
@@ -114,7 +113,7 @@ public class CBJDOAgent extends SimpleAgent {
 	public void handleCLEARANDRESTORE(){
 
 		confSet.clear();
-		currentDomain = new HashSet(getDomain());
+		currentDomain = new TreeSet(getDomain());
 	}
 	
 	
