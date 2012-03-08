@@ -4,9 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Vector;
 
-import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
@@ -71,13 +69,7 @@ public class CBJDOAgent extends SimpleAgent {
 		desicion(consistent, cpa);
 		
 	}
-
-	@WhenReceived("UNLABEL")
-	public void handleUNLABEL(){
-
 	
-	}
-
 	protected void desicion(boolean consistent, Assignment cpa) {
 		
 		if (isLastAgent())
@@ -89,7 +81,42 @@ public class CBJDOAgent extends SimpleAgent {
 		else if (consistent)
 			send("LABEL", cpa).toNextAgent();
 		
-		else if (consistent)
-			send("UNLABEL", cpa).toPreviousAgent();
+		else if (!consistent){
+			
+			if (confSet.isEmpty())
+				finishWithNoSolution();
+			
+			int h = confSet.last();
+			
+			confSet.remove(new Integer(h));
+			
+			send("UNLABEL", cpa, confSet).to(h);
+		}
 	}
+
+	@WhenReceived("UNLABEL")
+	public void handleUNLABEL(Assignment cpa, SortedSet<Integer> confSetOfI){
+
+		confSet.addAll(confSetOfI);
+		
+		int i = getCurrentMessage().getSender();
+		
+		for (int j = getId() + 1; j <= i; j++)
+			send("CLEAR_AND_RESTORE").to(j);
+		
+		currentDomain.remove(cpa.getAssignment(getId()));
+		
+		desicion(!currentDomain.isEmpty(), cpa);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@WhenReceived("CLEAR_AND_RESTORE")
+	public void handleCLEARANDRESTORE(){
+
+		confSet.clear();
+		currentDomain = new HashSet(getDomain());
+	}
+	
+	
+
 }
