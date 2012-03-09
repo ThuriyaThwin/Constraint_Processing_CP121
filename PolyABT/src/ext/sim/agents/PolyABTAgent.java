@@ -1,6 +1,7 @@
 package ext.sim.agents;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -124,7 +125,7 @@ public class PolyABTAgent extends SimpleAgent {
 
 			checkAgentView();
 		}
-		else if (coherent(nogood, self))
+		else //if (coherent(nogood, self))
 			send("OK", myValue).to(getCurrentMessage().getSender());
 	}
 
@@ -309,7 +310,8 @@ public class PolyABTAgent extends SimpleAgent {
 			Vector<Assignment> nogoodsOfThisKey = myNogoodStore.get(key);
 
 			for (int i = 0; i < nogoodsOfThisKey.size(); i++)
-				if (!coherent(nogoodsOfThisKey.get(i), myAgentView.assignedVariables()))
+				if (!coherent(getLHSOFNogood(nogoodsOfThisKey.get(i)), myAgentView.assignedVariables()))
+//				if (!coherent(myAgentView, getHigherpriorityNeighborsFromNogood(nogoodsOfThisKey.get(i))))
 					nogoodsToRemove.add(0,i);
 
 			for (Integer indexToRemove : nogoodsToRemove)
@@ -323,6 +325,17 @@ public class PolyABTAgent extends SimpleAgent {
 			myNogoodStore.remove(key);
 	}
 
+	private Assignment getLHSOFNogood(Assignment nogood) {
+
+		Assignment ans = new Assignment();
+		
+		for (Integer var : nogood.assignedVariables())
+			if (var != getId())
+				ans.assign(var, nogood.getAssignment(var));
+			
+		return ans;
+	}
+
 	private boolean coherent(Assignment nogood, Set<Integer> agents) {
 
 		print(getId() + " coherent: nogood: " + nogood + " agents: " + agents);
@@ -331,6 +344,10 @@ public class PolyABTAgent extends SimpleAgent {
 
 		for (Integer var : nogood.assignedVariables()){
 
+			//TODO: intersect..
+			if (!agents.contains(var))
+				continue;
+			
 			if ((getId() == var) && (nogood.getAssignment(var) != myValue))
 				return false;
 
