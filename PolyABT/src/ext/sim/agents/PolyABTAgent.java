@@ -400,7 +400,7 @@ public class PolyABTAgent extends SimpleAgent {
 	}
 
 	protected void print(String string) {
-		System.err.println(string);
-		System.err.flush();
+//		System.err.println(string);
+//		System.err.flush();
 	}
 }
