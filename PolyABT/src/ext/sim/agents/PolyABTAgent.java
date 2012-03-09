@@ -1,14 +1,12 @@
 package ext.sim.agents;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import bgu.dcr.az.api.*;
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
@@ -267,13 +265,31 @@ public class PolyABTAgent extends SimpleAgent {
     
 	@WhenReceived("ADL")
 	public void setLink(){
-		//TODO: Add Message Handling Code Here.
-		//you can add any parameters to the method in order to receive them within the message.
+
+		Integer sender = getCurrentMessage().getSender();
+		
+		lowerPriorityNeighbors.add(sender );
+		
+		send("OK", myValue).to(sender);
 	}
     
 	private void checkAddLink(Assignment nogood) {
-		// TODO Auto-generated method stub
+
+		for (Integer var : nogood.assignedVariables()){
+			
+			if ((getId() != var) && !higherPriorityNeighbors.contains(var)){
+				
+				send("ADL").to(var);
 		
+				higherPriorityNeighbors.add(var);
+				
+				Assignment assignment = new Assignment();
+				
+				assignment.assign(var, nogood.getAssignment(var));
+				
+				updateAgentView(assignment);
+			}
+		}
 	}
 
 	@Override
@@ -285,8 +301,4 @@ public class PolyABTAgent extends SimpleAgent {
 		System.err.println(string);
 		System.err.flush();
 	}
-
-
-
-
 }
