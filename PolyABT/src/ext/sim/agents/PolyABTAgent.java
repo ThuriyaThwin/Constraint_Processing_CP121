@@ -71,7 +71,11 @@ public class PolyABTAgent extends SimpleAgent {
 	@WhenReceived("OK")
 	public void ProcessInfo(Integer value){
 
-    	updateAgentView(getCurrentMessage().getSender(), value);
+    	Assignment tAss = new Assignment();
+    	
+    	tAss.assign(getCurrentMessage().getSender(), value);
+    	
+		updateAgentView(tAss);
     	checkAgentView();
 	}
 	
@@ -100,21 +104,73 @@ public class PolyABTAgent extends SimpleAgent {
 
 	protected void addNogoodToMyNogoodStore(Assignment nogood) {
 
+		Vector<Assignment> tVec = myNogoodStore.get(myValue);
 		
+		if (null == tVec)
+			tVec = new Vector<Assignment>();
+		//TODO:Make sure we delete non relevant no Goods
+		tVec.add(nogood);
+		
+		myNogoodStore.put(myValue, tVec);
 	}
 
 	private void backtrack() {
-		// TODO Auto-generated method stub
 		
+		Assignment newNogood = solve(myNogoodStore);
+		
+		if(null == newNogood){
+			
+			finishWithNoSolution();
+			return;
+		}
+		else{
+			
+			Integer lowPriorityAgent = getLhsFromNoGood(newNogood);
+			
+			send("NOGOOD",newNogood).to(lowPriorityAgent);
+			
+	    	Assignment tAss = new Assignment();
+	    	tAss.assign(lowPriorityAgent, -1);
+	    	
+			updateAgentView(tAss);
+			
+			checkAgentView();
+		}
 	}
     
+	private Assignment solve(Map<Integer, Vector<Assignment>> myNogoodStore2) {
+
+		//TODO: improve it..
+		//TODO:Make sure we are not missing out on agents.DBT style.
+		Assignment nogood = new Assignment();
+		
+		for (Integer var : myAgentView.assignedVariables())
+			nogood.assign(var, myAgentView.getAssignment(var));
+		
+		return nogood;
+	}
+	
+	private Integer getLhsFromNoGood(Assignment assignment) {
+
+		Integer ans = -1;
+		
+		for (Integer var : assignment.assignedVariables())
+			if (ans < var)
+				ans = var;
+			
+		return ans;
+	}
+
 	private Integer chooseValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-    protected void updateAgentView(int sender, Integer value) {
+    protected void updateAgentView(Assignment assignment) {
 		
+    	// if the given assignement includes a var with value -1,
+    	// we need to unassign him from myAgentView..
+    	
     	// TODO Auto-generated method stub
 		
 	}
