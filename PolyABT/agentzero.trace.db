@@ -1,0 +1,8 @@
+03-09 21:30:12 database: close
+java.lang.NullPointerException
+	at org.h2.store.PageLog.removeUntil(PageLog.java:720)
+	at org.h2.store.PageLog.removeUntil(PageLog.java:697)
+	at org.h2.store.PageStore.checkpoint(PageStore.java:410)
+	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1168)
+	at org.h2.engine.Database.close(Database.java:1121)
+	at org.h2.engine.DatabaseCloser.run(DatabaseCloser.java:80)
