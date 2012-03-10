@@ -1,22 +1,26 @@
 package ext.sim.agents;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.logging.Logger;
+
+import ext.sim.tools.LoggerController;
 
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
-import bgu.dcr.az.api.pgen.Problem;
 import bgu.dcr.az.api.tools.*;
 import bgu.dcr.az.api.ano.WhenReceived;
 
 @Algorithm(name="PolyABT", useIdleDetector=true)
 public class PolyABTAgent extends SimpleAgent {
 
+	private static final String FILENAME = "logs\\PolyABT.log";
+	private static final String LOGGERNAME = "PolyABT";
+	
 	protected Assignment						myAgentView				= null;
 	protected Integer							myValue					= null;
 
@@ -27,6 +31,14 @@ public class PolyABTAgent extends SimpleAgent {
 
 	@Override
 	public void start() {
+		
+		if (isFirstAgent())
+			try {
+				LoggerController.createLogger(FILENAME, LOGGERNAME);
+			} catch (Exception e) {
+				e.printStackTrace();
+				finishWithNoSolution();
+			}
 
 		print(getId() + " starts");
 
@@ -123,7 +135,7 @@ public class PolyABTAgent extends SimpleAgent {
 			
 			checkAgentView();
 		}
-		else{ //if (coherent(nogood, self))
+		else { //if (coherent(nogood, self))
 			print(getId() + " resolveConflict: nogood: " + nogood + " and agents: " + agents + " are coherent so I keep my value: " + myValue);
 			send("OK", myValue).to(getCurrentMessage().getSender());
 		}
@@ -156,6 +168,7 @@ public class PolyABTAgent extends SimpleAgent {
 		
 		if(newNogood.getNumberOfAssignedVariables() == 0){
 
+			print(getId() + " backtrack: There is no solution");
 			finishWithNoSolution();
 			return;
 		}
@@ -345,7 +358,7 @@ public class PolyABTAgent extends SimpleAgent {
 		for (Integer key : keysToRemove)
 			myNogoodStore.remove(key);
 		
-		print(getId() + " before removeInconsistentNogoods: myNogoodStore: " + myNogoodStore + " myAgentView: " + myAgentView);
+		print(getId() + " after removeInconsistentNogoods: myNogoodStore: " + myNogoodStore + " myAgentView: " + myAgentView);
 	}
 
 	private Assignment getLHSOFNogood(Assignment nogood) {
@@ -365,7 +378,7 @@ public class PolyABTAgent extends SimpleAgent {
 
 	private boolean coherent(Assignment nogood, Set<Integer> agents) {
 
-		print(getId() + " coherent: nogood: " + nogood + " agents: " + agents);
+		print(getId() + " coherent: nogood: " + nogood + " agents: " + agents + " myAgentView: " + myAgentView + " myValue: " + myValue);
 
 		//TODO: why we need agents??.. maybe intersect instead of union?..
 
@@ -431,8 +444,9 @@ public class PolyABTAgent extends SimpleAgent {
 		finish(myValue);
 	}
 
-	protected void print(String string) {
-		System.err.println(string);
-		System.err.flush();
+	protected void print(String msg) {
+//		System.err.println(string);
+//		System.err.flush();
+		Logger.getLogger(LOGGERNAME).info(msg);
 	}
 }
