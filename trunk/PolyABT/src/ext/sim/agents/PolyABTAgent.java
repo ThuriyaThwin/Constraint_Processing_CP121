@@ -65,12 +65,14 @@ public class PolyABTAgent extends SimpleAgent {
 
 	protected void checkAgentView() {
 
-		print(getId() + " checkAgentView");
+		print(getId() + " entered checkAgentView");
 
 		if ((-1 == myValue) || !myAgentView.isConsistentWith(getId(), myValue, getProblem())){
 
 			myValue = chooseValue();
 
+			print(getId() + " checkAgentView: myValue changed to: " + myValue);
+			
 			if (-1 != myValue)
 				send("OK", myValue).toAll(lowerPriorityNeighbors);
 
@@ -86,10 +88,6 @@ public class PolyABTAgent extends SimpleAgent {
 	@WhenReceived("OK")
 	public void ProcessInfo(Integer value){
 
-		//Hard coded test
-		if(stopForId(2)){
-			print("ShowTime");
-		}
 		print(getId() + " ProcessInfo (got OK) from: " + getCurrentMessage().getSender() + " value: " + value);
 
 		Assignment tAss = new Assignment();
@@ -103,10 +101,6 @@ public class PolyABTAgent extends SimpleAgent {
 	@WhenReceived("NOGOOD")
 	public void resolveConflict(Assignment nogood){
 		
-		
-		if(stopForId(1)){
-			print("Showtime " + "For one");
-		}
 		print(getId() + " resolveConflict (got NOGOOD) from: " + getCurrentMessage().getSender() + " nogood: " + nogood);
 
 		SortedSet<Integer> self = new TreeSet<Integer>();
@@ -117,16 +111,22 @@ public class PolyABTAgent extends SimpleAgent {
 
 		if (coherent(nogood, agents)){
 
+			print(getId() + " resolveConflict: nogood: " + nogood + " and agents: " + agents + " are not coherent");
+			
 			checkAddLink(nogood);
 
 			addNogoodToMyNogoodStore(nogood, myValue);
 
 			myValue = -1;
 
+			print(getId() + " resolveConflict: myValue changed to: " + myValue);
+			
 			checkAgentView();
 		}
-		else //if (coherent(nogood, self))
+		else{ //if (coherent(nogood, self))
+			print(getId() + " resolveConflict: nogood: " + nogood + " and agents: " + agents + " are coherent so I keep my value: " + myValue);
 			send("OK", myValue).to(getCurrentMessage().getSender());
+		}
 	}
 
 	protected void addNogoodToMyNogoodStore(Assignment nogood, int value) {
@@ -141,20 +141,19 @@ public class PolyABTAgent extends SimpleAgent {
 		//TODO:Make sure we delete non relevant no Goods
 		tVec.add(nogood);
 
+		print(getId() + " addNogoodToMyNogoodStore: myNogoodStore: " + myNogoodStore + " (after the addition of " + nogood);
+		
 		myNogoodStore.put(value, tVec);
 	}
 
 	private void backtrack() {
 
-		//Hard coded test
-		if(getId() == 2){
-			print("ShowTime");
-		}
-
-		print(getId() + " backtrack");
+		print(getId() + " entering backtrack");
 
 		Assignment newNogood = solve();
 
+		print(getId() + " backtrack: solved newNogod: " + newNogood);
+		
 		if(newNogood.getNumberOfAssignedVariables() == 0){
 
 			finishWithNoSolution();
@@ -162,8 +161,10 @@ public class PolyABTAgent extends SimpleAgent {
 		}
 		else{
 
-			Integer lowPriorityAgent = getLhsFromNoGood(newNogood);
+			Integer lowPriorityAgent = getRhsFromNoGood(newNogood);
 
+			print(getId() + " backtrack: lowPriorityAgent in newNogod: " + newNogood + " is: " + lowPriorityAgent);
+			
 			send("NOGOOD",newNogood).to(lowPriorityAgent);
 
 			Assignment tAss = new Assignment();
@@ -179,6 +180,8 @@ public class PolyABTAgent extends SimpleAgent {
 
 	private void removeNogoodsWithThisVar(Integer var, Integer val) {
 
+		print(getId() + " before removeNogoodsWithThisVar: var: " + var + " val: " + val + " myNogoodStore: " + myNogoodStore);
+		
 		Vector<Integer> keysToRemove = new Vector<Integer>();
 
 		for(Integer key : myNogoodStore.keySet()){
@@ -199,6 +202,8 @@ public class PolyABTAgent extends SimpleAgent {
 
 		for (Integer key : keysToRemove)
 			myNogoodStore.remove(key);
+		
+		print(getId() + " after removeNogoodsWithThisVar: var: " + var + " val: " + val + " myNogoodStore: " + myNogoodStore);
 	}
 
 	private Assignment solve() {
@@ -215,9 +220,9 @@ public class PolyABTAgent extends SimpleAgent {
 		return nogood;
 	}
 
-	private Integer getLhsFromNoGood(Assignment assignment) {
+	private Integer getRhsFromNoGood(Assignment assignment) {
 
-		print(getId() + " getLhsFromNoGood: assignment: " + assignment);
+		print(getId() + " entering getLhsFromNoGood: assignment: " + assignment);
 
 		Integer ans = -1;
 
@@ -225,15 +230,19 @@ public class PolyABTAgent extends SimpleAgent {
 			if (ans < var)
 				ans = var;
 
+		print(getId() + " exiting getLhsFromNoGood: assignment: " + assignment + " and RHS: " + ans);
+		
 		return ans;
 	}
 
 	private Integer chooseValue() {
 
-		print(getId() + " chooseValue");
+		print(getId() + " entering chooseValue");
 
 		SortedSet<Integer> currentDomain = eliminateValuesFromTheDomain();
 
+		print(getId() + " entering chooseValue : currentDomain: " + currentDomain);
+		
 		for (Integer v : currentDomain){
 
 			boolean consistent = true;
@@ -255,16 +264,21 @@ public class PolyABTAgent extends SimpleAgent {
 				}
 			}
 
-			if (consistent)
+			if (consistent){
+				
+				print(getId() + " exiting chooseValue : currentDomain: " + currentDomain + " with value: " + v);
 				return v;
+			}
+				
 		}
 
+		print(getId() + " exiting chooseValue : currentDomain: " + currentDomain + " with value: -1");
 		return -1;
 	}
 
 	private SortedSet<Integer> eliminateValuesFromTheDomain() {
 
-		print(getId() + " eliminateValuesFromTheDomain");
+		print(getId() + " eliminateValuesFromTheDomain: full domain: " + getDomain() + " myNogoodStore: " + myNogoodStore);
 
 		SortedSet<Integer> currentDomain = new TreeSet<Integer>(getDomain());
 
@@ -288,11 +302,18 @@ public class PolyABTAgent extends SimpleAgent {
 
 			int val = assignment.getAssignment(var);
 
-			if (-1 == val)
+			if (-1 == val){
+				
+				print(getId() + " updateAgentView: before removing var: " + var + " from myAgentView: " + myAgentView);
 				myAgentView.unassign(var);
-
-			else
+				print(getId() + " updateAgentView: after removing var: " + var + " from myAgentView: " + myAgentView);
+			}
+			else{
+				
+				print(getId() + " updateAgentView: before assigning var: " + var + " val: " + val + " to myAgentView: " + myAgentView);
 				myAgentView.assign(var, val);
+				print(getId() + " updateAgentView: after assigning var: " + var + " val: " + val + " to myAgentView: " + myAgentView);
+			}
 		}
 
 		removeInconsistentNogoods();
@@ -300,7 +321,7 @@ public class PolyABTAgent extends SimpleAgent {
 
 	protected void removeInconsistentNogoods() {
 
-		print(getId() + " removeInconsistentNogoods");
+		print(getId() + " before removeInconsistentNogoods: myNogoodStore: " + myNogoodStore + " myAgentView: " + myAgentView);
 
 		Vector<Integer> keysToRemove = new Vector<Integer>();
 
@@ -323,16 +344,22 @@ public class PolyABTAgent extends SimpleAgent {
 
 		for (Integer key : keysToRemove)
 			myNogoodStore.remove(key);
+		
+		print(getId() + " before removeInconsistentNogoods: myNogoodStore: " + myNogoodStore + " myAgentView: " + myAgentView);
 	}
 
 	private Assignment getLHSOFNogood(Assignment nogood) {
 
+		print(getId() + " before getLHSOFNogood: nogood: " + nogood);
+		
 		Assignment ans = new Assignment();
 		
 		for (Integer var : nogood.assignedVariables())
 			if (var != getId())
 				ans.assign(var, nogood.getAssignment(var));
-			
+		
+		print(getId() + " after getLHSOFNogood: ans: " + ans);
+		
 		return ans;
 	}
 
@@ -366,10 +393,12 @@ public class PolyABTAgent extends SimpleAgent {
 
 		Integer sender = getCurrentMessage().getSender();
 
-		print(getId() + " setLink (got ADL) from " + sender);
+		print(getId() + " setLink (got ADL) from " + sender + " lowerPriorityNeighbors before: " + lowerPriorityNeighbors);
 
 		lowerPriorityNeighbors.add(sender);
 
+		print(getId() + " setLink (got ADL) from " + sender + " lowerPriorityNeighbors after: " + lowerPriorityNeighbors);
+		
 		send("OK", myValue).to(sender);
 	}
 
@@ -379,10 +408,13 @@ public class PolyABTAgent extends SimpleAgent {
 
 		for (Integer var : nogood.assignedVariables()){
 
-			if ((getId() != var) && !higherPriorityNeighbors.contains(var)){
+			//TODO: != or >
+			if ((getId() > var) && !higherPriorityNeighbors.contains(var)){
 
 				send("ADL").to(var);
 
+				print(getId() + " checkAddLink: asked var: " + var + " to be my neighbor");
+				
 				higherPriorityNeighbors.add(var);
 
 				Assignment assignment = new Assignment();
@@ -400,7 +432,7 @@ public class PolyABTAgent extends SimpleAgent {
 	}
 
 	protected void print(String string) {
-//		System.err.println(string);
-//		System.err.flush();
+		System.err.println(string);
+		System.err.flush();
 	}
 }
