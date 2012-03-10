@@ -1,14 +1,6 @@
 <experiment>
 
-    <async-test name="ABT_p1_03" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
-        <algorithm name="ABT"/>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="7" d="7" p1="0.3"/>
-        <nccc-sc></nccc-sc>
-        <ncsc-sc />
-        <cc-sc />
-        <default-tester/>
-    </async-test>
+    
     <async-test name="CBJ_p1_03" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
         <algorithm name="CBJ"/>
         <dcop-unstructured></dcop-unstructured>
@@ -28,15 +20,7 @@
         <default-tester/>
     </async-test>
 
-	<async-test name="ABT_p1_05" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
-        <algorithm name="ABT"/>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="7" d="7" p1="0.5"/>
-        <nccc-sc></nccc-sc>
-        <ncsc-sc />
-        <cc-sc />
-        <default-tester/>
-    </async-test>
+	
     <async-test name="CBJ_p1_05" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
         <algorithm name="CBJ"/>
         <dcop-unstructured></dcop-unstructured>
@@ -56,15 +40,7 @@
         <default-tester/>
     </async-test>
     
-    <async-test name="ABT_p1_08" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
-        <algorithm name="ABT"/>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="7" d="7" p1="0.8"/>
-        <nccc-sc></nccc-sc>
-        <ncsc-sc />
-        <cc-sc />
-        <default-tester/>
-    </async-test>
+   
     <async-test name="CBJ_p1_08" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
         <algorithm name="CBJ"/>
         <dcop-unstructured></dcop-unstructured>

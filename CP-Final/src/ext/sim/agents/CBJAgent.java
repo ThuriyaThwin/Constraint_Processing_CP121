@@ -55,12 +55,15 @@ public class CBJAgent extends SimpleAgent {
 		while (!currentDomain.isEmpty() && !consistent) {
 
 			consistent = true;
+			
+			// Just For in the num of CCs
+			cpa.isConsistentWith(getId(), getFirstElementInCurrentDomain(), getProblem());
 
 			cpa.assign(getId(), getFirstElementInCurrentDomain());
 
 			print(getId() + " assigned the value "
 					+ getFirstElementInCurrentDomain());
-
+			
 			for (h = 0; h < getId() && consistent; h++)
 				consistent = getProblem().isConsistent(getId(),
 						cpa.getAssignment(getId()), h, cpa.getAssignment(h));
@@ -132,7 +135,7 @@ public class CBJAgent extends SimpleAgent {
 	}
 
 	private void print(String string) {
-		System.err.println(string);
-		System.err.flush();
+//		System.err.println(string);
+//		System.err.flush();
 	}
 }

@@ -325,7 +325,7 @@ public class ABTAgent extends SimpleAgent {
 	}
 
 	private void print(String string) {
-		System.err.println(string);
-		System.err.flush();
+//		System.err.println(string);
+//		System.err.flush();
 	}
 }

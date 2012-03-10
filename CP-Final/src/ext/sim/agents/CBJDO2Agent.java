@@ -83,6 +83,9 @@ public class CBJDO2Agent extends SimpleAgent {
 
 			consistent = true;
 
+			// Just For in the num of CCs
+			cpa.isConsistentWith(getId(), getFirstElementInCurrentDomain(), getProblem());
+			
 			cpa.assign(getId(), getFirstElementInCurrentDomain());
 
 			print(getId() + " tries the value "
@@ -200,8 +203,8 @@ public class CBJDO2Agent extends SimpleAgent {
 	}
 
 	private void print(String string) {
-		System.err.println(string);
-		System.err.flush();
+//		System.err.println(string);
+//		System.err.flush();
 	}
 
 }
