@@ -162,7 +162,6 @@ public class CBJDO2Agent extends SimpleAgent {
 
 		currentDomain.remove(cpa.getAssignment(getId()));
 		
-		// TODO
 		clearAndRestore(cpa);
 		
 		desicion(!currentDomain.isEmpty(), cpa, getId());

@@ -290,8 +290,6 @@ public class ABTAgent extends SimpleAgent {
 
 	private Assignment resolveInconsistentSubset() {
 
-		// TODO WTF??... something which related to DBT??..
-
 		Assignment nogood = new Assignment();
 
 		for (Integer var : agent_view.assignedVariables())

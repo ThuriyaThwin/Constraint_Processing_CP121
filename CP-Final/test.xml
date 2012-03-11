@@ -4,6 +4,7 @@
 		<algorithm name="CBJ"></algorithm>
 		<algorithm name="CBJDO2"></algorithm>
 		<algorithm name="ABT"></algorithm>
+		<algorithm name="ABTDO"></algorithm>
 		<dcop-unstructured></dcop-unstructured>
 		<dcsp-unstructured></dcsp-unstructured>
 		<BarabasiProblem n="10" d="10" m0="3" q="0.6"></BarabasiProblem>
@@ -12,7 +13,6 @@
 		<cc-sc />
 		<default-tester />
 	</async-test>
-	<!-- 
 	<async-test name="random_test_03" seed="1717" repeat-count="20"
 		run-var="p2" start="0.1" end="1" tick-size="0.1">
 		<algorithm name="CBJ"></algorithm>
@@ -39,7 +39,7 @@
 		<cc-sc />
 		<default-tester />
 	</async-test>
-	<async-test name="random_test_08" seed="1717" repeat-count="0"
+	<async-test name="random_test_08" seed="1717" repeat-count="20"
 		run-var="p2" start="0.1" end="1" tick-size="0.1">
 		<algorithm name="CBJ"></algorithm>
 		<algorithm name="CBJDO2"></algorithm>
@@ -52,7 +52,6 @@
 		<cc-sc />
 		<default-tester />
 	</async-test>
-	 -->
 </experiment>
  
 
