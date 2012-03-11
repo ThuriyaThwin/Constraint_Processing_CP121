@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
@@ -130,6 +132,7 @@ public class ABTDOAgent extends SimpleAgent {
 				+ " and current_value: " + current_value);
 
 		Integer old_value = current_value;
+		boolean sent = false;
 
 		int lowestAgent = getTheLowestPriorityAgentFromNoGood(noGood);
 
@@ -161,22 +164,21 @@ public class ABTDOAgent extends SimpleAgent {
 				addNewNeighborsFromNogood(noGood);
 
 				checkAgentView();
+			} else {
+
+				sent = true;
+
+				send("OK", current_value).to(getCurrentMessage().getSender());
+
+				print(getId() + " sends OK: to "
+						+ getCurrentMessage().getSender() + " with value "
+						+ current_value + " from method 'handleNOGOOD'");
 			}
-			// else {
-			//
-			// send("OK", current_value).to(getCurrentMessage().getSender());
-			//
-			// print(getId() + " sends OK: to "
-			// + getCurrentMessage().getSender() + " with value "
-			// + current_value + " from method 'handleNOGOOD'");
-			// }
 
 			// TODO: instead the above..
-			if (current_value == old_value
-					|| !isNogoodConsistentWithAgentViewAndCurrentAssignment(noGood)) {
+			if (current_value == old_value & !sent) {
 
-				print(getId()
-						+ " handleNOGOOD: Nogood is Not Consistent With Agent View And Current Assignment or current_value == old_value "
+				print(getId() + " handleNOGOOD: current_value == old_value "
 						+ " noGood: " + noGood + " current_value: "
 						+ current_value + " old_value: " + old_value
 						+ " agent_view: " + agent_view);
@@ -382,23 +384,23 @@ public class ABTDOAgent extends SimpleAgent {
 		for (Integer v : getDomain()) {
 
 			// TODO:?...
-			// if (v > current_value) {
+			if (v != current_value) {
 
-			boolean isConsistent = true;
+				boolean isConsistent = true;
 
-			for (Integer neighbor : higherPriorityNeighbors) {
+				for (Integer neighbor : higherPriorityNeighbors) {
 
-				if (!agent_view.isAssigned(neighbor))
-					continue;
+					if (!agent_view.isAssigned(neighbor))
+						continue;
 
-				if (!getProblem().isConsistent(getId(), v, neighbor,
-						agent_view.getAssignment(neighbor)))
-					isConsistent = false;
+					if (!getProblem().isConsistent(getId(), v, neighbor,
+							agent_view.getAssignment(neighbor)))
+						isConsistent = false;
+				}
+
+				if (isConsistent)
+					consistentValues.add(v);
 			}
-
-			if (isConsistent)
-				consistentValues.add(v);
-			// }
 		}
 
 		for (Integer v : consistentValues)
@@ -543,7 +545,7 @@ public class ABTDOAgent extends SimpleAgent {
 
 		for (Integer key : keysToRemove)
 			nogoodsPerRemovedValue.remove(key);
-		
+
 		print(getId() + " removeNogoodsThatContainThisVariable: var: " + var
 				+ " val: " + val + " nogoods after: " + nogoodsPerRemovedValue);
 	}
@@ -551,9 +553,9 @@ public class ABTDOAgent extends SimpleAgent {
 	// TODO: check again that we really want to do exactly that..
 	private void removeInconsistentNogoodsWhenReceivingOrder() {
 
-		print(getId() + " removeNogoodsThatContainThisVariable: order: " + current_order
-				+ " nogoods before: " + nogoodsPerRemovedValue);
-		
+		print(getId() + " removeNogoodsThatContainThisVariable: order: "
+				+ current_order + " nogoods before: " + nogoodsPerRemovedValue);
+
 		Vector<Integer> keysToRemove = new Vector<Integer>();
 
 		// TODO: higher or lower??..
@@ -579,9 +581,9 @@ public class ABTDOAgent extends SimpleAgent {
 
 		for (Integer key : keysToRemove)
 			nogoodsPerRemovedValue.remove(key);
-		
-		print(getId() + " removeNogoodsThatContainThisVariable: order: " + current_order
-				+ " nogoods after: " + nogoodsPerRemovedValue);
+
+		print(getId() + " removeNogoodsThatContainThisVariable: order: "
+				+ current_order + " nogoods after: " + nogoodsPerRemovedValue);
 	}
 
 	@WhenReceived("ADD_NEIGHBOR")
