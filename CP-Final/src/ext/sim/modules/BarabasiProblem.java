@@ -27,6 +27,9 @@ public class BarabasiProblem extends AbstractProblemGenerator{
 
 	@Variable(name = "m0", description = "number of nodes in the initial network", defaultValue = "2")
 	int m0 = 2;
+	
+	@Variable(name = "q", description = "Probability to connect to a node,can be rounded smaller", defaultValue = "0.5")
+	float q = 0.5f;
 
 	@Variable(name = "p2", description = "probability of constarint between 2 constrained vars", defaultValue="0.4")
 	float p2 = 0.4f;
@@ -35,7 +38,7 @@ public class BarabasiProblem extends AbstractProblemGenerator{
 	Vector<Integer> unInitializedNodes;
 	HashMap<Integer, Integer> NodeDegree;
 	int sumOfDegrees = 0;
-
+	private int numberOfConnectionsToStorngNode = 0;
 	private boolean symetric = true;
 
 	private boolean initInitialNetwork(Problem problem,Random random){
@@ -116,13 +119,17 @@ public class BarabasiProblem extends AbstractProblemGenerator{
 	}
 
 	private void addNode(Problem problem, Random random, int tNodeSrc,
-			Integer tNodeDst) {
-		if((random.nextDouble()*0.5)<= this.getPropabilityForConnectionToNode(problem, tNodeDst)){
+			int tNodeDst) {
+		if((random.nextDouble() * q) <= getPropabilityForConnectionToNode(problem, tNodeDst)){
 			int tdegree1Before = problem.getNeighbors(tNodeSrc).size();
 			int tdegree2Before = problem.getNeighbors(tNodeDst).size();
 			connectNodes(tNodeSrc, tNodeDst, problem, random);
 			int tdegree1After = problem.getNeighbors(tNodeSrc).size();
 			int tdegree2After = problem.getNeighbors(tNodeDst).size();
+			if(tdegree2After > (this.n/3)){
+				System.out.println("Connected to a strong componenet");
+				numberOfConnectionsToStorngNode++;
+			}
 			this.NodeDegree.put(tNodeSrc, problem.getNeighbors(tNodeSrc).size());
 			this.NodeDegree.put(tNodeDst, problem.getNeighbors(tNodeDst).size());
 			this.sumOfDegrees = this.sumOfDegrees + 2;
@@ -165,16 +172,18 @@ public class BarabasiProblem extends AbstractProblemGenerator{
 			}
 			this.initialNetworkNodes.add(tNodeSrc);
 		}
-		if(true){
-			System.out.println("Success");
-		}
+		
 	}
-
+	
 	@Override
 	public void generate(Problem problem, Random random) {
 		problem.initialize(ProblemType.DCSP, n, new ImmutableSet<Integer>(Agt0DSL.range(0, d - 1)));
 		initInitialNetwork(problem,random);
 		initAddedNodes(problem,random);
+		
+		if(true){
+			System.out.println("Success + numberOfConnectionsToStorngNode is " + numberOfConnectionsToStorngNode);
+		}
 	}
 
 
