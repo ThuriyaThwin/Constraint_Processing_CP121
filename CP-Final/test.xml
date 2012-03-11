@@ -5,7 +5,9 @@
         <algorithm name="ABT"></algorithm>
         <dcop-unstructured></dcop-unstructured>
         <dcsp-unstructured></dcsp-unstructured>
-        <BarabasiAlbertProblem n="20" d="10" m0="7" p2="0.5"></BarabasiAlbertProblem>
+       <!-- <BarabasiAlbertProblem n="20" d="10" m0="7" p2="0.5"></BarabasiAlbertProblem>-->
+	   <!--Example of how to run it-->
+	   <BarabasiProblem n="20" d="10" m0="10" p2="0.5"></BarabasiProblem>
         <nccc-sc/>
         <ncsc-sc ></ncsc-sc>
         <cc-sc />
