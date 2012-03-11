@@ -15,6 +15,9 @@ import bgu.dcr.az.api.ds.ImmutableSet;
 @Algorithm(name = "ABTDO", useIdleDetector = true)
 public class ABTDOAgent extends SimpleAgent {
 
+	private static boolean USE_RANDOM_HEURISTIC = false;
+	private static boolean USE_NOGOOD_HEURISTIC = true;
+
 	private Assignment agent_view = null;
 	private Integer current_value = null;
 	private Map<Integer, Vector<Assignment>> nogoodsPerRemovedValue = null;
@@ -36,7 +39,11 @@ public class ABTDOAgent extends SimpleAgent {
 
 		current_order = new Order(getNumberOfVariables());
 
-		heuristic = new RandomHeuristic();
+		if (USE_RANDOM_HEURISTIC)
+			heuristic = new RandomHeuristic();
+
+		else if (USE_NOGOOD_HEURISTIC)
+			heuristic = new NogoodTriggeredHeuristic(getId());
 
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAll(myAllNeighbors);
@@ -161,7 +168,20 @@ public class ABTDOAgent extends SimpleAgent {
 				addNewNeighborsFromNogood(noGood);
 
 				checkAgentView();
-			} else {
+				
+				if (USE_NOGOOD_HEURISTIC) {
+
+					heuristic.changeOrder(current_order, this);
+
+					send("ORDER", current_order).toAll(getLowerPriorityNeighbors());
+
+					print(getId()
+							+ " sends ORDER: to all his lower priority neighbors: "
+							+ getLowerPriorityNeighbors() + " with order: "
+							+ current_order + " from method 'handleNOGOOD'");
+				}
+			}
+			else {
 
 				sent = true;
 
@@ -304,20 +324,25 @@ public class ABTDOAgent extends SimpleAgent {
 
 				current_value = d;
 
-				heuristic.changeOrder(current_order, this);
+				if (USE_RANDOM_HEURISTIC) {
 
-				send("OK", current_value).toAll(getLowerPriorityNeighbors());
+					heuristic.changeOrder(current_order, this);
+
+					send("ORDER", current_order).toAll(
+							getLowerPriorityNeighbors());
+
+					print(getId()
+							+ " sends ORDER: to all his lower priority neighbors: "
+							+ getLowerPriorityNeighbors() + " with order: "
+							+ current_order + " from method 'checkAgentView'");
+				}
+
+				send("OK", current_value).toAll(myAllNeighbors);
 
 				print(getId() + " sends OK: to all his neighbors: "
 						+ myAllNeighbors + " with value " + current_value
 						+ " from method 'checkAgentView'");
 
-				send("ORDER", current_order).toAll(getLowerPriorityNeighbors());
-
-				print(getId()
-						+ " sends ORDER: to all his lower priority neighbors: "
-						+ getLowerPriorityNeighbors() + " with order: "
-						+ current_order + " from method 'checkAgentView'");
 			}
 		} else {
 			print(getId()
