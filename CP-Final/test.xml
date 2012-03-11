@@ -1,51 +1,59 @@
 <experiment>
-	<async-test name="scale_free_test" seed="1717" repeat-count="20" run-var="M" start="1" end="7" tick-size="1">
-        <algorithm name="CBJ"></algorithm>
-        <algorithm name="CBJDO2"></algorithm>
-        <algorithm name="ABT"></algorithm>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured></dcsp-unstructured>
-       <!-- <BarabasiAlbertProblem n="20" d="10" m0="7" p2="0.5"></BarabasiAlbertProblem>-->
-	   <!--Example of how to run it-->
-	   <BarabasiProblem n="12" d="10" m0="4" q="0.5" p2="0.8"></BarabasiProblem>
-        <nccc-sc/>
-        <ncsc-sc ></ncsc-sc>
-        <cc-sc />
-        <default-tester/>
-    </async-test>
-    <async-test name="random_test_03" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
-        <algorithm name="CBJ"></algorithm>
-        <algorithm name="CBJDO2"></algorithm>
-        <algorithm name="ABT"></algorithm>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="7" d="7" p1="0.3"></dcsp-unstructured>
-        <nccc-sc/>
-        <ncsc-sc ></ncsc-sc>
-        <cc-sc />
-        <default-tester/>
-    </async-test>
-        <async-test name="random_test_05" seed="1717" repeat-count="20" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
-        <algorithm name="CBJ"></algorithm>
-        <algorithm name="CBJDO2"></algorithm>
-        <algorithm name="ABT"></algorithm>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="7" d="7" p1="0.5"></dcsp-unstructured>
-        <nccc-sc/>
-        <ncsc-sc ></ncsc-sc>
-        <cc-sc />
-        <default-tester/>
-    </async-test>
-        <async-test name="random_test_08" seed="1717" repeat-count="0" run-var="p2" start="0.1" end="0.9" tick-size="0.1">
-        <algorithm name="CBJ"></algorithm>
-        <algorithm name="CBJDO2"></algorithm>
-        <dcop-unstructured></dcop-unstructured>
-        <dcsp-unstructured n="7" d="7" p1="0.8"></dcsp-unstructured>
-        <nccc-sc/>
-        <ncsc-sc ></ncsc-sc>
-        <cc-sc />
-        <default-tester/>
-    </async-test>
- </experiment>
+	<async-test name="scale_free_test" seed="1717" repeat-count="20"
+		run-var="p2" start="0.1" end="1" tick-size="0.1">
+		<algorithm name="CBJ"></algorithm>
+		<algorithm name="CBJDO2"></algorithm>
+		<algorithm name="ABT"></algorithm>
+		<dcop-unstructured></dcop-unstructured>
+		<dcsp-unstructured></dcsp-unstructured>
+		<BarabasiProblem n="10" d="10" m0="3" q="0.6"></BarabasiProblem>
+		<nccc-sc />
+		<ncsc-sc></ncsc-sc>
+		<cc-sc />
+		<default-tester />
+	</async-test>
+	<!-- 
+	<async-test name="random_test_03" seed="1717" repeat-count="20"
+		run-var="p2" start="0.1" end="1" tick-size="0.1">
+		<algorithm name="CBJ"></algorithm>
+		<algorithm name="CBJDO2"></algorithm>
+		<algorithm name="ABT"></algorithm>
+		<algorithm name="ABTDO"></algorithm>
+		<dcop-unstructured></dcop-unstructured>
+		<dcsp-unstructured n="7" d="7" p1="0.3"></dcsp-unstructured>
+		<nccc-sc />
+		<ncsc-sc></ncsc-sc>
+		<cc-sc />
+		<default-tester />
+	</async-test>
+	<async-test name="random_test_05" seed="1717" repeat-count="20"
+		run-var="p2" start="0.1" end="1" tick-size="0.1">
+		<algorithm name="CBJ"></algorithm>
+		<algorithm name="CBJDO2"></algorithm>
+		<algorithm name="ABT"></algorithm>
+		<algorithm name="ABTDO"></algorithm>
+		<dcop-unstructured></dcop-unstructured>
+		<dcsp-unstructured n="7" d="7" p1="0.5"></dcsp-unstructured>
+		<nccc-sc />
+		<ncsc-sc></ncsc-sc>
+		<cc-sc />
+		<default-tester />
+	</async-test>
+	<async-test name="random_test_08" seed="1717" repeat-count="0"
+		run-var="p2" start="0.1" end="1" tick-size="0.1">
+		<algorithm name="CBJ"></algorithm>
+		<algorithm name="CBJDO2"></algorithm>
+		<algorithm name="ABT"></algorithm>
+		<algorithm name="ABTDO"></algorithm>
+		<dcop-unstructured></dcop-unstructured>
+		<dcsp-unstructured n="7" d="7" p1="0.8"></dcsp-unstructured>
+		<nccc-sc />
+		<ncsc-sc></ncsc-sc>
+		<cc-sc />
+		<default-tester />
+	</async-test>
+	 -->
+</experiment>
  
 
         
