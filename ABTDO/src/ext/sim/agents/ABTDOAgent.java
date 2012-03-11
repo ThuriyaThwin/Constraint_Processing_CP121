@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import bgu.dcr.az.api.agt.*;
 import bgu.dcr.az.api.ano.*;
 import bgu.dcr.az.api.tools.*;
@@ -39,7 +37,6 @@ public class ABTDOAgent extends SimpleAgent {
 		current_order = new Order(getNumberOfVariables());
 
 		heuristic = new RandomHeuristic();
-		// heuristic = new NoChangeHeuristic();
 
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAll(myAllNeighbors);
@@ -86,8 +83,6 @@ public class ABTDOAgent extends SimpleAgent {
 			for (int i = 0; i < nogoodsOfThisKey.size(); i++)
 				if (nogoodsOfThisKey.get(i).isAssigned(var)
 						&& (nogoodsOfThisKey.get(i).getAssignment(var) != val))
-					// TODO: ?..
-					// )
 					nogoodsToRemove.add(0, i);
 
 			for (Integer indexToRemove : nogoodsToRemove)
@@ -177,7 +172,6 @@ public class ABTDOAgent extends SimpleAgent {
 						+ current_value + " from method 'handleNOGOOD'");
 			}
 
-			// TODO: instead the above..
 			if (current_value == old_value & !sent) {
 
 				print(getId() + " handleNOGOOD: current_value == old_value "
@@ -263,9 +257,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 				send("ADD_NEIGHBOR").to(v);
 
-				// TODO: ?..
-				myAllNeighbors.add(v);
-
 				print(getId() + " sends ADD_NEIGHBOR to " + v
 						+ " from method 'addNewNeighborsFromNogood'");
 
@@ -315,8 +306,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 				heuristic.changeOrder(current_order, this);
 
-				// send("OK", current_value).toAll(myAllNeighbors);
-				// TODO: ?...
 				send("OK", current_value).toAll(getLowerPriorityNeighbors());
 
 				print(getId() + " sends OK: to all his neighbors: "
@@ -324,8 +313,6 @@ public class ABTDOAgent extends SimpleAgent {
 						+ " from method 'checkAgentView'");
 
 				send("ORDER", current_order).toAll(getLowerPriorityNeighbors());
-				// TODO: ?...
-				// send("ORDER", current_order).toAllAgentsAfterMe();
 
 				print(getId()
 						+ " sends ORDER: to all his lower priority neighbors: "
@@ -345,7 +332,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 		Set<Integer> higherPriorityNeighbors = getHigherPriorityNeighbors();
 
-		// TODO: in order to count CCs..
 		Assignment tAss = new Assignment();
 
 		for (Integer neighbor : higherPriorityNeighbors) {
@@ -354,46 +340,12 @@ public class ABTDOAgent extends SimpleAgent {
 				continue;
 
 			tAss.assign(neighbor, agent_view.getAssignment(neighbor));
-			// //TODO: in order to count CCs..
-			// if (!getProblem().isConsistent(getId(), current_value, neighbor,
-			// agent_view.getAssignment(neighbor)))
-			// return false;
 		}
 
-		// TODO: in order to count CCs..
 		if (!tAss.isConsistentWith(getId(), current_value, getProblem()))
 			return false;
 
 		return (null == nogoodsPerRemovedValue.get(current_value));
-
-		// TODO NIR's.. remove it !!!!...
-		// return !isAgentViewIsSuperSetOfOfNoGood();
-	}
-
-	// TODO: NIR's.. remove it !!!!...
-	private boolean isAgentViewIsSuperSetOfOfNoGood() {
-
-		for (Integer key : nogoodsPerRemovedValue.keySet()) {
-
-			for (Assignment noGood : nogoodsPerRemovedValue.get(key)) {
-
-				if (agent_view.assignedVariables().containsAll(
-						noGood.assignedVariables())) {
-
-					boolean flag = true;
-
-					for (Integer var : noGood.assignedVariables())
-						if (noGood.getAssignment(var) != agent_view
-								.getAssignment(var))
-							flag = false;
-
-					if (flag)
-						return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	private int getValueFromDWhichConsistentWithAllHigherPriorityAssignmentsInAgentView() {
@@ -403,12 +355,10 @@ public class ABTDOAgent extends SimpleAgent {
 
 		for (Integer v : getDomain()) {
 
-			// TODO:?...
 			if (v != current_value) {
 
 				boolean isConsistent = true;
 
-				// TODO: in order to count CCs..
 				Assignment tAss = new Assignment();
 
 				for (Integer neighbor : higherPriorityNeighbors) {
@@ -417,15 +367,8 @@ public class ABTDOAgent extends SimpleAgent {
 						continue;
 
 					tAss.assign(neighbor, agent_view.getAssignment(neighbor));
-					// //TODO: in order to count CCs..
-					// if (!getProblem().isConsistent(getId(), v, neighbor,
-					// agent_view.getAssignment(neighbor))){
-					// isConsistent = false;
-					// break;
-					// }
 				}
 
-				// TODO: in order to count CCs..
 				isConsistent = tAss.isConsistentWith(getId(), v, getProblem());
 
 				if (isConsistent)
@@ -435,8 +378,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 		for (Integer v : consistentValues)
 			if (null == nogoodsPerRemovedValue.get(v))
-				// TODO: NIR's.. remove it !!!!...
-				// if (!isAgentViewIsSuperSetOfOfNoGood())
 				return v;
 
 		return -1;
@@ -476,7 +417,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 		Assignment noGood = resolveInconsistentSubset();
 
-		// TODO
 		int lowestPriorityVar = getTheHighestLowerPriorityAgentFromNoGood(noGood);
 
 		if (-1 == lowestPriorityVar
@@ -488,12 +428,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 			return;
 		}
-
-		// int lowestPriorityVar =
-		// getTheHighestLowerPriorityAgentFromNoGood(noGood);
-
-		// TODO:?..
-		// current_value = 0;
 
 		send("NOGOOD", noGood).to(lowestPriorityVar);
 
@@ -520,11 +454,7 @@ public class ABTDOAgent extends SimpleAgent {
 
 		int tAgent = -1;
 
-		// TODO: != or <
 		for (int agent : noGood.assignedVariables())
-			// if (current_order.getPosition(agent) < current_order
-			// .getPosition(getId())
-			// && current_order.getPosition(agent) > tAgent)
 			if (agent != getId() && tAgent < current_order.getPosition(agent))
 				tAgent = agent;
 
@@ -562,8 +492,6 @@ public class ABTDOAgent extends SimpleAgent {
 			for (int i = 0; i < nogoodsOfThisKey.size(); i++)
 				if (nogoodsOfThisKey.get(i).isAssigned(var)
 						&& (nogoodsOfThisKey.get(i).getAssignment(var) == val))
-					// TODO
-					// )
 					nogoodsToRemove.add(0, i);
 
 			for (Integer indexToRemove : nogoodsToRemove)
@@ -580,7 +508,6 @@ public class ABTDOAgent extends SimpleAgent {
 				+ " val: " + val + " nogoods after: " + nogoodsPerRemovedValue);
 	}
 
-	// TODO: check again that we really want to do exactly that..
 	private void removeInconsistentNogoodsWhenReceivingOrder() {
 
 		print(getId() + " removeNogoodsThatContainThisVariable: order: "
@@ -588,7 +515,6 @@ public class ABTDOAgent extends SimpleAgent {
 
 		Vector<Integer> keysToRemove = new Vector<Integer>();
 
-		// TODO: higher or lower??..
 		for (Integer var : getLowerPriorityNeighbors()) {
 
 			for (Integer key : nogoodsPerRemovedValue.keySet()) {
