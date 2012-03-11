@@ -38,8 +38,8 @@ public class ABTDOAgent extends SimpleAgent {
 
 		current_order = new Order(getNumberOfVariables());
 
-		// heuristic = new RandomHeuristic();
-		heuristic = new NoChangeHeuristic();
+		heuristic = new RandomHeuristic();
+		// heuristic = new NoChangeHeuristic();
 
 		// KICK START THE ALGORITHM..
 		send("OK", current_value).toAll(myAllNeighbors);
@@ -70,7 +70,7 @@ public class ABTDOAgent extends SimpleAgent {
 
 	private void removeInconsistentNoGoods(Integer var, Integer val) {
 
-		print(getId() + " before removeNogoodsWithThisVar: var: " + var
+		print(getId() + " before removeInconsistentNoGoods: var: " + var
 				+ " val: " + val + " myNogoodStore: " + nogoodsPerRemovedValue
 				+ " agent_view: " + agent_view + " current_value: "
 				+ current_value);
@@ -86,6 +86,8 @@ public class ABTDOAgent extends SimpleAgent {
 			for (int i = 0; i < nogoodsOfThisKey.size(); i++)
 				if (nogoodsOfThisKey.get(i).isAssigned(var)
 						&& (nogoodsOfThisKey.get(i).getAssignment(var) != val))
+					// TODO: ?..
+					// )
 					nogoodsToRemove.add(0, i);
 
 			for (Integer indexToRemove : nogoodsToRemove)
@@ -98,7 +100,7 @@ public class ABTDOAgent extends SimpleAgent {
 		for (Integer key : keysToRemove)
 			nogoodsPerRemovedValue.remove(key);
 
-		print(getId() + " after removeNogoodsWithThisVar: var: " + var
+		print(getId() + " after removeInconsistentNoGoods: var: " + var
 				+ " val: " + val + " myNogoodStore: " + nogoodsPerRemovedValue
 				+ " agent_view: " + agent_view + " current_value: "
 				+ current_value);
@@ -261,6 +263,9 @@ public class ABTDOAgent extends SimpleAgent {
 
 				send("ADD_NEIGHBOR").to(v);
 
+				// TODO: ?..
+				myAllNeighbors.add(v);
+
 				print(getId() + " sends ADD_NEIGHBOR to " + v
 						+ " from method 'addNewNeighborsFromNogood'");
 
@@ -327,6 +332,12 @@ public class ABTDOAgent extends SimpleAgent {
 						+ getLowerPriorityNeighbors() + " with order: "
 						+ current_order + " from method 'checkAgentView'");
 			}
+		} else {
+			print(getId()
+					+ " checkAgentView: current assignment is consistent with All Higher Priority Assignments In AgentView "
+					+ ", agent_view: " + agent_view + " current_value: "
+					+ current_value + " nogoodsPerRemovedValue: "
+					+ nogoodsPerRemovedValue);
 		}
 	}
 
@@ -334,15 +345,24 @@ public class ABTDOAgent extends SimpleAgent {
 
 		Set<Integer> higherPriorityNeighbors = getHigherPriorityNeighbors();
 
+		// TODO: in order to count CCs..
+		Assignment tAss = new Assignment();
+
 		for (Integer neighbor : higherPriorityNeighbors) {
 
 			if (!agent_view.isAssigned(neighbor))
 				continue;
 
-			if (!getProblem().isConsistent(getId(), current_value, neighbor,
-					agent_view.getAssignment(neighbor)))
-				return false;
+			tAss.assign(neighbor, agent_view.getAssignment(neighbor));
+			// //TODO: in order to count CCs..
+			// if (!getProblem().isConsistent(getId(), current_value, neighbor,
+			// agent_view.getAssignment(neighbor)))
+			// return false;
 		}
+
+		// TODO: in order to count CCs..
+		if (!tAss.isConsistentWith(getId(), current_value, getProblem()))
+			return false;
 
 		return (null == nogoodsPerRemovedValue.get(current_value));
 
@@ -388,15 +408,25 @@ public class ABTDOAgent extends SimpleAgent {
 
 				boolean isConsistent = true;
 
+				// TODO: in order to count CCs..
+				Assignment tAss = new Assignment();
+
 				for (Integer neighbor : higherPriorityNeighbors) {
 
 					if (!agent_view.isAssigned(neighbor))
 						continue;
 
-					if (!getProblem().isConsistent(getId(), v, neighbor,
-							agent_view.getAssignment(neighbor)))
-						isConsistent = false;
+					tAss.assign(neighbor, agent_view.getAssignment(neighbor));
+					// //TODO: in order to count CCs..
+					// if (!getProblem().isConsistent(getId(), v, neighbor,
+					// agent_view.getAssignment(neighbor))){
+					// isConsistent = false;
+					// break;
+					// }
 				}
+
+				// TODO: in order to count CCs..
+				isConsistent = tAss.isConsistentWith(getId(), v, getProblem());
 
 				if (isConsistent)
 					consistentValues.add(v);
