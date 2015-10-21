@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/219/CP-Final/src/ext/sim/agents
+END
+Heuristic.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/Heuristic.java
+END
+RandomHeuristic.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/RandomHeuristic.java
+END
+NogoodTriggeredHeuristic.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/NogoodTriggeredHeuristic.java
+END
+CBJDO2Agent.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/219/CP-Final/src/ext/sim/agents/CBJDO2Agent.java
+END
+NoChangeHeuristic.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/NoChangeHeuristic.java
+END
+ABTAgent.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/219/CP-Final/src/ext/sim/agents/ABTAgent.java
+END
+ABTDOAgent.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/ABTDOAgent.java
+END
+Order.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/Order.java
+END
+Pair.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/217/CP-Final/src/ext/sim/agents/Pair.java
+END
+CBJAgent.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/202/CP-Final/src/ext/sim/agents/CBJAgent.java
+END

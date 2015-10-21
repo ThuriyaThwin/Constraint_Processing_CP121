@@ -1,0 +1,162 @@
+P1=0.2, P2=0.1:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 957
+Average FCCBJDAC CCs = 5228
+
+P1=0.2, P2=0.2:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 893
+Average FCCBJDAC CCs = 5007
+
+P1=0.2, P2=0.30000000000000004:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 836
+Average FCCBJDAC CCs = 4717
+
+P1=0.2, P2=0.4:
+Average FCCBJ Assignments = 18
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 818
+Average FCCBJDAC CCs = 4428
+
+P1=0.2, P2=0.5:
+Average FCCBJ Assignments = 27
+Average FCCBJDAC Assignments = 34
+Average FCCBJ CCs = 987
+Average FCCBJDAC CCs = 5585
+
+P1=0.2, P2=0.6:
+Average FCCBJ Assignments = 555
+Average FCCBJDAC Assignments = 35
+Average FCCBJ CCs = 10714
+Average FCCBJDAC CCs = 6463
+
+P1=0.2, P2=0.7:
+Average FCCBJ Assignments = 4909
+Average FCCBJDAC Assignments = 1590
+Average FCCBJ CCs = 126098
+Average FCCBJDAC CCs = 134417
+
+P1=0.2, P2=0.7999999999999999:
+Average FCCBJ Assignments = 417
+Average FCCBJDAC Assignments = 92
+Average FCCBJ CCs = 15221
+Average FCCBJDAC CCs = 28312
+
+P1=0.2, P2=0.8999999999999999:
+Average FCCBJ Assignments = 83
+Average FCCBJDAC Assignments = 14
+Average FCCBJ CCs = 3790
+Average FCCBJDAC CCs = 3757
+
+P1=0.5, P2=0.1:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 853
+Average FCCBJDAC CCs = 4794
+
+P1=0.5, P2=0.2:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 715
+Average FCCBJDAC CCs = 4166
+
+P1=0.5, P2=0.30000000000000004:
+Average FCCBJ Assignments = 73
+Average FCCBJDAC Assignments = 24
+Average FCCBJ CCs = 1582
+Average FCCBJDAC CCs = 4322
+
+P1=0.5, P2=0.4:
+Average FCCBJ Assignments = 873
+Average FCCBJDAC Assignments = 118
+Average FCCBJ CCs = 18207
+Average FCCBJDAC CCs = 20185
+
+P1=0.5, P2=0.5:
+Average FCCBJ Assignments = 3258
+Average FCCBJDAC Assignments = 282
+Average FCCBJ CCs = 83103
+Average FCCBJDAC CCs = 73268
+
+P1=0.5, P2=0.6:
+Average FCCBJ Assignments = 607
+Average FCCBJDAC Assignments = 33
+Average FCCBJ CCs = 20283
+Average FCCBJDAC CCs = 13848
+
+P1=0.5, P2=0.7:
+Average FCCBJ Assignments = 160
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 5204
+Average FCCBJDAC CCs = 3497
+
+P1=0.5, P2=0.7999999999999999:
+Average FCCBJ Assignments = 50
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 2208
+Average FCCBJDAC CCs = 1531
+
+P1=0.5, P2=0.8999999999999999:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 662
+Average FCCBJDAC CCs = 600
+
+P1=0.8, P2=0.1:
+Average FCCBJ Assignments = 15
+Average FCCBJDAC Assignments = 15
+Average FCCBJ CCs = 755
+Average FCCBJDAC CCs = 4381
+
+P1=0.8, P2=0.2:
+Average FCCBJ Assignments = 38
+Average FCCBJDAC Assignments = 20
+Average FCCBJ CCs = 856
+Average FCCBJDAC CCs = 3822
+
+P1=0.8, P2=0.30000000000000004:
+Average FCCBJ Assignments = 2367
+Average FCCBJDAC Assignments = 367
+Average FCCBJ CCs = 46708
+Average FCCBJDAC CCs = 66781
+
+P1=0.8, P2=0.4:
+Average FCCBJ Assignments = 1226
+Average FCCBJDAC Assignments = 133
+Average FCCBJ CCs = 32516
+Average FCCBJDAC CCs = 42166
+
+P1=0.8, P2=0.5:
+Average FCCBJ Assignments = 290
+Average FCCBJDAC Assignments = 26
+Average FCCBJ CCs = 9433
+Average FCCBJDAC CCs = 10005
+
+P1=0.8, P2=0.6:
+Average FCCBJ Assignments = 97
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 3627
+Average FCCBJDAC CCs = 3010
+
+P1=0.8, P2=0.7:
+Average FCCBJ Assignments = 44
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 1816
+Average FCCBJDAC CCs = 1627
+
+P1=0.8, P2=0.7999999999999999:
+Average FCCBJ Assignments = 20
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 944
+Average FCCBJDAC CCs = 925
+
+P1=0.8, P2=0.8999999999999999:
+Average FCCBJ Assignments = 10
+Average FCCBJDAC Assignments = 10
+Average FCCBJ CCs = 372
+Average FCCBJDAC CCs = 372
+

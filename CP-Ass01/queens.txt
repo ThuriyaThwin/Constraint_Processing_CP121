@@ -1,0 +1,144 @@
+2 Queens
+FCCBJ Assignments = 2
+FCCBJDAC Assignments = 2
+FCCBJ CCs = 4
+FCCBJDAC CCs = 4
+
+3 Queens
+FCCBJ Assignments = 5
+FCCBJDAC Assignments = 3
+FCCBJ CCs = 17
+FCCBJDAC CCs = 17
+
+4 Queens
+FCCBJ Assignments = 8
+FCCBJDAC Assignments = 5
+FCCBJ CCs = 38
+FCCBJDAC CCs = 42
+
+5 Queens
+FCCBJ Assignments = 5
+FCCBJDAC Assignments = 5
+FCCBJ CCs = 34
+FCCBJDAC CCs = 68
+
+6 Queens
+FCCBJ Assignments = 26
+FCCBJDAC Assignments = 16
+FCCBJ CCs = 221
+FCCBJDAC CCs = 423
+
+7 Queens
+FCCBJ Assignments = 9
+FCCBJDAC Assignments = 7
+FCCBJ CCs = 94
+FCCBJDAC CCs = 255
+
+8 Queens
+FCCBJ Assignments = 89
+FCCBJDAC Assignments = 43
+FCCBJ CCs = 807
+FCCBJDAC CCs = 1665
+
+9 Queens
+FCCBJ Assignments = 35
+FCCBJDAC Assignments = 18
+FCCBJ CCs = 400
+FCCBJDAC CCs = 1044
+
+10 Queens
+FCCBJ Assignments = 70
+FCCBJDAC Assignments = 33
+FCCBJ CCs = 875
+FCCBJDAC CCs = 2200
+
+11 Queens
+FCCBJ Assignments = 34
+FCCBJDAC Assignments = 19
+FCCBJ CCs = 586
+FCCBJDAC CCs = 1959
+
+12 Queens
+FCCBJ Assignments = 176
+FCCBJDAC Assignments = 72
+FCCBJ CCs = 2314
+FCCBJDAC CCs = 5884
+
+13 Queens
+FCCBJ Assignments = 83
+FCCBJDAC Assignments = 41
+FCCBJ CCs = 1397
+FCCBJDAC CCs = 4777
+
+14 Queens
+FCCBJ Assignments = 1399
+FCCBJDAC Assignments = 586
+FCCBJ CCs = 17896
+FCCBJDAC CCs = 43107
+
+15 Queens
+FCCBJ Assignments = 1011
+FCCBJDAC Assignments = 395
+FCCBJ CCs = 15007
+FCCBJDAC CCs = 37702
+
+16 Queens
+FCCBJ Assignments = 7350
+FCCBJDAC Assignments = 2887
+FCCBJ CCs = 104827
+FCCBJDAC CCs = 252044
+
+17 Queens
+FCCBJ Assignments = 4143
+FCCBJDAC Assignments = 1560
+FCCBJ CCs = 66545
+FCCBJDAC CCs = 168217
+
+18 Queens
+FCCBJ Assignments = 29044
+FCCBJDAC Assignments = 11444
+FCCBJ CCs = 454199
+FCCBJDAC CCs = 1134742
+
+19 Queens
+FCCBJ Assignments = 1831
+FCCBJDAC Assignments = 724
+FCCBJ CCs = 34724
+FCCBJDAC CCs = 97996
+
+20 Queens
+FCCBJ Assignments = 134085
+FCCBJDAC Assignments = 51648
+FCCBJ CCs = 2271414
+FCCBJDAC CCs = 5889540
+
+21 Queens
+FCCBJ Assignments = 5774
+FCCBJDAC Assignments = 2594
+FCCBJ CCs = 112688
+FCCBJDAC CCs = 348370
+
+22 Queens
+FCCBJ Assignments = 1148399
+FCCBJDAC Assignments = 461375
+FCCBJ CCs = 20562535
+FCCBJDAC CCs = 56093486
+
+23 Queens
+FCCBJ Assignments = 15766
+FCCBJDAC Assignments = 7173
+FCCBJ CCs = 325329
+FCCBJDAC CCs = 1027595
+
+24 Queens
+FCCBJ Assignments = 274538
+FCCBJDAC Assignments = 119994
+FCCBJ CCs = 5553707
+FCCBJDAC CCs = 16809202
+
+25 Queens
+FCCBJ Assignments = 30831
+FCCBJDAC Assignments = 14324
+FCCBJ CCs = 724548
+FCCBJDAC CCs = 2401647
+
